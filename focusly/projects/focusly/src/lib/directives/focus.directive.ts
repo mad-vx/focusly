@@ -16,37 +16,37 @@ import { FocusItem } from '../models/focus-item.model';
   selector: '[focusly]',
   standalone: true
 })
-export class FocusDirective implements OnInit, OnDestroy {
-  @Input({ required: true }) set focusColumn(column: number) {
-    this._focusColumn = column;
+export class FocuslyDirective implements OnInit, OnDestroy {
+  @Input({ required: true }) set focuslyColumn(column: number) {
+    this._focuslyColumn = column;
     this.focusService.registerItemFocus(this.focus);
   }
 
-  @Input({ required: true }) set focusRow(row: number) {
-    this._focusRow = row;
+  @Input({ required: true }) set focuslyRow(row: number) {
+    this._focuslyRow = row;
     this.focusService.registerItemFocus(this.focus);
   }
 
-  @Input({ required: true }) set focusScope(scope: number) {
-    this._focusScope = scope;
+  @Input({ required: true }) set focuslyGroup(scope: number) {
+    this._focuslyScope = scope;
     this.focusService.registerItemFocus(this.focus);
   }
 
-  get focusColumn(): number | undefined {
-    return this._focusColumn;
+  get focuslyColumn(): number | undefined {
+    return this._focuslyColumn;
   }
 
-  get focusRow(): number | undefined {
-    return this._focusRow;
+  get focuslyRow(): number | undefined {
+    return this._focuslyRow;
   }
 
-  get focusScope(): number | undefined {
-    return this._focusScope;
+  get focuslyGroup(): number | undefined {
+    return this._focuslyScope;
   }
 
-  private _focusColumn: number | undefined;
-  private _focusRow: number | undefined;
-  private _focusScope: number | undefined;
+  private _focuslyColumn: number | undefined;
+  private _focuslyRow: number | undefined;
+  private _focuslyScope: number | undefined;
 
   private focusChangedSubscription: Subscription;
   private limitHitSubscription: Subscription;
@@ -54,9 +54,9 @@ export class FocusDirective implements OnInit, OnDestroy {
 
   protected get focus(): FocusItem {
     return <FocusItem>{
-      column: this.focusColumn,
-      row: this.focusRow,
-      groupId: this.focusScope,
+      column: this.focuslyColumn,
+      row: this.focuslyRow,
+      groupId: this.focuslyGroup,
       id: this.uniqueId
     };
   }
