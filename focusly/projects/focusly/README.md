@@ -1,63 +1,37 @@
-# Focusly
+# 🎯 Focusly – Intelligent Keyboard Navigation for Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+**Focusly** is a lightweight Angular library that enables **keyboard-driven focus navigation** across complex grids, forms, and multi-panel layouts.
 
-## Code scaffolding
+It provides an elegant way to define how users move between interactive controls — such as text boxes, dropdowns, or buttons — using keyboard shortcuts.  
+Focusly was designed to make keyboard navigation **predictable, accessible, and fast**, even in complex data entry UIs.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🚀 Features
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Navigate grids, tables, or forms entirely via keyboard  
+- Works with any focusable element (`<input>`, `<select>`, `<button>`, etc.)  
+- Supports **multiple independent focus groups** on a single page  
+- Simple declarative API using Angular directives  
+- Customizable navigation keys and direction logic  
+- Built for accessibility and developer simplicity  
+- Zero external dependencies
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🧠 Concept
 
-To build the library, run:
+Focusly organizes focusable elements into **groups**, **rows**, and **columns**.
 
-```bash
-ng build focusly
-```
+Each focusable element declares:
+- A **group** – to separate independent navigation contexts (e.g., two tables)
+- A **row** and **column** – to describe its position within that group
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+Focusly tracks the user’s current focus position and responds to keyboard events to move to the appropriate neighbour.
 
-### Publishing the Library
+---
 
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/focusly
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## ⚙️ Installation
 
 ```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+npm install focusly
