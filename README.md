@@ -1,6 +1,10 @@
 # 🎯 Focusly – Intelligent Keyboard Navigation for Angular
 
-**Focusly** is a lightweight Angular library that enables **keyboard-driven focus navigation** across complex grids, forms, and multi-panel layouts.
+**Focusly** is a lightweight Angular library that brings **intuitive, keyboard-driven navigation** to web applications.
+
+It lets users move effortlessly between interactive elements—inputs, dropdowns, buttons, or any focusable control—using familiar keys like **↑ ↓ ← →**, **Home**, **End**, and **Page Up / Page Down**.
+
+Each *Focusly Group* acts as an independent navigation zone, so multiple grids or forms on the same page can be navigated separately and respond logically to user intent.
 
 It provides an elegant way to define how users move between interactive controls — such as text boxes, dropdowns, or buttons — using keyboard shortcuts.  
 Focusly was designed to make keyboard navigation **predictable, accessible, and fast**, even in complex data entry UIs.
