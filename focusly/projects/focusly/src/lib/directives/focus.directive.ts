@@ -1,7 +1,9 @@
 import {
   ChangeDetectorRef,
+  computed,
   Directive,
   ElementRef,
+  HostBinding,
   HostListener,
   Input,
   OnDestroy,
@@ -48,7 +50,6 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private _focuslyRow: number | undefined;
   private _focuslyScope: number | undefined;
 
-  private focusChangedSubscription: Subscription;
   private limitHitSubscription: Subscription;
   private uniqueId = uuidv4();
 
@@ -69,27 +70,28 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   // Override this method to implement custom focus() actions
   selectCustomElement: (() => void) | undefined;
 
+  readonly isActive = computed(() => {
+    if (this.focusService.isCurrentFocus(this.focus)) {
+      this.elementRef.nativeElement.focus();
+      if (this.elementRef.nativeElement.select) {
+        this.elementRef.nativeElement.select();
+      } else {
+        if (this.selectCustomElement) {
+          this.selectCustomElement();
+        }
+      }  
+    }
+  });
+
+  @HostBinding('class.focusly-active')
+  get activeClass() {
+    return this.isActive();
+  }
+
   constructor(
     protected elementRef: ElementRef,
-    protected focusService: FocusService,
-    protected changeDetectorRef: ChangeDetectorRef
+    protected focusService: FocusService
   ) {
-    this.focusChangedSubscription = this.focusService.focusChanged$.subscribe(
-      (focus: FocusItem) => {
-        if (this.focusService.isCurrentFocus(this.focus)) {
-          this.elementRef.nativeElement.focus();
-          if (this.elementRef.nativeElement.select) {
-            this.elementRef.nativeElement.select();
-            this.changeDetectorRef.detectChanges();
-          } else {
-            if (this.selectCustomElement) {
-              this.selectCustomElement();
-              this.changeDetectorRef.detectChanges();
-            }
-          }
-        }
-      }
-    );
 
     this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
       if (this.focusService.isCurrentFocus(this.focus)) {
@@ -105,7 +107,6 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.focusService.unRegisterItemFocus(this.focus);
-    this.focusChangedSubscription.unsubscribe();
     this.limitHitSubscription.unsubscribe();
   }
 
@@ -114,7 +115,6 @@ export class FocuslyDirective implements OnInit, OnDestroy {
     this.focusService.onFocus(this.focus);
     if (this.onElementFocus) {
       this.onElementFocus();
-      this.changeDetectorRef.detectChanges();
     }
   }
 
