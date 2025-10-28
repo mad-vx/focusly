@@ -109,7 +109,29 @@ input[type="button"].save-active {
   box-shadow: 0 0 12px rgba(0, 122, 255, 0.7);
 }
 
-/* --- Toast message --- */
+.panel-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+  margin-block: 2rem;
+}
+
+@media (max-width: 1200px) {
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem 1rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  min-width: 0; /* fix long table overflow in grid children */
+}
+
 .toast-wrapper {
   position: fixed;
   right: 1rem;
@@ -131,6 +153,197 @@ input[type="button"].save-active {
   border-radius: 0.5rem;
   min-width: 180px;
   font-size: 0.9rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  text-align: center;
+}
+
+.page {
+  font-family: system-ui, sans-serif;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  color: #1a1a1a;
+}
+
+.instructions {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0 0 .5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .note {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: .75rem;
+    font-style: italic;
+  }
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: .75rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .panel-subtitle {
+    margin: .25rem 0 0 0;
+    font-size: .8rem;
+    color: #666;
+  }
+
+  .panel-action-btn {
+    padding: 0.5rem .75rem;
+    border-radius: 0.4rem;
+    border: 1px solid #999;
+    cursor: pointer;
+    min-width: 8rem;
+    text-align: center;
+    font-size: .85rem;
+    transition: box-shadow 0.2s, background-color 0.2s, border-color 0.2s;
+
+    &.save-active {
+      background-color: #007aff;
+      color: #fff;
+      border-color: #007aff;
+      box-shadow: 0 0 12px rgba(0, 122, 255, 0.7);
+    }
+  }
+}
+
+.data-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  thead th {
+    text-align: left;
+    background: #f1f1f1;
+    border-bottom: 1px solid #d0d0d0;
+    padding: 0.5rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    border-bottom: 1px solid #eee;
+    padding: 0.5rem;
+    vertical-align: middle;
+  }
+}
+
+.cell-label {
+  color: #222;
+  .ticker {
+    font-weight: 600;
+    margin-right: .5rem;
+  }
+  .currency {
+    font-size: .75rem;
+    color: #666;
+  }
+}
+
+.cell-input {
+  font-size: .8rem;
+  min-width: 5rem;
+  border: 1px solid #bbb;
+  border-radius: 0.3rem;
+  background: #fff;
+  outline: none;
+}
+.cell-input:focus {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
+}
+
+.cell-input.num {
+  width: 4.5rem;
+  text-align: right;
+}
+
+.cell-input.wide {
+  min-width: 12rem;
+  justify-items: left;
+}
+
+.cell-input.short {
+  max-width: 6rem;
+  min-width: 4rem;
+}
+
+.cell-checkbox {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cell-center {
+  text-align: center;
+}
+
+.ellipsis-btn {
+  font-size: 1rem;
+  line-height: 1rem;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-radius: .4rem;
+  padding: .3rem .6rem;
+  cursor: pointer;
+}
+.ellipsis-btn:focus {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
+}
+
+.vip-label {
+  display: inline-block;
+  margin-left: .4rem;
+  font-size: .7rem;
+  font-weight: 600;
+  color: #d48a00;
+}
+
+.toast-wrapper {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-in-out;
+  z-index: 9999;
+
+  &.toast-visible {
+    opacity: 1;
+  }
+}
+
+.toast {
+  background: #222;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  min-width: 180px;
+  font-size: 0.8rem;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
   text-align: center;
 }

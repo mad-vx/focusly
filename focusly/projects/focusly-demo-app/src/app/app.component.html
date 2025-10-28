@@ -1,89 +1,269 @@
-<main>
+<main class="page">
   <h1>Focusly Demo</h1>
+
   <section class="instructions">
-  <h2>Introduction</h2>
+    <h2>What is Focusly?</h2>
     <p>
-      <strong>Focusly</strong> is a lightweight Angular library that brings <strong>intuitive, keyboard-driven navigation</strong> to web applications.
+      <strong>Focusly</strong> lets you move around complex, data-heavy UIs using only the keyboard.
+      Use <strong>Alt + Arrow Keys</strong> to move between interactive cells, and press
+      <strong>Enter</strong> to trigger the contextual action for that panel.
     </p>
   </section>
 
   <section class="instructions">
-  <h2>Keyboard Navigation</h2>
-  <p>
-    You can navigate around the grids using your keyboard. Try the following key combinations:
-  </p>
-  <ul>
-    <li><strong>Alt + ↑ / ↓ / ← / →</strong> – Move focus up, down, left, or right within a grid</li>
-    <li><strong>Page Up / Page Down</strong> – Move to first/last columns</li>
-    <li><strong>Home / End</strong> – Jump to the first or last items in a row</li>
-  </ul>
-  <p class="note">
-    Each grid can contain different types of controls — text boxes, dropdowns, and read-only fields.  
-    Try using the keyboard only to move through both grids and experience how Focusly manages focus seamlessly.
-  </p>
-</section>
+    <h2>Keyboard Navigation</h2>
+    <ul>
+      <li><strong>Alt + ↑ / ↓ / ← / →</strong> – Move between fields</li>
+      <li><strong>Home / End</strong> – Jump to first / last column in the current row</li>
+      <li><strong>Page Up / Page Down</strong> – Jump to first / last row</li>
+      <li><strong>Enter</strong> – Run the panel's action (Save / Confirm)</li>
+    </ul>
+    <p class="note">
+      Below are two independent panels. Notice how <strong>Enter</strong> in the first
+      panel triggers “Confirm Trades”, and in the second panel it triggers “Save Customer”.
+      Focusly keeps those behaviours scoped.
+    </p>
+  </section>
 
-  <h3>Try it here!</h3>
-  <focusly-listener [keyDownEvents]="['Enter']">
-    <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey()">
-    </focusly-enter-key-subscriber>
-    <table>
-      @for (row of rows; track row) {
-        <tr>
-          @for (col of columns; track col) {
-            <td><input focusly [focuslyGroup]="1" [focuslyRow]="row" [focuslyColumn]="col" /></td>
-          }
-        </tr>
-      }
-    </table>
+  <div class="panel-grid">
+    <section class="panel">
+      <header class="panel-header">
+        <div>
+          <h3>Open Positions</h3>
+          <p class="panel-subtitle">Edit quantities, risk status, and desk notes</p>
+        </div>
 
-    <input
-      type="button"
-      value="Save 1"
-      [class.save-active]="activeSaveButton() === 1"
-      (click)="onEnterKey()"
-    />
-  </focusly-listener>
+        <input
+          type="button"
+          class="panel-action-btn"
+          value="Confirm Trades"
+          [class.save-active]="activeSaveButton() === 1"
+          (click)="onEnterKey()"
+        />
+      </header>
 
-  <h3>...and here!</h3>
-    <focusly-listener [keyDownEvents]="['Enter']">
-    <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey2()">
-    </focusly-enter-key-subscriber>
-    <table>
-      @for (row of rows; track row) {
-        <tr>
-          @for (col of columns; track col) {
-            @if (col !== 5 && col !== 3 && col !== 1) {
-              <td><input focusly [focuslyGroup]="2" [focuslyRow]="row" [focuslyColumn]="col" /></td>
+      <focusly-listener [keyDownEvents]="['Enter']">
+        <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey()">
+        </focusly-enter-key-subscriber>
+
+        <table class="data-grid">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Qty</th>
+              <th>Side</th>
+              <th>Risk OK?</th>
+              <th>Desk Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (row of tradeRows; track row.symbol) {
+              <tr>
+                <td class="cell-label">
+                  <span class="ticker">{{ row.symbol }}</span>
+                  <span class="currency">{{ row.ccy }}</span>
+                </td>
+                <td>
+                  <input
+                    focusly
+                    class="cell-input num"
+                    type="number"
+                    [focuslyGroup]="1"
+                    [focuslyRow]="row.rowIndex"
+                    [focuslyColumn]="0"
+                    [value]="row.qty"
+                  />
+                </td>
+
+                <td>
+                  <select
+                    focusly
+                    class="cell-input"
+                    [focuslyGroup]="1"
+                    [focuslyRow]="row.rowIndex"
+                    [focuslyColumn]="1"
+                  >
+                    <option [selected]="row.side === 'Buy'">Buy</option>
+                    <option [selected]="row.side === 'Sell'">Sell</option>
+                  </select>
+                </td>
+
+                <td class="cell-center">
+                  <input
+                    focusly
+                    class="cell-checkbox"
+                    type="checkbox"
+                    [focuslyGroup]="1"
+                    [focuslyRow]="row.rowIndex"
+                    [focuslyColumn]="2"
+                    [checked]="row.riskOk"
+                  />
+                </td>
+
+                <td>
+                  <input
+                    focusly
+                    class="cell-input wide"
+                    type="text"
+                    [focuslyGroup]="1"
+                    [focuslyRow]="row.rowIndex"
+                    [focuslyColumn]="3"
+                    [value]="row.notes"
+                    placeholder="Internal note…"
+                  />
+                </td>
+
+                <td class="cell-center">
+                </td>
+              </tr>
             }
-            @else if (col === 1) {
-              <td><label>Row {{row}}</label></td>
-            }
-            @else if (col === 3) {
-              <td><input readonly value="Skip"/></td>
-            }
-            @else {
+          </tbody>
+        </table>
+      </focusly-listener>
+    </section>
+
+    <section class="panel">
+      <header class="panel-header">
+        <div>
+          <h3>Customer Profile</h3>
+          <p class="panel-subtitle">Update trader contact</p>
+        </div>
+
+        <input
+          type="button"
+          class="panel-action-btn"
+          value="Save Customer"
+          [class.save-active]="activeSaveButton() === 2"
+          (click)="onEnterKey2()"
+        />
+      </header>
+
+      <focusly-listener [keyDownEvents]="['Enter']">
+        <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey2()">
+        </focusly-enter-key-subscriber>
+
+        <table class="data-grid">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="cell-label">Name</td>
               <td>
-                <select focusly [focuslyGroup]="2" [focuslyRow]="row" [focuslyColumn]="col">
-                  <option>Red</option>
-                  <option>Yellow</option>
-                  <option>Blue</option>
-                  <option>Green</option>
+                <input
+                  focusly
+                  class="cell-input wide"
+                  type="text"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="0"
+                  [focuslyColumn]="0"
+                  [value]="customer.name"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td class="cell-label">Account Status</td>
+              <td>
+                <select
+                  focusly
+                  class="cell-input"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="2"
+                  [focuslyColumn]="0"
+                >
+                  <option [selected]="customer.status === 'Active'">Active</option>
+                  <option [selected]="customer.status === 'On Hold'">On Hold</option>
+                  <option [selected]="customer.status === 'Closed'">Closed</option>
                 </select>
               </td>
-            }
-          }
-        </tr>
-      }
-    </table>
+            </tr>
 
-    <input
-      type="button"
-      value="Save 2"
-      [class.save-active]="activeSaveButton() === 2"
-      (click)="onEnterKey2()"
-    />
-  </focusly-listener>
+            <tr>
+              <td class="cell-label">Email</td>
+              <td>
+                <input
+                  focusly
+                  class="cell-input wide"
+                  type="email"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="3"
+                  [focuslyColumn]="0"
+                  [value]="customer.email"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td class="cell-label">Address</td>
+              <td>
+                <input
+                  focusly
+                  class="cell-input wide"
+                  type="text"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="4"
+                  [focuslyColumn]="0"
+                  [value]="customer.address1"
+                  placeholder="Line 1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input
+                  focusly
+                  class="cell-input wide"
+                  type="text"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="5"
+                  [focuslyColumn]="0"
+                  [value]="customer.address2"
+                  placeholder="Line 2"
+                />
+                </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>              
+                <input
+                  focusly
+                  class="cell-input wide"
+                  type="text"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="6"
+                  [focuslyColumn]="0"
+                  [value]="customer.city"
+                  placeholder="City"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <input
+                  focusly
+                  class="cell-input wide"
+                  type="text"
+                  [focuslyGroup]="2"
+                  [focuslyRow]="7"
+                  [focuslyColumn]="0"
+                  [value]="customer.postcode"
+                  placeholder="Postcode"
+                />
+            </td></tr>
+          </tbody>
+        </table>
+      </focusly-listener>
+    </section>
+  </div>
 
   <div class="toast-wrapper" [class.toast-visible]="showToast">
     <div class="toast">
