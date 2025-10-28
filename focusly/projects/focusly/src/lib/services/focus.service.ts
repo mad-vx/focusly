@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FocusItem } from '../models/focus-item.model';
 
@@ -7,11 +7,8 @@ export class FocusService {
   private endStopSubject = new Subject<FocusItem>();
   readonly endStopHit$ = this.endStopSubject.asObservable();
 
-  private focusChangedSubject = new Subject<FocusItem>();
-  readonly focusChanged$ = this.focusChangedSubject.asObservable();
-
   private focusRegistry = new Map<number, FocusItem[]>();
-  private currentFocus: FocusItem | null = null;
+  readonly currentFocus = signal<FocusItem | null>(null);
 
   private getScopeList(scope: number, create = false): FocusItem[] {
     let list = this.focusRegistry.get(scope);
@@ -25,14 +22,11 @@ export class FocusService {
   onFocus(focus: FocusItem): void {
     const list = this.getScopeList(focus.groupId);
     const found = list.find(r => r.id === focus.id);
-    this.currentFocus = found ?? focus;
+    this.currentFocus.set(found ?? focus);
   }
 
   setFocus(focus: FocusItem): void {
     this.onFocus(focus);
-    if (this.currentFocus) {
-      this.focusChangedSubject.next(this.currentFocus);
-    }
   }
 
   up(): void    { this.moveRow(-1, row => row >= 0); }
@@ -41,25 +35,29 @@ export class FocusService {
   right(): void { this.moveColumn( 1, col => col <= this.currentFocusMaxColumn()); }
 
   home(): void {
-    if (!this.currentFocus) return;
-    this.moveColumn(-this.currentFocus.column, col => col >= 0);
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
+    this.moveColumn(-currentFocus.column, col => col >= 0);
   }
 
   end(): void {
-    if (!this.currentFocus) return;
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
     const max = this.currentFocusMaxColumn();
-    this.moveColumn(max - this.currentFocus.column, col => col <= max);
+    this.moveColumn(max - currentFocus.column, col => col <= max);
   }
 
   pageUp(): void {
-    if (!this.currentFocus) return;
-    this.moveRow(-this.currentFocus.row, row => row >= 0);
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
+    this.moveRow(-currentFocus.row, row => row >= 0);
   }
 
   pageDown(): void {
-    if (!this.currentFocus) return;
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
     const max = this.currentFocusMaxRow();
-    this.moveRow(max - this.currentFocus.row, row => row <= max);
+    this.moveRow(max - currentFocus.row, row => row <= max);
   }
 
   registerItemFocus(focus: FocusItem): void {
@@ -89,7 +87,8 @@ export class FocusService {
   }
 
   isCurrentFocus(focus: FocusItem): boolean {
-    return !!this.currentFocus && this.currentFocus.id === focus.id;
+    const currentFocus = this.currentFocus();
+    return !!currentFocus && currentFocus.id === focus.id;
   }
 
   private findRegisteredFocus(
@@ -97,7 +96,7 @@ export class FocusService {
     row: number,
     groupId?: number
   ): FocusItem | undefined {
-    const effectiveScope = groupId ?? this.currentFocus?.groupId;
+    const effectiveScope = groupId ?? this.currentFocus()?.groupId;
     if (effectiveScope == null) return undefined;
 
     const list = this.focusRegistry.get(effectiveScope);
@@ -109,22 +108,24 @@ export class FocusService {
   }
 
   private moveRow(offset: number, endCondition: (row: number) => boolean): void {
-    if (!this.currentFocus) return;
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
     this.moveFocus(
-      this.currentFocus.row,
+      currentFocus.row,
       offset,
       endCondition,
-      (row) => this.findRegisteredFocus(this.currentFocus!.column, row)
+      (row) => this.findRegisteredFocus(currentFocus!.column, row)
     );
   }
 
   private moveColumn(offset: number, endCondition: (column: number) => boolean): void {
-    if (!this.currentFocus) return;
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
     this.moveFocus(
-      this.currentFocus.column,
+      currentFocus.column,
       offset,
       endCondition,
-      (col) => this.findRegisteredFocus(col, this.currentFocus!.row)
+      (col) => this.findRegisteredFocus(col, currentFocus!.row)
     );
   }
 
@@ -134,7 +135,8 @@ export class FocusService {
     endCondition: (x: number) => boolean,
     findNextFocus: (condition: number) => FocusItem | undefined
   ): void {
-    if (!this.currentFocus) return;
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
 
     condition += offset;
     let nextFocus: FocusItem | undefined;
@@ -147,20 +149,22 @@ export class FocusService {
     if (nextFocus) {
       this.setFocus(nextFocus);
     } else if (!endCondition(condition)) {
-      this.endStopSubject.next(this.currentFocus);
+      this.endStopSubject.next(currentFocus);
     }
   }
 
   private currentFocusMaxRow(): number {
-    if (!this.currentFocus) return 0;
-    const list = this.focusRegistry.get(this.currentFocus.groupId) ?? [];
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return 0;
+    const list = this.focusRegistry.get(currentFocus.groupId) ?? [];
     if (list.length === 0) return 0;
     return list.reduce((max, f) => (f.row > max ? f.row : max), list[0].row);
   }
 
   private currentFocusMaxColumn(): number {
-    if (!this.currentFocus) return 0;
-    const list = this.focusRegistry.get(this.currentFocus.groupId) ?? [];
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return 0;
+    const list = this.focusRegistry.get(currentFocus.groupId) ?? [];
     if (list.length === 0) return 0;
     return list.reduce((max, f) => (f.column > max ? f.column : max), list[0].column);
   }
