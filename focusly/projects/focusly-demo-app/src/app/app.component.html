@@ -1,0 +1,93 @@
+<main>
+  <h1>Focusly Demo</h1>
+  <section class="instructions">
+  <h2>Introduction</h2>
+    <p>
+      <strong>Focusly</strong> is a lightweight Angular library that brings <strong>intuitive, keyboard-driven navigation</strong> to web applications.
+    </p>
+  </section>
+
+  <section class="instructions">
+  <h2>Keyboard Navigation</h2>
+  <p>
+    You can navigate around the grids using your keyboard. Try the following key combinations:
+  </p>
+  <ul>
+    <li><strong>Alt + ↑ / ↓ / ← / →</strong> – Move focus up, down, left, or right within a grid</li>
+    <li><strong>Page Up / Page Down</strong> – Move to first/last columns</li>
+    <li><strong>Home / End</strong> – Jump to the first or last items in a row</li>
+  </ul>
+  <p class="note">
+    Each grid can contain different types of controls — text boxes, dropdowns, and read-only fields.  
+    Try using the keyboard only to move through both grids and experience how Focusly manages focus seamlessly.
+  </p>
+</section>
+
+  <h3>Try it here!</h3>
+  <focusly-listener [keyDownEvents]="['Enter']">
+    <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey()">
+    </focusly-enter-key-subscriber>
+    <table>
+      @for (row of rows; track row) {
+        <tr>
+          @for (col of columns; track col) {
+            <td><input focusly [focuslyGroup]="1" [focuslyRow]="row" [focuslyColumn]="col" /></td>
+          }
+        </tr>
+      }
+    </table>
+
+    <input
+      type="button"
+      value="Save 1"
+      [class.save-active]="activeSaveButton() === 1"
+      (click)="onEnterKey()"
+    />
+  </focusly-listener>
+
+  <h3>...and here!</h3>
+    <focusly-listener [keyDownEvents]="['Enter']">
+    <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey2()">
+    </focusly-enter-key-subscriber>
+    <table>
+      @for (row of rows; track row) {
+        <tr>
+          @for (col of columns; track col) {
+            @if (col !== 5 && col !== 3 && col !== 1) {
+              <td><input focusly [focuslyGroup]="2" [focuslyRow]="row" [focuslyColumn]="col" /></td>
+            }
+            @else if (col === 1) {
+              <td><label>Row {{row}}</label></td>
+            }
+            @else if (col === 3) {
+              <td><input readonly value="Skip"/></td>
+            }
+            @else {
+              <td>
+                <select focusly [focuslyGroup]="2" [focuslyRow]="row" [focuslyColumn]="col">
+                  <option>Red</option>
+                  <option>Yellow</option>
+                  <option>Blue</option>
+                  <option>Green</option>
+                </select>
+              </td>
+            }
+          }
+        </tr>
+      }
+    </table>
+
+    <input
+      type="button"
+      value="Save 2"
+      [class.save-active]="activeSaveButton() === 2"
+      (click)="onEnterKey2()"
+    />
+  </focusly-listener>
+
+  <div class="toast-wrapper" [class.toast-visible]="showToast">
+    <div class="toast">
+      {{ lastActionMessage }}
+    </div>
+  </div>
+</main>

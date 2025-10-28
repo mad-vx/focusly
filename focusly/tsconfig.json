@@ -7,7 +7,8 @@
     "strict": true,
     "paths": {
       "focusly": [
-        "./dist/focusly"
+        "./dist/focusly",
+        "./projects/focusly/src/public-api.ts"
       ]
     },
     "noImplicitOverride": true,

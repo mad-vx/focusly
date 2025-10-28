@@ -1,0 +1,46 @@
+.instructions {
+  background: #f9fafb;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  margin: 1.5rem 0 2rem;
+  max-width: 700px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.instructions h2 {
+  color: #1a237e;
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.instructions p {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.instructions ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.instructions li {
+  background: #ffffff;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.instructions strong {
+  color: #1976d2;
+}
+
+.instructions .note {
+  font-size: 0.95rem;
+  color: #555;
+  font-style: italic;
+}
