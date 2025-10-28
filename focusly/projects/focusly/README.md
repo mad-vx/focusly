@@ -1,63 +1,23 @@
-# Focusly
+# 🧩 Focusly
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+Focusly is a lightweight **keyboard-navigation framework for Angular** that lets users move seamlessly between complex, data-heavy UI elements using only the keyboard.
 
-## Code scaffolding
+It’s designed for **grids, forms, and dashboards**, where fast keyboard movement between inputs, selects, and buttons is essential.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## ✨ Features
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- 🚀 Navigate between inputs, selects, buttons, and checkboxes with **Alt + Arrow Keys**
+- 🎯 **Scoped focus groups** so each panel or table behaves independently
+- ⚡ Built with Angular **signals** for instant reactivity — no manual change detection
+- 🧠 Easily extendable to custom components
+- 🔄 Fully reactive and framework-native (no DOM listeners or external deps)
+- 🪶 Small, simple, and zero-dependency
 
-```bash
-ng generate --help
-```
+---
 
-## Building
-
-To build the library, run:
-
-```bash
-ng build focusly
-```
-
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
-
-### Publishing the Library
-
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/focusly
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 📦 Installation
 
 ```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+npm install @zaybu/focusly
