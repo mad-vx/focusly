@@ -51,6 +51,10 @@ select {
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 
+input[type='checkbox'] {
+  width: 20px;
+}
+
 select {
   width: 100px;
 }
@@ -250,7 +254,6 @@ input[type='button'],
   color: #d48a00;
 }
 
-/* Toast Notifications */
 .toast-wrapper {
   position: fixed;
   top: 1rem;
