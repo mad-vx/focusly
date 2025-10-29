@@ -1,4 +1,4 @@
-<main class="page">
+<main class="page" (keypress)="onKeyPress($event)">
   <h1>Focusly Demo</h1>
 
   <section class="instructions">
@@ -270,4 +270,5 @@
       {{ lastActionMessage }}
     </div>
   </div>
+  <key-display></key-display>
 </main>
