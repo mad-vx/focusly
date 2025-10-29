@@ -63,7 +63,9 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   // Override this method to implement custom onFocus actions
   onElementFocus = (): void => {
-    this.elementRef.nativeElement.select();
+    if (this.elementRef.nativeElement.select) {
+      this.elementRef.nativeElement.select();
+    }
   };
 
   // Override this method to implement custom focus() actions

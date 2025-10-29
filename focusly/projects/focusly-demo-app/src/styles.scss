@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles */
 main {
   display: flex;
   flex-direction: column;
@@ -27,17 +27,20 @@ table {
   border-radius: 12px;
   padding: 1rem;
   transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.01);
+  }
 }
 
-table:hover {
-  transform: scale(1.01);
-}
-
-td, select {
+td,
+select {
   padding: 0.5rem;
 }
 
-input, input[focusly], select {
+input,
+input[focusly],
+select {
   width: 60px;
   height: 40px;
   text-align: center;
@@ -48,25 +51,33 @@ input, input[focusly], select {
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 
-select {
-    width: 100px;
+input[type='checkbox'] {
+  width: 20px;
 }
 
-input[focusly]:hover, select[focusly]:hover {
+select {
+  width: 100px;
+}
+
+input[focusly]:hover,
+select[focusly]:hover {
   border-color: #90caf9;
 }
 
-input[focusly]:focus, select[focusly]:focus {
+input[focusly]:focus,
+select[focusly]:focus {
   border-color: #1e88e5;
   box-shadow: 0 0 8px rgba(30, 136, 229, 0.4);
   transform: scale(1.05);
 }
 
-input[type="button"] {
-  background-color: #43a047; /* pleasant medium green */
-  color: white;
-  border: none;
-  border-radius: 8px;
+input[type='button'],
+.panel-action-btn {
+  background-color: #43a047;
+  width: auto;
+  color: #fff;
+  border: 1px solid #999;
+  border-radius: 0.4rem;
   padding: 0.6rem 0.8rem;
   font-size: 1rem;
   font-weight: 500;
@@ -74,39 +85,29 @@ input[type="button"] {
   transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
   margin-top: 1rem;
   box-shadow: 0 2px 6px rgba(67, 160, 71, 0.2);
-}
 
-input[type="button"]:hover {
-  background-color: #388e3c; /* darker on hover */
-  box-shadow: 0 4px 10px rgba(67, 160, 71, 0.3);
-  transform: translateY(-2px);
-}
+  &:hover {
+    background-color: #388e3c;
+    box-shadow: 0 4px 10px rgba(67, 160, 71, 0.3);
+    transform: translateY(-2px);
+  }
 
-input[type="button"]:active {
-  background-color: #2e7d32;
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(67, 160, 71, 0.2);
-}
+  &:active {
+    background-color: #2e7d32;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(67, 160, 71, 0.2);
+  }
 
-input[type="button"]:focus {
-  outline: 3px solid rgba(67, 160, 71, 0.4);
-  outline-offset: 2px;
-}
+  &:focus {
+    outline: 3px solid rgba(67, 160, 71, 0.4);
+    outline-offset: 2px;
+  }
 
-input[type="button"] {
-  width: auto;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.4rem;
-  border: 1px solid #999;
-  cursor: pointer;
-  transition: box-shadow 0.2s, background-color 0.2s, border-color 0.2s;
-}
-
-input[type="button"].save-active {
-  background-color: #007aff;
-  color: #fff;
-  border-color: #007aff;
-  box-shadow: 0 0 12px rgba(0, 122, 255, 0.7);
+  &.save-active {
+    background-color: #007aff;
+    border-color: #007aff;
+    box-shadow: 0 0 12px rgba(0, 122, 255, 0.7);
+  }
 }
 
 .panel-grid {
@@ -115,53 +116,40 @@ input[type="button"].save-active {
   gap: 2rem;
   align-items: start;
   margin-block: 2rem;
-}
 
-@media (max-width: 1200px) {
-  .panel-grid {
+  @media (max-width: 1200px) {
     grid-template-columns: 1fr;
   }
 }
 
 .panel {
-  background: #1f1f1f;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 1rem 1rem 1.5rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   min-width: 0; /* fix long table overflow in grid children */
 }
 
-.toast-wrapper {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease-in-out;
-  z-index: 9999;
-}
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 
-.toast-wrapper.toast-visible {
-  opacity: 1;
-}
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
 
-.toast {
-  background: #222;
-  color: #fff;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  min-width: 180px;
-  font-size: 0.9rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  text-align: center;
-}
-
-.page {
-  font-family: system-ui, sans-serif;
-  padding: 1.5rem;
-  background-color: #f8f9fa;
-  color: #1a1a1a;
+  .panel-subtitle {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.8rem;
+    color: #666;
+  }
 }
 
 .instructions {
@@ -172,7 +160,7 @@ input[type="button"].save-active {
   margin-bottom: 1rem;
 
   h2 {
-    margin: 0 0 .5rem 0;
+    margin: 0 0 0.5rem 0;
     font-size: 1rem;
     font-weight: 600;
   }
@@ -180,54 +168,8 @@ input[type="button"].save-active {
   .note {
     font-size: 0.85rem;
     color: #555;
-    margin-top: .75rem;
+    margin-top: 0.75rem;
     font-style: italic;
-  }
-}
-
-.panel {
-  background: #ffffff;
-  border: 1px solid #dcdcdc;
-  border-radius: 0.5rem;
-  padding: 1rem 1.25rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: .75rem;
-
-  h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  .panel-subtitle {
-    margin: .25rem 0 0 0;
-    font-size: .8rem;
-    color: #666;
-  }
-
-  .panel-action-btn {
-    padding: 0.5rem .75rem;
-    border-radius: 0.4rem;
-    border: 1px solid #999;
-    cursor: pointer;
-    min-width: 8rem;
-    text-align: center;
-    font-size: .85rem;
-    transition: box-shadow 0.2s, background-color 0.2s, border-color 0.2s;
-
-    &.save-active {
-      background-color: #007aff;
-      color: #fff;
-      border-color: #007aff;
-      box-shadow: 0 0 12px rgba(0, 122, 255, 0.7);
-    }
   }
 }
 
@@ -254,42 +196,45 @@ input[type="button"].save-active {
 
 .cell-label {
   color: #222;
+
   .ticker {
     font-weight: 600;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
+
   .currency {
-    font-size: .75rem;
+    font-size: 0.75rem;
     color: #666;
   }
 }
 
 .cell-input {
-  font-size: .8rem;
+  font-size: 0.8rem;
   min-width: 5rem;
   border: 1px solid #bbb;
   border-radius: 0.3rem;
   background: #fff;
   outline: none;
-}
-.cell-input:focus {
-  border-color: #007aff;
-  box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
-}
 
-.cell-input.num {
-  width: 4.5rem;
-  text-align: right;
-}
+  &:focus {
+    border-color: #007aff;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+  }
 
-.cell-input.wide {
-  min-width: 12rem;
-  justify-items: left;
-}
+  &.num {
+    width: 4.5rem;
+    text-align: right;
+  }
 
-.cell-input.short {
-  max-width: 6rem;
-  min-width: 4rem;
+  &.wide {
+    min-width: 12rem;
+    justify-items: left;
+  }
+
+  &.short {
+    max-width: 6rem;
+    min-width: 4rem;
+  }
 }
 
 .cell-checkbox {
@@ -301,32 +246,17 @@ input[type="button"].save-active {
   text-align: center;
 }
 
-.ellipsis-btn {
-  font-size: 1rem;
-  line-height: 1rem;
-  background: #fff;
-  border: 1px solid #bbb;
-  border-radius: .4rem;
-  padding: .3rem .6rem;
-  cursor: pointer;
-}
-.ellipsis-btn:focus {
-  border-color: #007aff;
-  box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
-}
-
 .vip-label {
   display: inline-block;
-  margin-left: .4rem;
-  font-size: .7rem;
+  margin-left: 0.4rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #d48a00;
 }
 
 .toast-wrapper {
   position: fixed;
-  right: 1rem;
-  bottom: 1rem;
+  top: 1rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 200ms ease-in-out;
@@ -343,7 +273,7 @@ input[type="button"].save-active {
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   min-width: 180px;
-  font-size: 0.8rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  font-size: 0.9rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
