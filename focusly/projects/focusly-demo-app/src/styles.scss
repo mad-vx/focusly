@@ -19,7 +19,6 @@ h1 {
   letter-spacing: 0.5px;
 }
 
-/* Table styling */
 table {
   border-collapse: separate;
   border-spacing: 10px;
@@ -39,7 +38,6 @@ select {
   padding: 0.5rem;
 }
 
-/* Input / Select styling */
 input,
 input[focusly],
 select {
@@ -69,10 +67,10 @@ select[focusly]:focus {
   transform: scale(1.05);
 }
 
-/* Action Buttons */
 input[type='button'],
 .panel-action-btn {
   background-color: #43a047;
+  width: auto;
   color: #fff;
   border: 1px solid #999;
   border-radius: 0.4rem;
@@ -108,7 +106,6 @@ input[type='button'],
   }
 }
 
-/* Layout Grid for Panels */
 .panel-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -121,7 +118,6 @@ input[type='button'],
   }
 }
 
-/* Panels */
 .panel {
   background: #ffffff;
   border: 1px solid #dcdcdc;
@@ -152,7 +148,6 @@ input[type='button'],
   }
 }
 
-/* Instructions Box */
 .instructions {
   background: #ffffff;
   border: 1px solid #dcdcdc;
@@ -174,7 +169,6 @@ input[type='button'],
   }
 }
 
-/* Data Grid Tables */
 .data-grid {
   width: 100%;
   border-collapse: collapse;
@@ -196,7 +190,6 @@ input[type='button'],
   }
 }
 
-/* Cell Styles */
 .cell-label {
   color: #222;
 
