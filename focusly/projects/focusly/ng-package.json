@@ -3,6 +3,5 @@
   "dest": "../../dist/focusly",
   "lib": {
     "entryFile": "src/public-api.ts"
-  },
-  "assets": [ "./docs/focusly-demo.gif"]
+  }
 }
