@@ -39,3 +39,15 @@ Focusly tracks the user’s current focus position and responds to keyboard even
 
 ```bash
 npm install focusly
+```
+
+## ⚡ Keyboard Navigation in Action
+
+Experience **Focusly** in motion — navigate complex Angular tables and forms 
+using only your keyboard.  
+Use **Alt + Arrow Keys** to move focus, and **Enter** to trigger contextual actions, 
+all handled reactively via Angular **signals**.
+
+<p align="center">
+  <img src="./focusly/projects/focusly-demo-app/docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>
+</p>
