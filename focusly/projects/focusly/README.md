@@ -32,5 +32,5 @@ Use **Alt + Arrow Keys** to move focus, and **Enter** to trigger contextual acti
 all handled reactively via Angular **signals**.
 
 <p align="center">
-  <img src="../focusly-demo-app/docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>
+  <img src="./docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>
 </p>
