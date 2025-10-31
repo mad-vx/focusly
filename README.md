@@ -38,7 +38,7 @@ Focusly tracks the user’s current focus position and responds to keyboard even
 ## 📦 Installation
 
 ```bash
-npm install focusly
+npm install @zaybu/focusly
 ```
 
 ## ⚡ Keyboard Navigation in Action
