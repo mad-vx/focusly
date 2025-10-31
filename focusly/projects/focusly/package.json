@@ -1,6 +1,26 @@
 {
   "name": "@zaybu/focusly",
   "version": "0.0.5",
+  "description": "Intuitive, elegant keyboard navigation for Angular — built with Signals for instant reactivity.",
+  "keywords": [
+    "angular",
+    "keyboard navigation",
+    "focus",
+    "accessibility",
+    "signals",
+    "directive",
+    "forms",
+    "tables",
+    "keyboard",
+    "navigation"
+  ],
+  "author": "Mark Evans",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mad-vx/focusly.git"
+  },
+  "homepage": "https://github.com/mad-vx/focusly#readme",
   "peerDependencies": {
     "@angular/common": "^19.2.0",
     "@angular/core": "^19.2.0"
