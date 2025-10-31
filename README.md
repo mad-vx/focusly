@@ -47,5 +47,5 @@ Experience **Focusly** in motion — navigate complex Angular tables and forms u
 Use **Alt + Arrow Keys** to move focus, and **Enter** to trigger contextual actions.
 
 <p align="center">
-  <img src="./focusly/projects/focusly-demo-app/docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>
+  <img src="https://raw.githubusercontent.com/mad-vx/focusly/main/focusly/projects/focusly-demo-app/docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>
 </p>
