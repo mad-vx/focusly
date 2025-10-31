@@ -1,4 +1,4 @@
-# 🎯 Focusly – Intelligent Keyboard Navigation for Angular
+# 🎯 Focusly – Intuitive, Elegant Keyboard Navigation for Angular
 
 **Focusly** is a lightweight Angular library that brings **intuitive, keyboard-driven navigation** to web applications.
 
@@ -11,21 +11,21 @@ Focusly was designed to make keyboard navigation **predictable, accessible, and 
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
-- Navigate grids, tables, or forms entirely via keyboard  
-- Works with any focusable element (`<input>`, `<select>`, `<button>`, etc.)  
-- Supports **multiple independent focus groups** on a single page  
-- Simple declarative API using Angular directives  
-- Customizable navigation keys and direction logic  
-- Built for accessibility and developer simplicity  
-- Zero external dependencies
+- 🚀 Navigate grids, tables, or forms entirely via keyboard 
+- 🎯 **Scoped focus groups** so each panel or table behaves independently on a single page
+- 🪄 Elegant and simple declarative API using Angular directives  
+- 🧩 Works with any focusable element (`<input>`, `<select>`, `<button>`, etc.)  
+- 🧠 Easily extendable to custom components 
+- ♿ Built for accessibility and developer simplicity
+- ⚡ Built with Angular **signals** for instant reactivity — no manual change detection
+- 🔄 Fully reactive and framework-native (no DOM listeners or external deps)
+- 🪶 Small, simple, and zero-dependency
 
 ---
 
 ## 🧠 Concept
-
-Focusly organizes focusable elements into **groups**, **rows**, and **columns**.
 
 Each focusable element declares:
 - A **group** – to separate independent navigation contexts (e.g., two tables)
@@ -35,7 +35,7 @@ Focusly tracks the user’s current focus position and responds to keyboard even
 
 ---
 
-## ⚙️ Installation
+## 📦 Installation
 
 ```bash
 npm install focusly
@@ -43,10 +43,8 @@ npm install focusly
 
 ## ⚡ Keyboard Navigation in Action
 
-Experience **Focusly** in motion — navigate complex Angular tables and forms 
-using only your keyboard.  
-Use **Alt + Arrow Keys** to move focus, and **Enter** to trigger contextual actions, 
-all handled reactively via Angular **signals**.
+Experience **Focusly** in motion — navigate complex Angular tables and forms using only your keyboard.  
+Use **Alt + Arrow Keys** to move focus, and **Enter** to trigger contextual actions.
 
 <p align="center">
   <img src="./focusly/projects/focusly-demo-app/docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>

@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build-lib": "cd ./projects/focusly && ng build",
+    "build-lib": "cd ./projects/focusly && ng build && copy ../../../README.md ../../dist/focusly",
+    "copy readme": "copy ..\\..\\README.md ..\\dist\\focusly'",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pack": "cd ./dist/focusly && npm pack",
