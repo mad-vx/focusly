@@ -49,3 +49,11 @@ Use **Alt + Arrow Keys** to move focus, and **Enter** to trigger contextual acti
 <p align="center">
   <img src="https://raw.githubusercontent.com/mad-vx/focusly/main/focusly/projects/focusly-demo-app/docs/focusly-demo.gif" alt="Focusly demo" width="80%"/>
 </p>
+
+
+## 🧩 Extensible by Design — Custom Component Integration
+
+Unlike many keyboard-navigation libraries that hard-code focus behaviour in a central service, Focusly is built to be truly extensible.
+Each custom UI component can declare its own Focusly-aware directive, cleanly encapsulating how focus is set, managed, and released.
+
+This means you can integrate complex third-party components (like Angular Material, PrimeNG, or NgZorro) without modifying Focusly’s core logic.
