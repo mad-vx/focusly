@@ -9,6 +9,9 @@
       "focusly": [
         "./dist/focusly",
         "./projects/focusly/src/public-api.ts"
+      ],
+      "focusly-nz": [
+        "./dist/focusly-nz"
       ]
     },
     "noImplicitOverride": true,

@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/mad-vx/focusly#readme",
   "peerDependencies": {
-    "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0"
+    "@angular/core": ">=16.0.0 <21.0.0",
+    "@angular/common": ">=16.0.0 <21.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
