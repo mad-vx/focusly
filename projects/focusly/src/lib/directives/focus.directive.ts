@@ -11,7 +11,7 @@ import {
 import { Subscription } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { FocusService } from '../services/focus.service';
-import { FocusItem } from '../models/focus-item.model';
+import { FocusItem } from '../../../../../packages/focusly-core/src/models/focus-item.model';
 
 @Directive({
   selector: '[focusly]',

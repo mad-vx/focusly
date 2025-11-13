@@ -1,42 +1,19 @@
 {
-  "name": "focusly",
-  "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build-lib": "cd ./projects/focusly && ng build && cd .. && cd.. && npm run copy-readme",
-    "copy-readme": "copy ..\\README.md dist\\focusly\\README.md",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "pack": "cd ./dist/focusly && npm pack",
-    "publish": "cd ./dist/focusly && npm publish"
-  },
+  "name": "focusly-monorepo",
   "private": true,
-  "dependencies": {
-    "@angular/common": "^20.3.9",
-    "@angular/compiler": "^20.3.9",
-    "@angular/core": "^20.3.9",
-    "@angular/forms": "^20.3.9",
-    "@angular/platform-browser": "^20.3.9",
-    "@angular/platform-browser-dynamic": "^20.3.9",
-    "@angular/router": "^20.3.9",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+  "packageManager": "pnpm@9.12.2",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "release": "changeset version && pnpm -r build && changeset publish",
+    "copy-readme": "node tooling/release/copy-readme.mjs"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "@angular/build": "^20.3.8",
-    "@angular/cli": "^20.3.8",
-    "@angular/compiler-cli": "^20.3.9",
-    "@types/jasmine": "~5.1.0",
-    "@types/uuid": "^10.0.0",
-    "jasmine-core": "~5.6.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
-    "ng-packagr": "^20.3.0",
+    "@changesets/cli": "^2.27.8",
+    "tsup": "^8.5.0",
     "typescript": "~5.9.3"
   }
 }

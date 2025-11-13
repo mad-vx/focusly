@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FocusItem } from '../models/focus-item.model';
+import { FocusItem } from '../../../../../packages/focusly-core/src/models/focus-item.model';
 
 @Injectable({ providedIn: 'root' })
 export class FocusService {
