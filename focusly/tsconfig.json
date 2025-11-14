@@ -6,11 +6,11 @@
     "outDir": "./dist/out-tsc",
     "strict": true,
     "paths": {
-      "focusly": [
+      "@zaybu/focusly": [
         "./dist/focusly",
         "./projects/focusly/src/public-api.ts"
       ],
-      "focusly-nz": [
+      "@zaybu/focusly-nz": [
         "./dist/focusly-nz"
       ]
     },
@@ -25,7 +25,8 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "ES2022",
+    "lib": ["ES2022", "DOM"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

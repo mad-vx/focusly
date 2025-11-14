@@ -4,13 +4,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "types": [],
-    "paths": {
-      "@zaybu/focusly": [
-        "../../dist/focusly",
-        "../../projects/focusly/src/public-api.ts"
-      ]
-    }
+    "types": []
   },
   "files": [
     "src/main.ts"

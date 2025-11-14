@@ -4,12 +4,12 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
+  inject,
   Input,
   OnDestroy,
   OnInit
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
 import { FocusService } from '../services/focus.service';
 import { FocusItem } from '../models/focus-item.model';
 
@@ -50,14 +50,14 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private _focuslyScope: number | undefined;
 
   private limitHitSubscription: Subscription;
-  private uniqueId = uuidv4();
+  private uniqueId = () => crypto.randomUUID();
 
   protected get focus(): FocusItem {
     return <FocusItem>{
       column: this.focuslyColumn,
       row: this.focuslyRow,
       groupId: this.focuslyGroup,
-      id: this.uniqueId
+      id: this.uniqueId()
     };
   }
 
@@ -84,15 +84,28 @@ export class FocuslyDirective implements OnInit, OnDestroy {
     }
   });
 
+  readonly keyHandlers: Record<string, () => void> = {
+    'alt+arrowdown': () => this.focusService.down(),
+    'alt+arrowup':   () => this.focusService.up(),
+    'alt+arrowleft': () => this.focusService.left(),
+    'alt+arrowright':() => this.focusService.right(),
+    'home':          () => this.focusService.home(),
+    'end':           () => this.focusService.end(),
+    'pageup':        () => this.focusService.pageUp(),
+    'pagedown':      () => this.focusService.pageDown(),
+    'tab':           () => this.focusService.down(),
+    'shift+tab':     () => this.focusService.up(),
+  };
+
   @HostBinding('class.focusly-active')
   get activeClass() {
     return this.isActive();
   }
 
-  constructor(
-    protected elementRef: ElementRef,
-    protected focusService: FocusService
-  ) {
+  protected elementRef = inject(ElementRef);
+  protected focusService = inject(FocusService);
+
+  constructor() {
 
     this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
       if (this.focusService.isCurrentFocus(this.focus)) {
@@ -119,51 +132,19 @@ export class FocuslyDirective implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('keydown.tab', ['$event'])
-  @HostListener('keydown.alt.arrowdown', ['$event'])
-  public onKeyPressArrowDown(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.down());
-  }
+  @HostListener('keydown', ['$event'])
+  onKeydown(e: KeyboardEvent) {
+    const key = [
+      e.altKey ? 'alt' : '',
+      e.shiftKey ? 'shift' : '',
+      e.key.toLowerCase()
+    ].filter(Boolean).join('+');
 
-  @HostListener('keydown.shift.tab', ['$event'])
-  @HostListener('keydown.alt.arrowup', ['$event'])
-  public onKeyPressArrowUp(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.up());
-  }
+    const handler = this.keyHandlers[key] ?? null;
+    if (!handler) return;
 
-  @HostListener('keydown.alt.arrowleft', ['$event'])
-  public onKeyPressArrowLeft(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.left());
-  }
-
-  @HostListener('keydown.alt.arrowright', ['$event'])
-  public onKeyPressArrowRight(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.right());
-  }
-
-  @HostListener('keydown.home', ['$event'])
-  public onKeyPressHome(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.home());
-  }
-
-  @HostListener('keydown.end', ['$event'])
-  public onKeyPressEnd(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.end());
-  }
-
-  @HostListener('keydown.pageup', ['$event'])
-  public onKeyPressPageUp(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.pageUp());
-  }
-
-  @HostListener('keydown.pagedown', ['$event'])
-  public onKeyPressPageDown(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.pageDown());
-  }
-
-  private processKeyPress(event: KeyboardEvent, focusServiceMethod: () => void) {
-    event.stopPropagation();
-    event.preventDefault();
-    focusServiceMethod();
+    e.preventDefault();
+    e.stopPropagation();
+    handler();
   }
 }

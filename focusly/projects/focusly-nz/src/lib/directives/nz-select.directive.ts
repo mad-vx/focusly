@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Directive, ElementRef, HostListener, inject } from '@angular/core';
+import { Directive, HostListener, inject } from '@angular/core';
+import { FocuslyDirective } from '@zaybu/focusly';
+import { NzSelectComponent } from 'ng-zorro-antd/select';
 
 @Directive({
   selector: '[appNzSelectGridFocus]',
   standalone: true
 })
 export class NzSelectGridFocusDirective extends FocuslyDirective {
-  protected elementRef: ElementRef;
-  protected focuslyService: FocusSer;
-  protected changeDetectorRef: ChangeDetectorRef;
   protected nzSelect = inject(NzSelectComponent);
 
   // This tracks if the mouse has been clicked on the dropdown.
@@ -15,13 +14,7 @@ export class NzSelectGridFocusDirective extends FocuslyDirective {
   private mouseClick = false;
 
   constructor() {
-    const elementRef = inject(ElementRef);
-    const gridFocusService = inject(GridFocusService);
-
-    super(elementRef, gridFocusService, changeDetectorRef);
-    this.elementRef = elementRef;
-    this.gridFocusService = gridFocusService;
-    this.changeDetectorRef = changeDetectorRef;
+    super();
 
     this.selectCustomElement = () => {
       this.nzSelect.focus();
