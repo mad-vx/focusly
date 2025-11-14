@@ -7,6 +7,7 @@
     "start:open": "ng serve focusly-demo-app -o",
     "start:prod": "ng serve focusly-demo-app --configuration production",
     "build:demo": "ng build focusly-demo-app",
+    "build:demo:watch": "ng build focusly-demo-app --watch",
     "build:demo:prod": "ng build focusly-demo-app --configuration production",
     "build:demo:ghpages": "ng build focusly-demo-app --configuration production --base-href /focusly-demo-app/",
     "build:lib": "ng build focusly",
