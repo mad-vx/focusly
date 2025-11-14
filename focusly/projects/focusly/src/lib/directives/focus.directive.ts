@@ -50,14 +50,14 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private _focuslyScope: number | undefined;
 
   private limitHitSubscription: Subscription;
-  private uniqueId = () => crypto.randomUUID();
+  private uniqueId = crypto.randomUUID();
 
   protected get focus(): FocusItem {
     return <FocusItem>{
       column: this.focuslyColumn,
       row: this.focuslyRow,
       groupId: this.focuslyGroup,
-      id: this.uniqueId()
+      id: this.uniqueId
     };
   }
 
@@ -72,7 +72,8 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   selectCustomElement: (() => void) | undefined;
 
   readonly isActive = computed(() => {
-    if (this.focusService.isCurrentFocus(this.focus)) {
+    const isActive = this.focusService.isCurrentFocus(this.focus);
+    if (isActive) {
       this.elementRef.nativeElement.focus();
       if (this.elementRef.nativeElement.select) {
         this.elementRef.nativeElement.select();
@@ -82,6 +83,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
         }
       }  
     }
+    return isActive;
   });
 
   readonly keyHandlers: Record<string, () => void> = {
@@ -99,6 +101,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @HostBinding('class.focusly-active')
   get activeClass() {
+    console.log(this.isActive());
     return this.isActive();
   }
 
