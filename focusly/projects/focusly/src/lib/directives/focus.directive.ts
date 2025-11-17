@@ -101,7 +101,6 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @HostBinding('class.focusly-active')
   get activeClass() {
-    console.log(this.isActive());
     return this.isActive();
   }
 

@@ -3,10 +3,10 @@ import { FocuslyDirective } from '@zaybu/focusly';
 import { NzSelectComponent } from 'ng-zorro-antd/select';
 
 @Directive({
-  selector: '[appNzSelectGridFocus]',
+  selector: '[nz-select-focusly]',
   standalone: true
 })
-export class NzSelectGridFocusDirective extends FocuslyDirective {
+export class NzSelectFocusDirective extends FocuslyDirective {
   protected nzSelect = inject(NzSelectComponent);
 
   // This tracks if the mouse has been clicked on the dropdown.

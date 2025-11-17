@@ -1,32 +1,4 @@
-<main class="page" (keypress)="onKeyPress($event)">
-  <h1>Focusly Demo</h1>
-
-  <section class="instructions">
-    <h2>What is Focusly?</h2>
-    <p>
-      <strong>Focusly</strong> lets you move around complex, data-heavy UIs using only the keyboard.
-      Use <strong>Alt + Arrow Keys</strong> to move between interactive cells, and press
-      <strong>Enter</strong> to trigger the contextual action for that panel.
-    </p>
-  </section>
-
-  <section class="instructions">
-    <h2>Keyboard Navigation</h2>
-    <ul>
-      <li><strong>Alt + ↑ / ↓ / ← / →</strong> – Move between fields</li>
-      <li><strong>Home / End</strong> – Jump to first / last column in the current row</li>
-      <li><strong>Page Up / Page Down</strong> – Jump to first / last row</li>
-      <li><strong>Enter</strong> – Run the panel's action (Save / Confirm)</li>
-    </ul>
-    <p class="note">
-      Below are two independent panels. Notice how <strong>Enter</strong> in the first
-      panel triggers “Confirm Trades”, and in the second panel it triggers “Save Customer”.
-      Focusly keeps those behaviours scoped.
-    </p>
-  </section>
-
-  <app-ng-zorro></app-ng-zorro>
-  <!-- <div class="panel-grid">
+  <div class="panel-grid">
     <section class="panel">
       <header class="panel-header">
         <div>
@@ -79,7 +51,10 @@
                 </td>
 
                 <td>
-                  <select
+                      <ng-container
+                        *ngTemplateOutlet="buyOrSellTemplate; context: { $implicit:  row, row:row, group: 1 }">
+                    </ng-container>
+                  <!-- <select
                     focusly
                     class="cell-input"
                     [focuslyGroup]="1"
@@ -88,7 +63,7 @@
                   >
                     <option [selected]="row.side === 'Buy'">Buy</option>
                     <option [selected]="row.side === 'Sell'">Sell</option>
-                  </select>
+                  </select> -->
                 </td>
 
                 <td class="cell-center">
@@ -264,12 +239,4 @@
         </table>
       </focusly-listener>
     </section>
-  </div> -->
-
-  <div class="toast-wrapper" [class.toast-visible]="showToast">
-    <div class="toast">
-      {{ lastActionMessage }}
-    </div>
   </div>
-  <key-display></key-display>
-</main>
