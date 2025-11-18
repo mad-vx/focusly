@@ -54,16 +54,6 @@
                     <ng-container
                         *ngTemplateOutlet="buyOrSellTemplate; context: { $implicit:  row, row:row, group: 1 }">
                     </ng-container>
-                  <!-- <select
-                    focusly
-                    class="cell-input"
-                    [focuslyGroup]="1"
-                    [focuslyRow]="row.rowIndex"
-                    [focuslyColumn]="1"
-                  >
-                    <option [selected]="row.side === 'Buy'">Buy</option>
-                    <option [selected]="row.side === 'Sell'">Sell</option>
-                  </select> -->
                 </td>
 
                 <td class="cell-center">
