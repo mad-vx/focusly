@@ -2,17 +2,16 @@ import { Component, Input, signal, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent } from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
-import { BaseDemoGrid } from '../abstract/base-demo-grid';
+import { KeyDisplayComponent } from '../keyboard.component';
 
 @Component({
   selector: 'app-base-component',
-  imports: [NgTemplateOutlet, FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent],
+  imports: [NgTemplateOutlet, FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent, KeyDisplayComponent],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss',
   standalone: true
 })
 export class BaseComponent  {
-  //buyOrSellTemplate = input.required<TemplateRef<any>>()
   @Input() buyOrSellTemplate?: TemplateRef<TradeCellContext>;
   
   tradeRows: TradeRow[] = [

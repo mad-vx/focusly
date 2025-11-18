@@ -51,7 +51,7 @@
                 </td>
 
                 <td>
-                      <ng-container
+                    <ng-container
                         *ngTemplateOutlet="buyOrSellTemplate; context: { $implicit:  row, row:row, group: 1 }">
                     </ng-container>
                   <!-- <select
@@ -240,3 +240,10 @@
       </focusly-listener>
     </section>
   </div>
+
+  <div class="toast-wrapper" [class.toast-visible]="showToast">
+    <div class="toast">
+      {{ lastActionMessage }}
+    </div>
+  </div>
+  <key-display></key-display>
