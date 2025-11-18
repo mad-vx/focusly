@@ -1,14 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { FocuslyEnterKeySubscriberComponent } from '@zaybu/focusly';
-import { FocuslyDirective, FocuslyListenerComponent } from '@zaybu/focusly';
 import { KeyboardService } from './services/keyboard-service';
 import { KeyDisplayComponent } from "./components/keyboard.component";
 import { NgZorroComponent } from "./components/ng-zorro/ng-zorro.component";
-import { BaseComponent } from './components/base/base.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-root',
-  imports: [KeyDisplayComponent, NgZorroComponent],
+  imports: [KeyDisplayComponent, NgZorroComponent, NzSelectModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   standalone: true
