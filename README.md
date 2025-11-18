@@ -20,6 +20,7 @@ Focusly was designed to make keyboard navigation **predictable, accessible, and 
 - 🧠 Easily extendable to custom components 
 - ♿ Built for accessibility and developer simplicity
 - ⚡ Built with Angular **signals** for instant reactivity — no manual change detection
+- ⚡ Works with provideZonelessChangeDetection() - ensures optimal performance in zone-less Angular apps
 - 🔄 Fully reactive and framework-native (no DOM listeners or external deps)
 - 🪶 Small, simple, and zero-dependency
 
