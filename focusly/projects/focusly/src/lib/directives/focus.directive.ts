@@ -4,12 +4,14 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
+  inject,
   Input,
+  Injector,
   OnDestroy,
-  OnInit
+  OnInit,
+  effect,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
 import { FocusService } from '../services/focus.service';
 import { FocusItem } from '../models/focus-item.model';
 
@@ -49,57 +51,116 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private _focuslyRow: number | undefined;
   private _focuslyScope: number | undefined;
 
-  private limitHitSubscription: Subscription;
-  private uniqueId = uuidv4();
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+  protected readonly focusService = inject(FocusService);
+  private readonly injector = inject(Injector);
 
+  private readonly uniqueId = crypto.randomUUID();
+  private readonly limitHitSubscription: Subscription;
+
+  /**
+   * Public-facing FocusItem snapshot for this host element.
+   * Always built from current inputs.
+   */
   protected get focus(): FocusItem {
-    return <FocusItem>{
+    return {
       column: this.focuslyColumn,
       row: this.focuslyRow,
       groupId: this.focuslyGroup,
       id: this.uniqueId
-    };
+    } as FocusItem;
   }
 
-  // Override this method to implement custom onFocus actions
-  onElementFocus = (): void => {
-    if (this.elementRef.nativeElement.select) {
-      this.elementRef.nativeElement.select();
+  /**
+   * Hook for when this element receives focus *programmatically* via effect.
+   * Override in derived directives if needed.
+   */
+  protected onElementFocus: () => void = () => {
+    const host = this.elementRef.nativeElement as any;
+    if (host.select) {
+      host.select();
     }
   };
 
-  // Override this method to implement custom focus() actions
-  selectCustomElement: (() => void) | undefined;
+  /**
+   * Hook for programmatic focus of non-native controls (e.g. NzSelect).
+   * If set, this will be used instead of native focus/select.
+   */
+  protected selectCustomElement: (() => void) | undefined;
 
-  readonly isActive = computed(() => {
-    if (this.focusService.isCurrentFocus(this.focus)) {
-      this.elementRef.nativeElement.focus();
-      if (this.elementRef.nativeElement.select) {
-        this.elementRef.nativeElement.select();
-      } else {
-        if (this.selectCustomElement) {
-          this.selectCustomElement();
-        }
-      }  
-    }
-  });
+  /**
+   * Pure computed: "Am I currently the active focus item?"
+   * NOTE: NO SIDE EFFECTS HERE.
+   */
+  readonly isActive = computed(() =>
+    this.focusService.isCurrentFocus(this.focus)
+  );
+
+  /**
+   * Keyboard navigation mapping.
+   */
+  readonly keyHandlers: Record<string, () => void> = {
+    'alt+arrowdown': () => this.focusService.down(),
+    'alt+arrowup':   () => this.focusService.up(),
+    'alt+arrowleft': () => this.focusService.left(),
+    'alt+arrowright':() => this.focusService.right(),
+    'home':          () => this.focusService.home(),
+    'end':           () => this.focusService.end(),
+    'pageup':        () => this.focusService.pageUp(),
+    'pagedown':      () => this.focusService.pageDown(),
+    'tab':           () => this.focusService.down(),
+    'shift+tab':     () => this.focusService.up(),
+  };
 
   @HostBinding('class.focusly-active')
-  get activeClass() {
+  get activeClass(): boolean {
     return this.isActive();
   }
 
-  constructor(
-    protected elementRef: ElementRef,
-    protected focusService: FocusService
-  ) {
-
-    this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
-      if (this.focusService.isCurrentFocus(this.focus)) {
-        this.elementRef.nativeElement.blur();
-        this.elementRef.nativeElement.focus();
+  constructor() {
+    // Handle "end of grid" / limit hit behaviour
+    this.limitHitSubscription = this.focusService.endStopHit$.subscribe(
+      (focus: FocusItem) => {
+        if (this.focusService.isCurrentFocus(this.focus)) {
+          const host = this.elementRef.nativeElement;
+          // Defer blur/focus to after the current CD cycle
+          queueMicrotask(() => {
+            (host as any).blur?.();
+            (host as any).focus?.();
+          });
+        }
       }
-    });
+    );
+
+    // Effect to handle focus side-effect when this item becomes active
+    effect(
+      () => {
+        if (!this.isActive()) {
+          return;
+        }
+
+        // Run after current change detection to avoid ExpressionChanged errors
+        queueMicrotask(() => {
+          // Re-check in case focus changed again before this microtask ran
+          if (!this.isActive()) {
+            return;
+          }
+
+          const host = this.elementRef.nativeElement as any;
+
+          if (this.selectCustomElement) {
+            this.selectCustomElement();
+          } else {
+            host.focus?.();
+            if (host.select) {
+              host.select();
+            }
+          }
+          this.onElementFocus();
+        });
+      },
+      { injector: this.injector }
+    );
   }
 
   ngOnInit(): void {
@@ -111,59 +172,73 @@ export class FocuslyDirective implements OnInit, OnDestroy {
     this.limitHitSubscription.unsubscribe();
   }
 
+  // These are the ONLY @HostListener decorators; derived directives just
+  // override the protected hooks below.
+
   @HostListener('focus', ['$event'])
-  public onFocus(event: any): void {
+  @HostListener('focusin', ['$event'])
+  protected handleFocusIn(event: FocusEvent): void {
     this.focusService.onFocus(this.focus);
-    if (this.onElementFocus) {
-      this.onElementFocus();
+    this.onFocusIn(event);
+  }
+
+  @HostListener('focusout', ['$event'])
+  protected handleFocusOut(event: FocusEvent): void {
+    this.onFocusOut(event);
+  }
+
+  @HostListener('mousedown', ['$event'])
+  protected handleMouseDown(event: MouseEvent): void {
+    this.onMouseDown(event);
+  }
+
+  @HostListener('keydown', ['$event'])
+  protected handleKeydown(e: KeyboardEvent): void {
+    const key = [
+      e.altKey ? 'alt' : '',
+      e.shiftKey ? 'shift' : '',
+      e.key.toLowerCase()
+    ]
+      .filter(Boolean)
+      .join('+');
+
+    const handler = this.keyHandlers[key];
+
+    if (handler) {
+      e.preventDefault();
+      e.stopPropagation();
+      handler();
     }
+    this.onKeydown(e);
   }
 
-  @HostListener('keydown.tab', ['$event'])
-  @HostListener('keydown.alt.arrowdown', ['$event'])
-  public onKeyPressArrowDown(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.down());
+  @HostListener('keydown.enter', ['$event'])
+  protected handleEnterKey(e: Event): void {
+    this.onEnterKey(e as KeyboardEvent);
   }
 
-  @HostListener('keydown.shift.tab', ['$event'])
-  @HostListener('keydown.alt.arrowup', ['$event'])
-  public onKeyPressArrowUp(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.up());
+  // ----- Overridable hooks for derived directives ---------------------------
+  // Default implementations do nothing. NzSelectFocusDirective (etc.) can
+  // override any of these to implement control-specific behaviour without
+  // needing its own @HostListener decorators.
+
+  protected onFocusIn(event: FocusEvent): void {
+    // Default: no-op
   }
 
-  @HostListener('keydown.alt.arrowleft', ['$event'])
-  public onKeyPressArrowLeft(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.left());
+  protected onFocusOut(event: FocusEvent): void {
+    // Default: no-op
   }
 
-  @HostListener('keydown.alt.arrowright', ['$event'])
-  public onKeyPressArrowRight(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.right());
+  protected onMouseDown(event: MouseEvent): void {
+    // Default: no-op
   }
 
-  @HostListener('keydown.home', ['$event'])
-  public onKeyPressHome(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.home());
+  protected onKeydown(event: KeyboardEvent): void {
+    // Default: no-op
   }
 
-  @HostListener('keydown.end', ['$event'])
-  public onKeyPressEnd(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.end());
-  }
-
-  @HostListener('keydown.pageup', ['$event'])
-  public onKeyPressPageUp(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.pageUp());
-  }
-
-  @HostListener('keydown.pagedown', ['$event'])
-  public onKeyPressPageDown(event: KeyboardEvent): void {
-    this.processKeyPress(event, () => this.focusService.pageDown());
-  }
-
-  private processKeyPress(event: KeyboardEvent, focusServiceMethod: () => void) {
-    event.stopPropagation();
-    event.preventDefault();
-    focusServiceMethod();
+  protected onEnterKey(event: KeyboardEvent): void {
+    // Default: no-op
   }
 }

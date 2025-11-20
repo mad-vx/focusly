@@ -38,9 +38,6 @@ import { KeyboardService } from '../services/keyboard-service';
 export class KeyDisplayComponent {
   private keyCapture = inject(KeyboardService);
 
-  // Expose the raw combo string to the template
   readonly combo = this.keyCapture.lastCombo;
-
-  // We can hide the HUD when there's nothing to show
   readonly visible = computed(() => this.combo().trim().length > 0);
 }

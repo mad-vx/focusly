@@ -20,6 +20,7 @@ Focusly was designed to make keyboard navigation **predictable, accessible, and 
 - 🧠 Easily extendable to custom components 
 - ♿ Built for accessibility and developer simplicity
 - ⚡ Built with Angular **signals** for instant reactivity — no manual change detection
+- ⚡ Works with provideZonelessChangeDetection() - ensures optimal performance in zone-less Angular apps
 - 🔄 Fully reactive and framework-native (no DOM listeners or external deps)
 - 🪶 Small, simple, and zero-dependency
 
@@ -41,6 +42,19 @@ Focusly tracks the user’s current focus position and responds to keyboard even
 npm install @zaybu/focusly
 ```
 
+## 📝 Example Usage
+```html
+  <select
+      focusly
+      [focuslyGroup]="1"
+      [focuslyRow]="2"
+      [focuslyColumn]="3"
+      >
+      <option>Buy</option>
+      <option>Sell</option>
+  </select>
+```
+
 ## ⚡ Keyboard Navigation in Action
 
 Experience **Focusly** in motion — navigate complex Angular tables and forms using only your keyboard.  
@@ -57,3 +71,15 @@ Unlike many keyboard-navigation libraries that hard-code focus behaviour in a ce
 Each custom UI component can declare its own Focusly-aware directive, cleanly encapsulating how focus is set, managed, and released.
 
 This means you can integrate complex third-party components (like Angular Material, PrimeNG, or NgZorro) without modifying Focusly’s core logic.
+
+Focusly is built on a single, powerful base directive that provides all core keyboard-navigation behaviour—movement logic, focus tracking, directional traversal, and accessible focus management. Support for UI libraries such as NG-ZORRO, Angular Material, or any other component framework is achieved through lightweight extension directives that simply override a few optional hooks.
+
+Unlike other keyboard-navigation solutions that tightly couple navigation logic to specific components—or require you to write large amounts of boilerplate—Focusly keeps the API clean and the implementation surface tiny. 
+The benefits are substantial:
+
+- Consistent behaviour across all toolkits and components
+- No duplication of navigation logic
+- Simple, maintainable extensions for toolkit-specific behaviour
+- Small footprint, big flexibility—you can support new UI libraries in minutes
+
+This design allows Focusly to be both highly opinionated in the places that matter (accessibility, deterministic movement, and predictable focus handling), and highly extensible wherever component libraries differ.

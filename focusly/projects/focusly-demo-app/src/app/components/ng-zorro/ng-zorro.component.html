@@ -1,0 +1,16 @@
+<ng-template #nzSide let-row let-group="group">
+  <nz-select
+    nz-select-focusly
+    class="cell-input"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="1"
+    [(ngModel)]="row.side">
+    <nz-option nzLabel="Buy"  nzValue="Buy"></nz-option>
+    <nz-option nzLabel="Sell" nzValue="Sell"></nz-option> 
+  </nz-select>
+</ng-template>
+
+<app-base-component
+  [buyOrSellTemplate]="nzSide">
+</app-base-component>

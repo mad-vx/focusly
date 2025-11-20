@@ -1,4 +1,4 @@
-<main class="page" (keypress)="onKeyPress($event)">
+<main class="page">
   <h1>Focusly Demo</h1>
 
   <section class="instructions">
@@ -25,250 +25,24 @@
     </p>
   </section>
 
-  <div class="panel-grid">
-    <section class="panel">
-      <header class="panel-header">
-        <div>
-          <h3>Open Positions</h3>
-          <p class="panel-subtitle">Edit quantities, risk status, and desk notes</p>
-        </div>
+  <section class="instructions">
+    <h2>Component Toolkit Independant</h2>
+    <p>
+Focusly is designed to work seamlessly across all UI component toolkits.
+In this demo you can switch between Vanilla HTML and NG-ZORRO.
+Toolkit-specific support is implemented as a thin extension of the base directive, meaning the core navigation logic stays centralised and clean while each UI library only adds a few small, tailored overrides. This keeps behaviour consistent, predictable, and incredibly easy to maintain.
+    </p>
+    <p>
+      <input type="radio" [checked]="toolkit() === 'none'" (click)="toolkit.set('none')"/><label>Vanilla HTML</label> 
+      <input type="radio" [checked]="toolkit() === 'ngzorro'" (click)="toolkit.set('ngzorro')"/><label>Ng-Zorro</label> 
+    </p>
+  </section>
 
-        <input
-          type="button"
-          class="panel-action-btn"
-          value="Confirm Trades"
-          [class.save-active]="activeSaveButton() === 1"
-          (click)="onEnterKey()"
-        />
-      </header>
+  @if(toolkit() === 'ngzorro') {
+    <app-ng-zorro></app-ng-zorro>
+  }
+  @else {
+    <app-vanilla-html></app-vanilla-html>
+  }
 
-      <focusly-listener [keyDownEvents]="['Enter']">
-        <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey()">
-        </focusly-enter-key-subscriber>
-
-        <table class="data-grid">
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>Qty</th>
-              <th>Side</th>
-              <th>Risk OK?</th>
-              <th>Desk Notes</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (row of tradeRows; track row.symbol) {
-              <tr>
-                <td class="cell-label">
-                  <span class="ticker">{{ row.symbol }}</span>
-                  <span class="currency">{{ row.ccy }}</span>
-                </td>
-                <td>
-                  <input
-                    focusly
-                    class="cell-input num"
-                    type="number"
-                    [focuslyGroup]="1"
-                    [focuslyRow]="row.rowIndex"
-                    [focuslyColumn]="0"
-                    [value]="row.qty"
-                  />
-                </td>
-
-                <td>
-                  <select
-                    focusly
-                    class="cell-input"
-                    [focuslyGroup]="1"
-                    [focuslyRow]="row.rowIndex"
-                    [focuslyColumn]="1"
-                  >
-                    <option [selected]="row.side === 'Buy'">Buy</option>
-                    <option [selected]="row.side === 'Sell'">Sell</option>
-                  </select>
-                </td>
-
-                <td class="cell-center">
-                  <input
-                    focusly
-                    class="cell-checkbox"
-                    type="checkbox"
-                    [focuslyGroup]="1"
-                    [focuslyRow]="row.rowIndex"
-                    [focuslyColumn]="2"
-                    [checked]="row.riskOk"
-                  />
-                </td>
-
-                <td>
-                  <input
-                    focusly
-                    class="cell-input wide"
-                    type="text"
-                    [focuslyGroup]="1"
-                    [focuslyRow]="row.rowIndex"
-                    [focuslyColumn]="3"
-                    [value]="row.notes"
-                    placeholder="Internal note…"
-                  />
-                </td>
-
-                <td class="cell-center">
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </focusly-listener>
-    </section>
-
-    <section class="panel">
-      <header class="panel-header">
-        <div>
-          <h3>Customer Profile</h3>
-          <p class="panel-subtitle">Update trader contact</p>
-        </div>
-
-        <input
-          type="button"
-          class="panel-action-btn"
-          value="Save Customer"
-          [class.save-active]="activeSaveButton() === 2"
-          (click)="onEnterKey2()"
-        />
-      </header>
-
-      <focusly-listener [keyDownEvents]="['Enter']">
-        <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey2()">
-        </focusly-enter-key-subscriber>
-
-        <table class="data-grid">
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Value</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td class="cell-label">Name</td>
-              <td>
-                <input
-                  focusly
-                  class="cell-input wide"
-                  type="text"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="0"
-                  [focuslyColumn]="0"
-                  [value]="customer.name"
-                />
-              </td>
-            </tr>
-
-            <tr>
-              <td class="cell-label">Account Status</td>
-              <td>
-                <select
-                  focusly
-                  class="cell-input"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="2"
-                  [focuslyColumn]="0"
-                >
-                  <option [selected]="customer.status === 'Active'">Active</option>
-                  <option [selected]="customer.status === 'On Hold'">On Hold</option>
-                  <option [selected]="customer.status === 'Closed'">Closed</option>
-                </select>
-              </td>
-            </tr>
-
-            <tr>
-              <td class="cell-label">Email</td>
-              <td>
-                <input
-                  focusly
-                  class="cell-input wide"
-                  type="email"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="3"
-                  [focuslyColumn]="0"
-                  [value]="customer.email"
-                />
-              </td>
-            </tr>
-
-            <tr>
-              <td class="cell-label">Address</td>
-              <td>
-                <input
-                  focusly
-                  class="cell-input wide"
-                  type="text"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="4"
-                  [focuslyColumn]="0"
-                  [value]="customer.address1"
-                  placeholder="Line 1"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><input
-                  focusly
-                  class="cell-input wide"
-                  type="text"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="5"
-                  [focuslyColumn]="0"
-                  [value]="customer.address2"
-                  placeholder="Line 2"
-                />
-                </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>              
-                <input
-                  focusly
-                  class="cell-input wide"
-                  type="text"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="6"
-                  [focuslyColumn]="0"
-                  [value]="customer.city"
-                  placeholder="City"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>
-                <input
-                  focusly
-                  class="cell-input wide"
-                  type="text"
-                  [focuslyGroup]="2"
-                  [focuslyRow]="7"
-                  [focuslyColumn]="0"
-                  [value]="customer.postcode"
-                  placeholder="Postcode"
-                />
-            </td></tr>
-          </tbody>
-        </table>
-      </focusly-listener>
-    </section>
-  </div>
-
-  <div class="toast-wrapper" [class.toast-visible]="showToast">
-    <div class="toast">
-      {{ lastActionMessage }}
-    </div>
-  </div>
-  <key-display></key-display>
 </main>
