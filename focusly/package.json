@@ -15,7 +15,7 @@
     "build:nz": "ng build focusly-nz",
     "watch:nz": "ng build focusly-nz --watch",
     "dev": "concurrently \"ng build focusly --watch\" \"ng serve focusly-demo-app -o\"",
-    "copy-readme": "node tooling/release/copy-readme.mjs",
+    "copy-readme": "copy ..\\README.md dist\\focusly\\README.md",
     "pack": "cd ./dist/focusly && npm pack",
     "publish": "cd ./dist/focusly && npm publish",
     "pack:nz": "cd ./dist/focusly-nz && npm pack",

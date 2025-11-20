@@ -42,6 +42,19 @@ Focusly tracks the user’s current focus position and responds to keyboard even
 npm install @zaybu/focusly
 ```
 
+## 📝 Example Usage
+```html
+  <select
+      focusly
+      [focuslyGroup]="1"
+      [focuslyRow]="2"
+      [focuslyColumn]="3"
+      >
+      <option>Buy</option>
+      <option>Sell</option>
+  </select>
+```
+
 ## ⚡ Keyboard Navigation in Action
 
 Experience **Focusly** in motion — navigate complex Angular tables and forms using only your keyboard.  
