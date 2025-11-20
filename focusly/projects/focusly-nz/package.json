@@ -2,7 +2,7 @@
   "name": "@zaybu/focusly-nz",
   "version": "0.0.5",
   "peerDependencies": {
-    "@zaybu/focusly": "^0.0.3",
+    "@zaybu/focusly": "^0.0.5",
     "@angular/core": ">=16 <21",
     "@angular/common": ">=16 <21",
     "ng-zorro-antd": ">=16 <21"
