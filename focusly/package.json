@@ -19,7 +19,7 @@
     "pack": "cd ./dist/focusly && npm pack",
     "publish": "cd ./dist/focusly && npm publish",
     "pack:nz": "cd ./dist/focusly-nz && npm pack",
-    "publish:nz": "cd ./dist/focusly-nz && npm publish",
+    "publish:nz": "cd ./dist/focusly-nz && npm publish --access public",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\"",
     "changeset:changeset": "changeset",
     "changeset:version-packages": "changeset version",
