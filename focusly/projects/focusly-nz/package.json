@@ -1,6 +1,37 @@
 {
   "name": "@zaybu/focusly-nz",
   "version": "0.0.6",
+  "description": "NG-ZORRO extension package for the Focusly keyboard navigation framework",
+  "keywords": [
+    "angular",
+    "angular library",
+    "angular directive",
+    "focus",
+    "focus management",
+    "keyboard",
+    "keyboard navigation",
+    "keyboard shortcuts",
+    "ng-zorro",
+    "accessibility",
+    "a11y",
+    "forms",
+    "tables",
+    "grids",
+    "navigation",
+    "signals",
+    "angular signals",
+    "ux",
+    "ui",
+    "usability",
+    "frontend"
+  ],
+  "author": "Mark Evans",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mad-vx/focusly.git"
+  },
+  "homepage": "https://github.com/mad-vx/focusly#readme",
   "peerDependencies": {
     "@zaybu/focusly": "^0.0.6",
     "@angular/core": ">=16 <21",
