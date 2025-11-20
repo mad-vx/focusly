@@ -19,7 +19,8 @@
     "pack": "cd ./dist/focusly && npm pack",
     "publish": "cd ./dist/focusly && npm publish",
     "pack:nz": "cd ./dist/focusly-nz && npm pack",
-    "publish:nz": "cd ./dist/focusly-nz && npm publish"
+    "publish:nz": "cd ./dist/focusly-nz && npm publish",
+    "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\""
   },
   "private": true,
   "dependencies": {
@@ -47,6 +48,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^20.3.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.9.3"
   }
 }
