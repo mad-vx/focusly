@@ -10,7 +10,5 @@
     "types": [],
     "sourceMap": true
   },
-  "exclude": [
-    "**/*.spec.ts"
-  ]
+  "exclude": ["**/*.spec.ts"]
 }

@@ -8,7 +8,9 @@
     "ng-zorro-antd": ">=16 <21"
   },
   "peerDependenciesMeta": {
-    "ng-zorro-antd": { "optional": false }
+    "ng-zorro-antd": {
+      "optional": false
+    }
   },
   "sideEffects": false
 }

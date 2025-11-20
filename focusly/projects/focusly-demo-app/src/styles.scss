@@ -48,7 +48,10 @@ select {
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.1s;
 }
 
 input[type='checkbox'] {
@@ -82,7 +85,10 @@ input[type='button'],
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease,
+    box-shadow 0.2s ease;
   margin-top: 1rem;
   box-shadow: 0 2px 6px rgba(67, 160, 71, 0.2);
 

@@ -17,6 +17,7 @@ npm install @zaybu/focusly @zaybu/focusly-nz
 ```
 
 ## 📝 Example Usage
+
 ```html
 <nz-select
   nz-select-focusly

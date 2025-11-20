@@ -28,10 +28,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/focusly/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }
@@ -53,9 +50,7 @@
             "outputPath": "dist/focusly-demo-app",
             "index": "projects/focusly-demo-app/src/index.html",
             "browser": "projects/focusly-demo-app/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/focusly-demo-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -64,9 +59,7 @@
                 "input": "projects/focusly-demo-app/public"
               }
             ],
-            "styles": [
-              "projects/focusly-demo-app/src/styles.scss"
-            ],
+            "styles": ["projects/focusly-demo-app/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -111,10 +104,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/focusly-demo-app/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -123,9 +113,7 @@
                 "input": "projects/focusly-demo-app/public"
               }
             ],
-            "styles": [
-              "projects/focusly-demo-app/src/styles.scss"
-            ],
+            "styles": ["projects/focusly-demo-app/src/styles.scss"],
             "scripts": []
           }
         }
@@ -156,10 +144,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/focusly-nz/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }

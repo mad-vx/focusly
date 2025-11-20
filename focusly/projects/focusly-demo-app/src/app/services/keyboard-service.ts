@@ -27,12 +27,18 @@ export class KeyboardService {
 
   private normaliseKey(key: string): string {
     switch (key) {
-      case 'ArrowUp': return '↑';
-      case 'ArrowDown': return '↓';
-      case 'ArrowLeft': return '←';
-      case 'ArrowRight': return '→';
-      case ' ': return 'Space';
-      default: return key.length === 1 ? key.toUpperCase() : key;
+      case 'ArrowUp':
+        return '↑';
+      case 'ArrowDown':
+        return '↓';
+      case 'ArrowLeft':
+        return '←';
+      case 'ArrowRight':
+        return '→';
+      case ' ':
+        return 'Space';
+      default:
+        return key.length === 1 ? key.toUpperCase() : key;
     }
   }
 }
