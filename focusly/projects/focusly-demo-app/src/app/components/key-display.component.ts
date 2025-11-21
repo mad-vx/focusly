@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { KeyboardService } from '../services/keyboard-service';
+import { KeyDisplayService } from '../services/key-display-service';
 
 @Component({
   selector: 'key-display',
@@ -38,7 +38,7 @@ import { KeyboardService } from '../services/keyboard-service';
   ],
 })
 export class KeyDisplayComponent {
-  private keyCapture = inject(KeyboardService);
+  private keyCapture = inject(KeyDisplayService);
 
   readonly combo = this.keyCapture.lastCombo;
   readonly visible = computed(() => this.combo().trim().length > 0);

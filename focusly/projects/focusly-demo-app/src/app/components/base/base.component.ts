@@ -6,7 +6,7 @@ import {
   FocuslyListenerComponent,
 } from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
-import { KeyDisplayComponent } from '../keyboard.component';
+import { KeyDisplayComponent } from '../key-display.component';
 
 @Component({
   selector: 'app-base-component',

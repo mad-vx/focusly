@@ -83,3 +83,22 @@ The benefits are substantial:
 - Small footprint, big flexibility—you can support new UI libraries in minutes
 
 This design allows Focusly to be both highly opinionated in the places that matter (accessibility, deterministic movement, and predictable focus handling), and highly extensible wherever component libraries differ.
+
+## 🚀 Quick Links
+
+Try Focusly, explore the code, or join the discussion:
+
+🚀 Live Demo (StackBlitz)
+https://stackblitz.com/edit/focusly-demo
+
+📦 npm Package
+https://www.npmjs.com/package/@zaybu/focusly
+
+💻 GitHub Repository
+https://github.com/mad-vx/focusly
+
+🌐 GitHub Pages
+https://mad-vx.github.io/focusly/
+
+💡 Comments, Suggestions & Questions (GitHub Discussions)
+https://github.com/mad-vx/focusly/discussions
