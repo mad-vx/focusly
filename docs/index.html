@@ -216,7 +216,10 @@
       position: relative;
       overflow: hidden;
       border-radius: var(--radius-xl);
-      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%), radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.22), transparent 50%), rgba(15, 23, 42, 0.96);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.22), transparent 50%),
+        rgba(15, 23, 42, 0.96);
       border: 1px solid rgba(148, 163, 184, 0.5);
       box-shadow: var(--shadow);
       padding: 18px 18px 20px;
@@ -312,7 +315,9 @@
 
     .demo-cell.active {
       border-color: #38bdf8;
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6), 0 0 0 8px rgba(56, 189, 248, 0.15);
+      box-shadow:
+        0 0 0 1px rgba(56, 189, 248, 0.6),
+        0 0 0 8px rgba(56, 189, 248, 0.15);
     }
 
     .demo-cell strong {
@@ -395,48 +400,58 @@
         </a>
         <a class="btn btn-ghost" href="https://github.com/mad-vx/focusly/discussions" target="_blank" rel="noreferrer">
           💡 Got any comments, suggestions or questions?
-        </a>        
+        </a>
       </div>
     </section>
+
     <aside class="demo-card">
       <div class="demo-header">
         <div class="demo-pill">
           <span class="demo-pill-dot"></span>
-          Why Focusly?
+          What makes Focusly different?
         </div>
       </div>
 
       <div class="subtitle">
-      <h2>Why Focusly?</h2>
         <p>
-          Because moving around your UI shouldn’t be hard.
-        </p>
-
-        <p>
-          Focusly turns keyboard navigation into a first-class experience. With just a
-          few declarative directives, your Angular components instantly gain:
+          There are plenty of data grids and UI libraries out there – but Focusly is only
+          interested in one thing: <strong>keyboard navigation done right</strong>.
         </p>
 
         <ul>
-          <li>Smart arrow-key navigation</li>
-          <li>Predictable focus behaviour</li>
-          <li>Seamless movement between grids and inputs</li>
-          <li>Optional shortcuts for power users</li>
+          <li>
+            <strong>Works with your existing UI</strong><br>
+            Focusly doesn’t force you into a custom grid or component set. It works with
+            <em>your</em> HTML, your components, and your design system.
+          </li>
+          <li>
+            <strong>Pure Angular, no heavy dependencies</strong><br>
+            Implemented as lightweight Angular directives with a small surface area,
+            so it’s easy to understand, test, and extend.
+          </li>
+          <li>
+            <strong>Declarative, not imperative</strong><br>
+            You describe focusable regions and items; Focusly handles the arrow-key
+            logic, edge cases, and movement rules for you.
+          </li>
+          <li>
+            <strong>Not tied to a single widget</strong><br>
+            Use the same navigation model across forms, grids, cards, toolbars, or any
+            custom layout instead of having one-off implementations everywhere.
+          </li>
+          <li>
+            <strong>Built for real-world apps</strong><br>
+            Designed from production use in complex trading-style UIs where fast,
+            predictable keyboard movement really matters.
+          </li>
         </ul>
 
         <p>
-          No boilerplate. No brittle event handlers. No custom logic scattered across
-          components.
-        </p>
-
-        <p>
-          If your application has <strong>dashboards, forms, grids, admin panels,
-          or lots of interactive elements</strong>, Focusly helps users move faster —
-          and helps developers ship cleaner, more maintainable code.
+          Instead of being “yet another grid”, Focusly aims to be the
+          <strong>keyboard navigation layer</strong> you can drop into any Angular application.
         </p>
       </div>
     </aside>
-
   </main>
 </body>
 </html>
