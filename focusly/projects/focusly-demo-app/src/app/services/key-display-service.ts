@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class KeyboardService {
+export class KeyDisplayService {
   readonly lastCombo = signal<string>('');
 
   // We keep a reference so we can remove the listener on destroy if needed
