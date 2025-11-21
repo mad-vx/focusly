@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Focusly – Keyboard Navigation for Angular</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Focusly is a lightweight Angular library for keyboard navigation and focus management, designed for complex grids and input-heavy UIs."
+  />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: light dark;
+      --bg: #050816;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: rgba(148, 163, 184, 0.4);
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.7);
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 60%, #000 100%);
+      color: var(--text);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page {
+      max-width: 1080px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 24px 26px;
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: rgba(15, 23, 42, 0.7);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .hero-badge span {
+      display: inline-flex;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+    }
+
+    h1 {
+      font-size: clamp(28px, 3.1vw, 34px);
+      margin: 0 0 8px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      margin: 0 0 18px;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    a.btn {
+      text-decoration: none;
+      font-size: 13px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.12s ease-out, border 0.12s ease-out;
+      white-space: nowrap;
+    }
+
+    a.btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #0b1120;
+      font-weight: 600;
+      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.3);
+    }
+
+    a.btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(56, 189, 248, 0.45);
+    }
+
+    a.btn-ghost {
+      background: rgba(15, 23, 42, 0.8);
+      border-color: rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+    }
+
+    a.btn-ghost:hover {
+      border-color: var(--accent);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+    }
+
+    .kbd-row {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    kbd {
+      padding: 3px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: radial-gradient(circle at top, rgba(30, 64, 175, 0.7), rgba(15, 23, 42, 0.9));
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 10px;
+      color: var(--text);
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.7);
+    }
+
+    .meta {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.7);
+    }
+
+    /* Right column card */
+    .demo-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%), radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.22), transparent 50%), rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow: var(--shadow);
+      padding: 18px 18px 20px;
+      backdrop-filter: blur(18px);
+    }
+
+    .demo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .demo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 11px;
+    }
+
+    .demo-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.35);
+    }
+
+    .demo-frame {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.92);
+      padding: 10px;
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.7);
+    }
+
+    .demo-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 5px;
+    }
+
+    .dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.6);
+    }
+
+    .dots span:nth-child(1) {
+      background: #f97373;
+    }
+
+    .dots span:nth-child(2) {
+      background: #facc15;
+    }
+
+    .dots span:nth-child(3) {
+      background: #22c55e;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .demo-cell {
+      padding: 7px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      color: var(--muted);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-cell.active {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6), 0 0 0 8px rgba(56, 189, 248, 0.15);
+    }
+
+    .demo-cell strong {
+      display: block;
+      font-size: 11px;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .demo-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-shortcut {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .demo-shortcut kbd {
+      box-shadow: none;
+      border-radius: 4px;
+      background: rgba(15, 23, 42, 1);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .demo-link {
+      font-size: 11px;
+      text-decoration: none;
+      color: var(--accent);
+      opacity: 0.9;
+    }
+
+    .demo-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <div class="hero-badge">
+        <span></span>
+        Angular · Keyboard Navigation · Accessibility
+      </div>
+      <h1>
+        <span class="gradient-text">Focusly</span> – Intuitive, Elegant Keyboard Navigation for Angular.
+      </h1>
+      <p class="subtitle">
+        Focusly gives your Angular app first-class keyboard navigation and focus management,
+        especially for dense data grids and input-heavy UIs, with a tiny, declarative API.
+      </p>
+
+      <div class="chips">
+        <div class="chip">✅ Built with Angular Signals for instant reactivity</div>
+        <div class="chip">✅ Standalone Angular components</div>
+        <div class="chip">✅ No runtime dependencies</div>
+        <div class="chip">✅ Upcoming support for any UI library</div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="https://stackblitz.com/edit/focusly-demo" target="_blank" rel="noreferrer">
+          🚀 Open Live Demo
+        </a>
+        <a class="btn btn-ghost" href="https://www.npmjs.com/package/@zaybu/focusly" target="_blank" rel="noreferrer">
+          📦 npm: @zaybu/focusly
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/mad-vx/focusly" target="_blank" rel="noreferrer">
+          💻 View on GitHub
+        </a>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>
