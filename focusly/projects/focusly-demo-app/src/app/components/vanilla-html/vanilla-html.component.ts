@@ -4,11 +4,9 @@ import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-vanilla-html',
-  imports: [ FocuslyDirective, BaseComponent],
+  imports: [FocuslyDirective, BaseComponent],
   templateUrl: './vanilla-html.component.html',
   styleUrl: './vanilla-html.component.scss',
-  standalone: true
+  standalone: true,
 })
-export class VanillaHtmlComponent {
-
-}
+export class VanillaHtmlComponent {}

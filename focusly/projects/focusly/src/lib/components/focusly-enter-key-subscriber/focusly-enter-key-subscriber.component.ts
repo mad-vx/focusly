@@ -1,5 +1,3 @@
-
-
 import { Component, output } from '@angular/core';
 import { FocuslySubscriberComponent } from '../focusly-subscriber/focusly-subscriber.component';
 
@@ -7,7 +5,7 @@ import { FocuslySubscriberComponent } from '../focusly-subscriber/focusly-subscr
   selector: 'focusly-enter-key-subscriber',
   templateUrl: './focusly-enter-key-subscriber.component.html',
   imports: [FocuslySubscriberComponent],
-  standalone: true
+  standalone: true,
 })
 export class FocuslyEnterKeySubscriberComponent {
   readonly keyboardEvent = output();

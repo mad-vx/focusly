@@ -7,13 +7,13 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-ng-zorro',
-  imports: [ NzSelectModule, NzSelectFocusDirective, FormsModule , BaseComponent ],
+  imports: [NzSelectModule, NzSelectFocusDirective, FormsModule, BaseComponent],
   templateUrl: './ng-zorro.component.html',
   styleUrl: './ng-zorro.component.scss',
-  standalone: true
+  standalone: true,
 })
 export class NgZorroComponent extends BaseDemoGrid {
-  override title: string = "NgZorro - Focusly Demo";
+  override title: string = 'NgZorro - Focusly Demo';
 
   constructor() {
     super();

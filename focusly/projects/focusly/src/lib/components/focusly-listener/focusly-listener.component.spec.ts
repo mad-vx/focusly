@@ -8,9 +8,8 @@ describe('FocuslyListenerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FocuslyListenerComponent]
-    })
-    .compileComponents();
+      imports: [FocuslyListenerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FocuslyListenerComponent);
     component = fixture.componentInstance;

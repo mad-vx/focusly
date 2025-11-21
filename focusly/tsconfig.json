@@ -6,13 +6,8 @@
     "outDir": "./dist/out-tsc",
     "strict": true,
     "paths": {
-      "@zaybu/focusly": [
-        "./dist/focusly",
-        "./projects/focusly/src/public-api.ts"
-      ],
-      "@zaybu/focusly-nz": [
-        "./dist/focusly-nz"
-      ]
+      "@zaybu/focusly": ["./dist/focusly", "./projects/focusly/src/public-api.ts"],
+      "@zaybu/focusly-nz": ["./dist/focusly-nz"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

@@ -4,7 +4,7 @@ import { NzSelectComponent } from 'ng-zorro-antd/select';
 
 @Directive({
   selector: '[nz-select-focusly]',
-  standalone: true
+  standalone: true,
 })
 export class NzSelectFocusDirective extends FocuslyDirective {
   protected nzSelect = inject(NzSelectComponent);

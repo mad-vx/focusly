@@ -1,30 +1,104 @@
 import { Component, Input, signal, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent } from '@zaybu/focusly';
+import {
+  FocuslyDirective,
+  FocuslyEnterKeySubscriberComponent,
+  FocuslyListenerComponent,
+} from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { KeyDisplayComponent } from '../keyboard.component';
 
 @Component({
   selector: 'app-base-component',
-  imports: [NgTemplateOutlet, FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent, KeyDisplayComponent],
+  imports: [
+    NgTemplateOutlet,
+    FocuslyDirective,
+    FocuslyEnterKeySubscriberComponent,
+    FocuslyListenerComponent,
+    KeyDisplayComponent,
+  ],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss',
-  standalone: true
+  standalone: true,
 })
-export class BaseComponent  {
+export class BaseComponent {
   @Input() buyOrSellTemplate?: TemplateRef<TradeCellContext>;
-  
+
   tradeRows: TradeRow[] = [
-    { symbol: 'AAPL', ccy: 'USD', qty: 120, side: 'Buy', riskOk: true,  notes: 'Strong Q4 earnings', rowIndex: 0 },
-    { symbol: 'TSLA', ccy: 'USD', qty: 80,  side: 'Sell', riskOk: false, notes: 'Volatile week',      rowIndex: 1 },
-    { symbol: 'AMZN', ccy: 'USD', qty: 60,  side: 'Buy', riskOk: true,  notes: '',                   rowIndex: 2 },
-    { symbol: 'MSFT', ccy: 'USD', qty: 45,  side: 'Sell', riskOk: true,  notes: 'Tech rotation',      rowIndex: 3 },
-    { symbol: 'NVDA', ccy: 'USD', qty: 30,  side: 'Buy', riskOk: false, notes: 'Chip shortage',      rowIndex: 4 },
-    { symbol: 'GOOG', ccy: 'USD', qty: 75,  side: 'Buy', riskOk: true,  notes: '',                   rowIndex: 5 },
-    { symbol: 'META', ccy: 'USD', qty: 90,  side: 'Sell', riskOk: true,  notes: 'High valuation',     rowIndex: 6 },
-    { symbol: 'BABA', ccy: 'HKD', qty: 100, side: 'Buy', riskOk: false, notes: 'China reopening',    rowIndex: 7 },
-    { symbol: 'NFLX', ccy: 'USD', qty: 40,  side: 'Buy', riskOk: true,  notes: 'Subscriber growth',  rowIndex: 8 },
-    { symbol: 'DIS',  ccy: 'USD', qty: 70,  side: 'Sell', riskOk: false, notes: 'Earnings miss',      rowIndex: 9 }
+    {
+      symbol: 'AAPL',
+      ccy: 'USD',
+      qty: 120,
+      side: 'Buy',
+      riskOk: true,
+      notes: 'Strong Q4 earnings',
+      rowIndex: 0,
+    },
+    {
+      symbol: 'TSLA',
+      ccy: 'USD',
+      qty: 80,
+      side: 'Sell',
+      riskOk: false,
+      notes: 'Volatile week',
+      rowIndex: 1,
+    },
+    { symbol: 'AMZN', ccy: 'USD', qty: 60, side: 'Buy', riskOk: true, notes: '', rowIndex: 2 },
+    {
+      symbol: 'MSFT',
+      ccy: 'USD',
+      qty: 45,
+      side: 'Sell',
+      riskOk: true,
+      notes: 'Tech rotation',
+      rowIndex: 3,
+    },
+    {
+      symbol: 'NVDA',
+      ccy: 'USD',
+      qty: 30,
+      side: 'Buy',
+      riskOk: false,
+      notes: 'Chip shortage',
+      rowIndex: 4,
+    },
+    { symbol: 'GOOG', ccy: 'USD', qty: 75, side: 'Buy', riskOk: true, notes: '', rowIndex: 5 },
+    {
+      symbol: 'META',
+      ccy: 'USD',
+      qty: 90,
+      side: 'Sell',
+      riskOk: true,
+      notes: 'High valuation',
+      rowIndex: 6,
+    },
+    {
+      symbol: 'BABA',
+      ccy: 'HKD',
+      qty: 100,
+      side: 'Buy',
+      riskOk: false,
+      notes: 'China reopening',
+      rowIndex: 7,
+    },
+    {
+      symbol: 'NFLX',
+      ccy: 'USD',
+      qty: 40,
+      side: 'Buy',
+      riskOk: true,
+      notes: 'Subscriber growth',
+      rowIndex: 8,
+    },
+    {
+      symbol: 'DIS',
+      ccy: 'USD',
+      qty: 70,
+      side: 'Sell',
+      riskOk: false,
+      notes: 'Earnings miss',
+      rowIndex: 9,
+    },
   ];
 
   customer = {
@@ -35,11 +109,11 @@ export class BaseComponent  {
     address1: '44 Bishopsgate',
     address2: 'Level 12',
     city: 'London',
-    postcode: 'EC9X 7OZ'
+    postcode: 'EC9X 7OZ',
   };
 
-  columns = [0,1,2,3,4,5,6]; 
-  rows = [0,1,2,3,4,5,6];
+  columns = [0, 1, 2, 3, 4, 5, 6];
+  rows = [0, 1, 2, 3, 4, 5, 6];
 
   activeSaveButton = signal<1 | 2 | null>(null);
   lastActionMessage: string | null = null;
@@ -55,8 +129,7 @@ export class BaseComponent  {
     this.triggerFeedback(2, 'Save Customer Details');
   }
 
-  onKeyPress($event: any) {
-  }
+  onKeyPress($event: any) {}
 
   private triggerFeedback(which: 1 | 2, msg: string): void {
     this.activeSaveButton.set(which);
@@ -66,7 +139,7 @@ export class BaseComponent  {
     }
     this.buttonFlashHandle = setTimeout(() => {
       this.activeSaveButton.set(null);
-    }, 1000); 
+    }, 1000);
 
     this.lastActionMessage = msg;
     this.showToast = true;

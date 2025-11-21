@@ -8,9 +8,8 @@ describe('VanillaHtmlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VanillaHtmlComponent]
-    })
-    .compileComponents();
+      imports: [VanillaHtmlComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(VanillaHtmlComponent);
     component = fixture.componentInstance;

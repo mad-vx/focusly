@@ -8,9 +8,8 @@ describe('NgZorroComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgZorroComponent]
-    })
-    .compileComponents();
+      imports: [NgZorroComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgZorroComponent);
     component = fixture.componentInstance;

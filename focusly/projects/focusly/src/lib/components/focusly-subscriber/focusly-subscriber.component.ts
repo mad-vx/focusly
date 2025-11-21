@@ -5,7 +5,7 @@ import {
   input,
   output,
   inject,
-  DestroyRef
+  DestroyRef,
 } from '@angular/core';
 import { throttleTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,7 +14,7 @@ import { FocuslyListenerComponent } from '../focusly-listener/focusly-listener.c
 @Component({
   selector: 'focusly-subscriber',
   template: ``,
-  standalone: true
+  standalone: true,
 })
 export class FocuslySubscriberComponent implements AfterViewInit {
   protected injector = inject(Injector);

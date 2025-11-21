@@ -3,4 +3,4 @@ export type FocusItem = {
   column: number;
   row: number;
   groupId: number;
-}
+};

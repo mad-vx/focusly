@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
   input,
-  inject
+  inject,
 } from '@angular/core';
 
 import { Subject, Subscription, filter, fromEvent } from 'rxjs';
@@ -16,7 +16,7 @@ import { isElementVisible } from '../../helpers/is-element-visible';
   selector: 'focusly-listener',
   templateUrl: './focusly-listener.component.html',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FocuslyListenerComponent implements OnInit, OnDestroy {
   elementRef = inject(ElementRef);
@@ -24,27 +24,27 @@ export class FocuslyListenerComponent implements OnInit, OnDestroy {
 
   readonly keyDownEvents = input.required<string[]>();
 
-  private keyboardEventsDictionary: Map<string, any> = new Map<string, any>();;
+  private keyboardEventsDictionary: Map<string, any> = new Map<string, any>();
   private keyboardEventSubscription: Subscription | undefined;
 
   private broadcastKeyDownEventSubject = new Subject<KeyboardEvent>();
   public broadcastKeyDownEvent$ = this.broadcastKeyDownEventSubject.asObservable();
 
   ngOnInit(): void {
-    this.keyDownEvents().forEach(
-      (keyboardEvent) => (this.keyboardEventsDictionary.set(keyboardEvent, true))
+    this.keyDownEvents().forEach((keyboardEvent) =>
+      this.keyboardEventsDictionary.set(keyboardEvent, true),
     );
 
     this.ngZone.runOutsideAngular(() => {
       this.keyboardEventSubscription = fromEvent<KeyboardEvent>(
         this.elementRef.nativeElement,
-        'keydown'
+        'keydown',
       )
         .pipe(
-          filter(
-            (keyboardEvent: KeyboardEvent) => this.keyboardEventsDictionary.get(keyboardEvent.key)
+          filter((keyboardEvent: KeyboardEvent) =>
+            this.keyboardEventsDictionary.get(keyboardEvent.key),
           ),
-          filter(() => isElementVisible(this.elementRef))
+          filter(() => isElementVisible(this.elementRef)),
         )
         .subscribe((keyboardEvent) => {
           this.broadcastKeyDownEventSubject.next(keyboardEvent);

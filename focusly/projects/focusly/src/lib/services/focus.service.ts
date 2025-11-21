@@ -21,7 +21,7 @@ export class FocusService {
 
   onFocus(focus: FocusItem): void {
     const list = this.getScopeList(focus.groupId);
-    const found = list.find(r => r.id === focus.id);
+    const found = list.find((r) => r.id === focus.id);
     this.currentFocus.set(found ?? focus);
   }
 
@@ -29,46 +29,51 @@ export class FocusService {
     this.onFocus(focus);
   }
 
-  up(): void    { this.moveRow(-1, row => row >= 0); }
-  down(): void  { this.moveRow( 1, row => row <= this.currentFocusMaxRow()); }
-  left(): void  { this.moveColumn(-1, col => col >= 0); }
-  right(): void { this.moveColumn( 1, col => col <= this.currentFocusMaxColumn()); }
+  up(): void {
+    this.moveRow(-1, (row) => row >= 0);
+  }
+  down(): void {
+    this.moveRow(1, (row) => row <= this.currentFocusMaxRow());
+  }
+  left(): void {
+    this.moveColumn(-1, (col) => col >= 0);
+  }
+  right(): void {
+    this.moveColumn(1, (col) => col <= this.currentFocusMaxColumn());
+  }
 
   home(): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
-    this.moveColumn(-currentFocus.column, col => col >= 0);
+    this.moveColumn(-currentFocus.column, (col) => col >= 0);
   }
 
   end(): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
     const max = this.currentFocusMaxColumn();
-    this.moveColumn(max - currentFocus.column, col => col <= max);
+    this.moveColumn(max - currentFocus.column, (col) => col <= max);
   }
 
   pageUp(): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
-    this.moveRow(-currentFocus.row, row => row >= 0);
+    this.moveRow(-currentFocus.row, (row) => row >= 0);
   }
 
   pageDown(): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
     const max = this.currentFocusMaxRow();
-    this.moveRow(max - currentFocus.row, row => row <= max);
+    this.moveRow(max - currentFocus.row, (row) => row <= max);
   }
 
   registerItemFocus(focus: FocusItem): void {
-    if (
-      focus.groupId === undefined ||
-      focus.column === undefined ||
-      focus.row === undefined
-    ) return;
+    if (focus.groupId === undefined || focus.column === undefined || focus.row === undefined)
+      return;
 
     const list = this.getScopeList(focus.groupId, true);
-    const index = list.findIndex(r => r.id === focus.id);
+    const index = list.findIndex((r) => r.id === focus.id);
 
     if (index >= 0) {
       list[index] = focus;
@@ -81,7 +86,7 @@ export class FocusService {
     const list = this.focusRegistry.get(focus.groupId);
     if (!list) return;
 
-    const index = list.findIndex(r => r.id === focus.id);
+    const index = list.findIndex((r) => r.id === focus.id);
     if (index >= 0) list.splice(index, 1);
     if (list.length === 0) this.focusRegistry.delete(focus.groupId);
   }
@@ -94,7 +99,7 @@ export class FocusService {
   private findRegisteredFocus(
     column: number,
     row: number,
-    groupId?: number
+    groupId?: number,
   ): FocusItem | undefined {
     const effectiveScope = groupId ?? this.currentFocus()?.groupId;
     if (effectiveScope == null) return undefined;
@@ -102,30 +107,22 @@ export class FocusService {
     const list = this.focusRegistry.get(effectiveScope);
     if (!list) return undefined;
 
-    return list.find(
-      r => r.column === column && r.row === row && r.groupId === effectiveScope
-    );
+    return list.find((r) => r.column === column && r.row === row && r.groupId === effectiveScope);
   }
 
   private moveRow(offset: number, endCondition: (row: number) => boolean): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
-    this.moveFocus(
-      currentFocus.row,
-      offset,
-      endCondition,
-      (row) => this.findRegisteredFocus(currentFocus!.column, row)
+    this.moveFocus(currentFocus.row, offset, endCondition, (row) =>
+      this.findRegisteredFocus(currentFocus!.column, row),
     );
   }
 
   private moveColumn(offset: number, endCondition: (column: number) => boolean): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
-    this.moveFocus(
-      currentFocus.column,
-      offset,
-      endCondition,
-      (col) => this.findRegisteredFocus(col, currentFocus!.row)
+    this.moveFocus(currentFocus.column, offset, endCondition, (col) =>
+      this.findRegisteredFocus(col, currentFocus!.row),
     );
   }
 
@@ -133,7 +130,7 @@ export class FocusService {
     condition: number,
     offset: number,
     endCondition: (x: number) => boolean,
-    findNextFocus: (condition: number) => FocusItem | undefined
+    findNextFocus: (condition: number) => FocusItem | undefined,
   ): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;

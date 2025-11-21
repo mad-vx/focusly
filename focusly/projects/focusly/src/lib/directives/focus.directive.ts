@@ -17,7 +17,7 @@ import { FocusItem } from '../models/focus-item.model';
 
 @Directive({
   selector: '[focusly]',
-  standalone: true
+  standalone: true,
 })
 export class FocuslyDirective implements OnInit, OnDestroy {
   @Input({ required: true }) set focuslyColumn(column: number) {
@@ -67,7 +67,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
       column: this.focuslyColumn,
       row: this.focuslyRow,
       groupId: this.focuslyGroup,
-      id: this.uniqueId
+      id: this.uniqueId,
     } as FocusItem;
   }
 
@@ -92,24 +92,22 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    * Pure computed: "Am I currently the active focus item?"
    * NOTE: NO SIDE EFFECTS HERE.
    */
-  readonly isActive = computed(() =>
-    this.focusService.isCurrentFocus(this.focus)
-  );
+  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focus));
 
   /**
    * Keyboard navigation mapping.
    */
   readonly keyHandlers: Record<string, () => void> = {
     'alt+arrowdown': () => this.focusService.down(),
-    'alt+arrowup':   () => this.focusService.up(),
+    'alt+arrowup': () => this.focusService.up(),
     'alt+arrowleft': () => this.focusService.left(),
-    'alt+arrowright':() => this.focusService.right(),
-    'home':          () => this.focusService.home(),
-    'end':           () => this.focusService.end(),
-    'pageup':        () => this.focusService.pageUp(),
-    'pagedown':      () => this.focusService.pageDown(),
-    'tab':           () => this.focusService.down(),
-    'shift+tab':     () => this.focusService.up(),
+    'alt+arrowright': () => this.focusService.right(),
+    home: () => this.focusService.home(),
+    end: () => this.focusService.end(),
+    pageup: () => this.focusService.pageUp(),
+    pagedown: () => this.focusService.pageDown(),
+    tab: () => this.focusService.down(),
+    'shift+tab': () => this.focusService.up(),
   };
 
   @HostBinding('class.focusly-active')
@@ -119,18 +117,16 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   constructor() {
     // Handle "end of grid" / limit hit behaviour
-    this.limitHitSubscription = this.focusService.endStopHit$.subscribe(
-      (focus: FocusItem) => {
-        if (this.focusService.isCurrentFocus(this.focus)) {
-          const host = this.elementRef.nativeElement;
-          // Defer blur/focus to after the current CD cycle
-          queueMicrotask(() => {
-            (host as any).blur?.();
-            (host as any).focus?.();
-          });
-        }
+    this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
+      if (this.focusService.isCurrentFocus(this.focus)) {
+        const host = this.elementRef.nativeElement;
+        // Defer blur/focus to after the current CD cycle
+        queueMicrotask(() => {
+          (host as any).blur?.();
+          (host as any).focus?.();
+        });
       }
-    );
+    });
 
     // Effect to handle focus side-effect when this item becomes active
     effect(
@@ -159,7 +155,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
           this.onElementFocus();
         });
       },
-      { injector: this.injector }
+      { injector: this.injector },
     );
   }
 
@@ -194,11 +190,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @HostListener('keydown', ['$event'])
   protected handleKeydown(e: KeyboardEvent): void {
-    const key = [
-      e.altKey ? 'alt' : '',
-      e.shiftKey ? 'shift' : '',
-      e.key.toLowerCase()
-    ]
+    const key = [e.altKey ? 'alt' : '', e.shiftKey ? 'shift' : '', e.key.toLowerCase()]
       .filter(Boolean)
       .join('+');
 

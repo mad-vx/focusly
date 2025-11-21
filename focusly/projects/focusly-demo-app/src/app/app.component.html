@@ -19,30 +19,36 @@
       <li><strong>Enter</strong> – Run the panel's action (Save / Confirm)</li>
     </ul>
     <p class="note">
-      Below are two independent panels. Notice how <strong>Enter</strong> in the first
-      panel triggers “Confirm Trades”, and in the second panel it triggers “Save Customer”.
-      Focusly keeps those behaviours scoped.
+      Below are two independent panels. Notice how <strong>Enter</strong> in the first panel
+      triggers “Confirm Trades”, and in the second panel it triggers “Save Customer”. Focusly keeps
+      those behaviours scoped.
     </p>
   </section>
 
   <section class="instructions">
     <h2>Component Toolkit Independant</h2>
     <p>
-Focusly is designed to work seamlessly across all UI component toolkits.
-In this demo you can switch between Vanilla HTML and NG-ZORRO.
-Toolkit-specific support is implemented as a thin extension of the base directive, meaning the core navigation logic stays centralised and clean while each UI library only adds a few small, tailored overrides. This keeps behaviour consistent, predictable, and incredibly easy to maintain.
+      Focusly is designed to work seamlessly across all UI component toolkits. In this demo you can
+      switch between Vanilla HTML and NG-ZORRO. Toolkit-specific support is implemented as a thin
+      extension of the base directive, meaning the core navigation logic stays centralised and clean
+      while each UI library only adds a few small, tailored overrides. This keeps behaviour
+      consistent, predictable, and incredibly easy to maintain.
     </p>
     <p>
-      <input type="radio" [checked]="toolkit() === 'none'" (click)="toolkit.set('none')"/><label>Vanilla HTML</label> 
-      <input type="radio" [checked]="toolkit() === 'ngzorro'" (click)="toolkit.set('ngzorro')"/><label>Ng-Zorro</label> 
+      <input type="radio" [checked]="toolkit() === 'none'" (click)="toolkit.set('none')" /><label
+        >Vanilla HTML</label
+      >
+      <input
+        type="radio"
+        [checked]="toolkit() === 'ngzorro'"
+        (click)="toolkit.set('ngzorro')"
+      /><label>Ng-Zorro</label>
     </p>
   </section>
 
-  @if(toolkit() === 'ngzorro') {
+  @if (toolkit() === 'ngzorro') {
     <app-ng-zorro></app-ng-zorro>
-  }
-  @else {
+  } @else {
     <app-vanilla-html></app-vanilla-html>
   }
-
 </main>
