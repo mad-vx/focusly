@@ -47,7 +47,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/focusly-demo-app",
+            "outputPath": "../docs/focusly-demo",
             "index": "projects/focusly-demo-app/src/index.html",
             "browser": "projects/focusly-demo-app/src/main.ts",
             "polyfills": ["zone.js"],
@@ -76,6 +76,8 @@
                   "maximumError": "8kB"
                 }
               ],
+              "baseHref": "./",
+              "deployUrl": "./",
               "outputHashing": "all"
             },
             "development": {
