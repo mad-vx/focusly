@@ -1,6 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FocusItem } from '../models/focus-item.model';
+import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
+import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyMap, KeyPressAction } from '../models/key-press-action.model';
 
 @Injectable({ providedIn: 'root' })
 export class FocusService {
@@ -10,6 +12,53 @@ export class FocusService {
   private focusRegistry = new Map<number, FocusItem[]>();
   readonly currentFocus = signal<FocusItem | null>(null);
 
+  private focusKeyMap = inject<FocuslyKeyMap>(FOCUSLY_KEYMAP);
+  private readonly _keymap = signal<FocuslyKeyMap>({ ...DEFAULT_FOCUSLY_KEYMAP, ...this.focusKeyMap });
+  readonly keyMap = this._keymap.asReadonly();
+
+  private readonly keyPressActionHandlers: Record<KeyPressAction, () => void> = {
+    'up': () => this.up(),
+    'down': () => this.down(),
+    'left': () => this.left(),
+    'right': () => this.right(),
+    'home': () => this.home(),
+    'end': () => this.end(),
+    'pageUp': () => this.pageUp(),
+    'pageDown': () => this.pageDown()
+  };
+
+  readonly keyHandlers = computed<Record<KeyPressAction, () => void>>(() => {
+    const effective = this.keyMap();   // already default + injected + updates
+    const handlers: Record<string, () => void> = {};
+
+    for (const [action, keyPress] of Object.entries(effective)) {
+      if (!keyPress) continue;
+      const fn = this.keyPressActionHandlers[action as KeyPressAction];
+      if (fn) {
+        handlers[keyPress] = fn;
+      }
+    }
+
+    return handlers;
+  });
+
+  readonly keyHandlersByChord = computed<Record<string, () => void>>(() => {
+    const map = this.keyMap();
+
+    const handlers: Record<string, () => void> = {};
+
+    for (const [action, keyChord] of Object.entries(map) as [KeyPressAction, string][]) {
+      if (!keyChord) continue;
+
+      const fn = this.keyPressActionHandlers[action];
+      if (!fn) continue;
+
+      handlers[keyChord] = fn;
+    }
+
+    return handlers;
+  });
+
   private getScopeList(scope: number, create = false): FocusItem[] {
     let list = this.focusRegistry.get(scope);
     if (!list && create) {
@@ -17,6 +66,10 @@ export class FocusService {
       this.focusRegistry.set(scope, list);
     }
     return list ?? [];
+  }
+
+  updateKeymap(partial: FocuslyKeyMap) {
+    this._keymap.update((current) => ({ ...current, ...partial }));
   }
 
   onFocus(focus: FocusItem): void {

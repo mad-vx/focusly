@@ -15,7 +15,7 @@ import { KeyDisplayComponent } from '../key-display.component';
     FocuslyDirective,
     FocuslyEnterKeySubscriberComponent,
     FocuslyListenerComponent,
-    KeyDisplayComponent,
+   // KeyDisplayComponent,
   ],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss',

@@ -94,22 +94,6 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    */
   readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focus));
 
-  /**
-   * Keyboard navigation mapping.
-   */
-  readonly keyHandlers: Record<string, () => void> = {
-    'alt+arrowdown': () => this.focusService.down(),
-    'alt+arrowup': () => this.focusService.up(),
-    'alt+arrowleft': () => this.focusService.left(),
-    'alt+arrowright': () => this.focusService.right(),
-    home: () => this.focusService.home(),
-    end: () => this.focusService.end(),
-    pageup: () => this.focusService.pageUp(),
-    pagedown: () => this.focusService.pageDown(),
-    tab: () => this.focusService.down(),
-    'shift+tab': () => this.focusService.up(),
-  };
-
   @HostBinding('class.focusly-active')
   get activeClass(): boolean {
     return this.isActive();
@@ -190,11 +174,11 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @HostListener('keydown', ['$event'])
   protected handleKeydown(e: KeyboardEvent): void {
-    const key = [e.altKey ? 'alt' : '', e.shiftKey ? 'shift' : '', e.key.toLowerCase()]
+    const key = [e.altKey ? 'alt' : '', e.shiftKey ? 'shift' : '', e.ctrlKey ? 'ctrl' : '', e.key.toLowerCase()]
       .filter(Boolean)
       .join('+');
 
-    const handler = this.keyHandlers[key];
+    const handler = this.focusService.keyHandlersByChord()[key];
 
     if (handler) {
       e.preventDefault();
