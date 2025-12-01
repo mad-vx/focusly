@@ -1,7 +1,7 @@
 export type ModifierKey = 'alt' | 'ctrl' | 'shift';
 
 export interface KeyChordConfig {
-  key: string; 
+  key: string;
   alt?: boolean;
   ctrl?: boolean;
   shift?: boolean;

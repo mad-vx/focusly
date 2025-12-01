@@ -2,7 +2,12 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FocusItem } from '../models/focus-item.model';
 import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
-import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyChord, FocuslyKeyMap, KeyPressAction } from '../models/key-press-action.model';
+import {
+  DEFAULT_FOCUSLY_KEYMAP,
+  FocuslyKeyChord,
+  FocuslyKeyMap,
+  KeyPressAction,
+} from '../models/key-press-action.model';
 import { createKeyChord } from '../models/key-chord.model';
 
 @Injectable({ providedIn: 'root' })
@@ -14,31 +19,37 @@ export class FocusService {
   readonly currentFocus = signal<FocusItem | null>(null);
 
   private focusKeyMap = inject<FocuslyKeyMap>(FOCUSLY_KEYMAP);
-  private readonly _keymap = signal<FocuslyKeyMap>({ ...DEFAULT_FOCUSLY_KEYMAP, ...this.focusKeyMap });
+  private readonly _keymap = signal<FocuslyKeyMap>({
+    ...DEFAULT_FOCUSLY_KEYMAP,
+    ...this.focusKeyMap,
+  });
   readonly keyMap = this._keymap.asReadonly();
 
   private readonly keyPressActionHandlers: Record<KeyPressAction, () => void> = {
-    'up': () => this.up(),
-    'down': () => this.down(),
-    'left': () => this.left(),
-    'right': () => this.right(),
-    'home': () => this.home(),
-    'end': () => this.end(),
-    'pageUp': () => this.pageUp(),
-    'pageDown': () => this.pageDown()
+    up: () => this.up(),
+    down: () => this.down(),
+    left: () => this.left(),
+    right: () => this.right(),
+    home: () => this.home(),
+    end: () => this.end(),
+    pageUp: () => this.pageUp(),
+    pageDown: () => this.pageDown(),
   };
 
   readonly keyHandlers = computed<Record<KeyPressAction, () => void>>(() => {
-    const effective = this.keyMap();  
+    const effective = this.keyMap();
     const handlers: Record<string, () => void> = {};
 
-    for (const [action, keyPressConfig] of Object.entries(effective) as [KeyPressAction, FocuslyKeyChord][]) {
+    for (const [action, keyPressConfig] of Object.entries(effective) as [
+      KeyPressAction,
+      FocuslyKeyChord,
+    ][]) {
       if (!keyPressConfig) continue;
       const fn = this.keyPressActionHandlers[action];
       if (!fn) continue;
 
       const keyPresses = Array.isArray(keyPressConfig) ? keyPressConfig : [keyPressConfig];
-      
+
       for (const keyPress of keyPresses) {
         if (!keyPress) continue;
         handlers[keyPress] = fn;
