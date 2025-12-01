@@ -1,0 +1,32 @@
+    <section class="focusly-keymap-config">
+        @if (title()) {
+            <header>
+                    <h3>{{ title() }}</h3>
+            </header>
+        }
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Key chord</th>
+          </tr>
+        </thead>
+        <tbody>
+            @for (action of keypressActionsToShow(); track $index) {
+                <tr>
+                    <td>{{ action }}</td>
+                    <td>
+                    <input
+                        type="text"
+                        [value]="formValue()[action] ?? ''"
+                        (change)="onChordInput(action, $any($event.target).value)"
+                        (blur)="onChordInput(action, $any($event.target).value)"
+                        placeholder="e.g. ctrl+arrowdown"
+                    />
+                    </td>
+                </tr>
+            }
+        </tbody>
+      </table>
+    </section>

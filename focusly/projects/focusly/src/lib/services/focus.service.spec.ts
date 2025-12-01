@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { FocusService } from './focus.service';
+import { FocuslyService } from './focus.service';
 
 describe('FocusService', () => {
-  let service: FocusService;
+  let service: FocuslyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FocusService);
+    service = TestBed.inject(FocuslyService);
   });
 
   it('should be created', () => {

@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { NgZorroComponent } from './components/ng-zorro/ng-zorro.component';
 import { VanillaHtmlComponent } from './components/vanilla-html/vanilla-html.component';
+import { FocuslyConfigComponent } from 'focusly-config';
 
 @Component({
   selector: 'app-root',
-  imports: [NgZorroComponent, VanillaHtmlComponent],
+  imports: [NgZorroComponent, VanillaHtmlComponent, FocuslyConfigComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   standalone: true,

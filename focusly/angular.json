@@ -150,6 +150,36 @@
           }
         }
       }
+    },
+    "focusly-config": {
+      "projectType": "library",
+      "root": "projects/focusly-config",
+      "sourceRoot": "projects/focusly-config/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/focusly-config/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/focusly-config/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/focusly-config/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "schematics": {

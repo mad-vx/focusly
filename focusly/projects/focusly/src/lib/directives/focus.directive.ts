@@ -12,7 +12,7 @@ import {
   effect,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FocusService } from '../services/focus.service';
+import { FocuslyService } from '../services/focus.service';
 import { FocusItem } from '../models/focus-item.model';
 
 @Directive({
@@ -52,7 +52,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private _focuslyScope: number | undefined;
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  protected readonly focusService = inject(FocusService);
+  protected readonly focusService = inject(FocuslyService);
   private readonly injector = inject(Injector);
 
   private readonly uniqueId = crypto.randomUUID();

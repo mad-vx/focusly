@@ -9,9 +9,10 @@ import {
   KeyPressAction,
 } from '../models/key-press-action.model';
 import { createKeyChord } from '../models/key-chord.model';
+import { FocuslyServiceApi } from '../models/focus-service-api.model';
 
 @Injectable({ providedIn: 'root' })
-export class FocusService {
+export class FocuslyService implements FocuslyServiceApi {
   private endStopSubject = new Subject<FocusItem>();
   readonly endStopHit$ = this.endStopSubject.asObservable();
 

@@ -14,10 +14,14 @@
     "watch:lib": "ng build focusly --watch",
     "build:nz": "ng build focusly-nz",
     "watch:nz": "ng build focusly-nz --watch",
+    "build:config": "ng build focusly-config",
+    "watch:config": "ng build focusly-config --watch",
     "dev": "concurrently \"ng build focusly --watch\" \"ng serve focusly-demo-app -o\"",
     "copy-readme": "copy ..\\README.md dist\\focusly\\README.md",
     "pack": "cd ./dist/focusly && npm pack",
     "publish": "cd ./dist/focusly && npm publish",
+    "pack:config": "cd ./dist/focusly-config && npm pack",
+    "publish:config": "cd ./dist/focusly-config && npm publish --access public",
     "pack:nz": "cd ./dist/focusly-nz && npm pack",
     "publish:nz": "cd ./dist/focusly-nz && npm publish --access public",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\"",
@@ -27,6 +31,7 @@
   },
   "workspaces": [
     "projects/focusly",
+    "projects/focusly-config",
     "projects/focusly-nz"
   ],
   "private": true,

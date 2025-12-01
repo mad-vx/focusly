@@ -7,7 +7,12 @@
     "strict": true,
     "paths": {
       "@zaybu/focusly": ["./dist/focusly", "./projects/focusly/src/public-api.ts"],
-      "@zaybu/focusly-nz": ["./dist/focusly-nz"]
+      "@zaybu/focusly-nz": [
+        "./dist/focusly-nz"
+      ],
+      "focusly-config": [
+        "./dist/focusly-config"
+      ]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
