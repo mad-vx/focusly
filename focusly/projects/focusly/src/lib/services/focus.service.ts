@@ -2,7 +2,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FocusItem } from '../models/focus-item.model';
 import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
-import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyMap, KeyPressAction } from '../models/key-press-action.model';
+import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyChord, FocuslyKeyMap, KeyPressAction } from '../models/key-press-action.model';
+import { createKeyChord } from '../models/key-chord.model';
 
 @Injectable({ providedIn: 'root' })
 export class FocusService {
@@ -28,13 +29,18 @@ export class FocusService {
   };
 
   readonly keyHandlers = computed<Record<KeyPressAction, () => void>>(() => {
-    const effective = this.keyMap();   // already default + injected + updates
+    const effective = this.keyMap();  
     const handlers: Record<string, () => void> = {};
 
-    for (const [action, keyPress] of Object.entries(effective)) {
-      if (!keyPress) continue;
-      const fn = this.keyPressActionHandlers[action as KeyPressAction];
-      if (fn) {
+    for (const [action, keyPressConfig] of Object.entries(effective) as [KeyPressAction, FocuslyKeyChord][]) {
+      if (!keyPressConfig) continue;
+      const fn = this.keyPressActionHandlers[action];
+      if (!fn) continue;
+
+      const keyPresses = Array.isArray(keyPressConfig) ? keyPressConfig : [keyPressConfig];
+      
+      for (const keyPress of keyPresses) {
+        if (!keyPress) continue;
         handlers[keyPress] = fn;
       }
     }
@@ -58,6 +64,11 @@ export class FocusService {
 
     return handlers;
   });
+
+  getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
+    const chord = this.chordFromKeyboardEvent(e);
+    return this.keyHandlersByChord()[chord];
+  }
 
   private getScopeList(scope: number, create = false): FocusItem[] {
     let list = this.focusRegistry.get(scope);
@@ -217,5 +228,14 @@ export class FocusService {
     const list = this.focusRegistry.get(currentFocus.groupId) ?? [];
     if (list.length === 0) return 0;
     return list.reduce((max, f) => (f.column > max ? f.column : max), list[0].column);
+  }
+
+  private chordFromKeyboardEvent(e: KeyboardEvent): string {
+    return createKeyChord({
+      key: e.key,
+      alt: e.altKey,
+      ctrl: e.ctrlKey,
+      shift: e.shiftKey,
+    });
   }
 }

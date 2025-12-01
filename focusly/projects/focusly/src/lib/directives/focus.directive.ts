@@ -174,12 +174,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @HostListener('keydown', ['$event'])
   protected handleKeydown(e: KeyboardEvent): void {
-    const key = [e.altKey ? 'alt' : '', e.shiftKey ? 'shift' : '', e.ctrlKey ? 'ctrl' : '', e.key.toLowerCase()]
-      .filter(Boolean)
-      .join('+');
-
-    const handler = this.focusService.keyHandlersByChord()[key];
-
+    const handler = this.focusService.getHandlerForKeyboardEvent(e);
     if (handler) {
       e.preventDefault();
       e.stopPropagation();
