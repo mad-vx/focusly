@@ -22,6 +22,7 @@ interface KeyOptionItem {
 export class FocuslyConfigComponent {
   private readonly focusService = inject(FOCUSLY_SERVICE_API);
   keyPressActions = input<KeyPressAction[] | null>(null);
+  showKeyMapCode = input(false);
   title = input<string | undefined>(undefined);
   keyMapChange = output<FocuslyKeyMap>();
   
@@ -61,7 +62,7 @@ export class FocuslyConfigComponent {
   readonly keyMapCode = computed(() => {
     const map = this.keyMapValue();
 
-    const actions = (Object.keys(map) as KeyPressAction[]).sort();
+    const actions = (Object.keys(map) as KeyPressAction[]);
 
     const lines: string[] = [];
     lines.push('provideFocuslyKeymap({');

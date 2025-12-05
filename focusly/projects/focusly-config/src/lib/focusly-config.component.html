@@ -4,7 +4,6 @@
       <h3>{{ title() }}</h3>
     </header>
   }
-
   <table>
     <thead>
       <tr>
@@ -55,9 +54,16 @@
     </tbody>
   </table>
 
-  <section class="focusly-keymap-json">
-    <h4>Generated Focusly keymap</h4>
-    <p>Use this in your application bootstrap to set default keymap configuration</p>
-    <pre><code>{{ keyMapCode() }}</code></pre>
-  </section>
+  @if(showKeyMapCode()) {
+    <section class="focusly-keymap-json">
+      <p>
+        Key mappings can be set at runtime and/or build time. 
+        This configuration component is available in the <code>@zaybu/focusly-config</code> project to include in your applications.
+      </p>
+      <p>
+        For build time configuration, use the code below in your application bootstrap.
+      </p>
+      <pre><code>{{ keyMapCode() }}</code></pre>
+    </section>
+  }
 </section>

@@ -106,10 +106,14 @@ export class BaseComponent {
     status: 'Active',
     vip: true,
     email: 'jane.porter@example.com',
+    phone: '07123000999',
+    website: 'https://github.com/mad-vx',
     address1: '44 Bishopsgate',
     address2: 'Level 12',
+    address3: '',
     city: 'London',
     postcode: 'EC9X 7OZ',
+    country: 'UK',
   };
 
   columns = [0, 1, 2, 3, 4, 5, 6];

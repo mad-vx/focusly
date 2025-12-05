@@ -169,6 +169,36 @@
           </tr>
 
           <tr>
+            <td class="cell-label">Phone</td>
+            <td>
+              <input
+                focusly
+                class="cell-input wide"
+                type="tel"
+                [focuslyGroup]="2"
+                [focuslyRow]="4"
+                [focuslyColumn]="0"
+                [value]="customer.phone"
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cell-label">Website</td>
+            <td>
+              <input
+                focusly
+                class="cell-input wide"
+                type="url"
+                [focuslyGroup]="2"
+                [focuslyRow]="5"
+                [focuslyColumn]="0"
+                [value]="customer.website"
+              />
+            </td>
+          </tr>
+
+          <tr>
             <td class="cell-label">Address</td>
             <td>
               <input
@@ -176,7 +206,7 @@
                 class="cell-input wide"
                 type="text"
                 [focuslyGroup]="2"
-                [focuslyRow]="4"
+                [focuslyRow]="6"
                 [focuslyColumn]="0"
                 [value]="customer.address1"
                 placeholder="Line 1"
@@ -191,7 +221,7 @@
                 class="cell-input wide"
                 type="text"
                 [focuslyGroup]="2"
-                [focuslyRow]="5"
+                [focuslyRow]="7"
                 [focuslyColumn]="0"
                 [value]="customer.address2"
                 placeholder="Line 2"
@@ -206,7 +236,22 @@
                 class="cell-input wide"
                 type="text"
                 [focuslyGroup]="2"
-                [focuslyRow]="6"
+                [focuslyRow]="8"
+                [focuslyColumn]="0"
+                [value]="customer.address3"
+                placeholder="Line 3"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input
+                focusly
+                class="cell-input wide"
+                type="text"
+                [focuslyGroup]="2"
+                [focuslyRow]="9"
                 [focuslyColumn]="0"
                 [value]="customer.city"
                 placeholder="City"
@@ -221,10 +266,25 @@
                 class="cell-input wide"
                 type="text"
                 [focuslyGroup]="2"
-                [focuslyRow]="7"
+                [focuslyRow]="10"
                 [focuslyColumn]="0"
                 [value]="customer.postcode"
                 placeholder="Postcode"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input
+                focusly
+                class="cell-input wide"
+                type="text"
+                [focuslyGroup]="2"
+                [focuslyRow]="11"
+                [focuslyColumn]="0"
+                [value]="customer.country"
+                placeholder="Country"
               />
             </td>
           </tr>

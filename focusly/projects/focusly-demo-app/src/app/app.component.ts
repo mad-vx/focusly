@@ -12,4 +12,23 @@ import { FocuslyConfigComponent } from 'focusly-config';
 })
 export class AppComponent {
   toolkit = signal<'none' | 'ngzorro'>('none');
+
+  readonly showConfig = signal(false);
+  readonly showToolkitInfo = signal(false);
+
+  openConfig(): void {
+    this.showConfig.set(true);
+  }
+
+  closeConfig(): void {
+    this.showConfig.set(false);
+  }
+
+  openToolkitInfo(): void {
+    this.showToolkitInfo.set(true);
+  }
+
+  closeToolkitInfo(): void {
+    this.showToolkitInfo.set(false);
+  }
 }

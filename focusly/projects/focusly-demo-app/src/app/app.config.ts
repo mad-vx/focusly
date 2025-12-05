@@ -8,10 +8,10 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideAnimations(),
     provideFocuslyKeymap({
-      down: createKeyChord({ ctrl: true, key: 'ArrowDown' }),
-      up: createKeyChord({ ctrl: true, key: 'ArrowUp' }),
-      left: createKeyChord({ ctrl: true, key: 'ArrowLeft' }),
-      right: createKeyChord({ ctrl: true, key: 'ArrowRight' }),
+      down: createKeyChord({ alt: true, key: 'ArrowDown' }),
+      up: createKeyChord({ alt: true, key: 'ArrowUp' }),
+      left: createKeyChord({ alt: true, key: 'ArrowLeft' }),
+      right: createKeyChord({ alt: true, key: 'ArrowRight' }),
     }),
   ],
 };
