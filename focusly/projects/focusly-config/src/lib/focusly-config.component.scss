@@ -1,0 +1,52 @@
+/* In focusly-config.component.css inside the library */
+
+.focusly-keymap-config {
+  display: block;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.focusly-keymap-config header h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.focusly-keymap-config table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.focusly-keymap-config th,
+.focusly-keymap-config td {
+  padding: 4px 6px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.focusly-keymap-config thead th {
+  font-weight: 600;
+}
+
+.focusly-keymap-config select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 3px 4px;
+  font-size: inherit;
+}
+
+.focusly-keymap-json h4 {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.focusly-keymap-json pre {
+  margin: 0;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+}

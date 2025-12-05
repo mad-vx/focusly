@@ -1,32 +1,63 @@
-    <section class="focusly-keymap-config">
-        @if (title()) {
-            <header>
-                    <h3>{{ title() }}</h3>
-            </header>
-        }
-      
-      <table>
-        <thead>
-          <tr>
-            <th>Action</th>
-            <th>Key chord</th>
-          </tr>
-        </thead>
-        <tbody>
-            @for (action of keypressActionsToShow(); track $index) {
-                <tr>
-                    <td>{{ action }}</td>
-                    <td>
-                    <input
-                        type="text"
-                        [value]="formValue()[action] ?? ''"
-                        (change)="onChordInput(action, $any($event.target).value)"
-                        (blur)="onChordInput(action, $any($event.target).value)"
-                        placeholder="e.g. ctrl+arrowdown"
-                    />
-                    </td>
-                </tr>
-            }
-        </tbody>
-      </table>
-    </section>
+<section class="focusly-keymap-config">
+  @if (title()) {
+    <header>
+      <h3>{{ title() }}</h3>
+    </header>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Modifier</th>
+        <th>Key</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (action of keyPressActionsToDisplay(); track action) {
+        <tr>
+          <td>{{ action }}</td>
+
+          <td>
+            <select (change)="onModifierChange(action, $any($event.target).value)">
+              @for (mod of modifierOptions; track mod.value) {
+                <option
+                  [value]="mod.value"
+                  [selected]="mod.value === getModifierForAction(action)"
+                >
+                  {{ mod.label }}
+                </option>
+              }
+            </select>
+          </td>
+
+          <td>
+            <select (change)="onKeyChange(action, $any($event.target).value)">
+              <option
+                value=""
+                [selected]="getKeyForAction(action) === ''"
+              >
+                Select key…
+              </option>
+
+              @for (opt of keyOptions; track opt.value) {
+                <option
+                  [value]="opt.value"
+                  [selected]="opt.value === getKeyForAction(action)"
+                >
+                  {{ opt.label }}
+                </option>
+              }
+            </select>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <section class="focusly-keymap-json">
+    <h4>Generated Focusly keymap</h4>
+    <p>Use this in your application bootstrap to set default keymap configuration</p>
+    <pre><code>{{ keyMapCode() }}</code></pre>
+  </section>
+</section>

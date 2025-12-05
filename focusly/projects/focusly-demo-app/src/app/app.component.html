@@ -8,9 +8,7 @@
       Use <strong>Alt + Arrow Keys</strong> to move between interactive cells, and press
       <strong>Enter</strong> to trigger the contextual action for that panel.
     </p>
-  </section>
 
-  <section class="instructions">
     <h2>Keyboard Navigation</h2>
     <ul>
       <li><strong>Alt + ↑ / ↓ / ← / →</strong> – Move between fields</li>
@@ -24,6 +22,12 @@
       those behaviours scoped.
     </p>
   </section>
+
+  @if (toolkit() === 'ngzorro') {
+    <app-ng-zorro></app-ng-zorro>
+  } @else {
+    <app-vanilla-html></app-vanilla-html>
+  }
 
   <section class="instructions">
     <h2>Component Toolkit Independant</h2>
@@ -45,12 +49,6 @@
       /><label>Ng-Zorro</label>
     </p>
   </section>
-
-  @if (toolkit() === 'ngzorro') {
-    <app-ng-zorro></app-ng-zorro>
-  } @else {
-    <app-vanilla-html></app-vanilla-html>
-  }
 
   <focusly-config title="Keymap Configuration"></focusly-config>
 </main>
