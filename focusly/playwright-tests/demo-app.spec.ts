@@ -59,6 +59,22 @@ function defineGridNavigationTests(mode: 'vanilla' | 'ngzorro') {
         await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 1}, 'Alt+ArrowRight');
         await testCellFocusChange(page, { row: 0, col: 1}, { row: 0, col: 0}, 'Alt+ArrowLeft');
     });
+
+    test('End moves from (0,0) to (0,3)', async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 3}, 'End');
+    });
+
+    test('Home moves from (0,3) to (0,0)', async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 3}, { row: 0, col: 0}, 'Home');
+    });
+
+    test('PageDown moves from (0,3) to (9, 3)', async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 3}, { row: 9, col: 3}, 'PageDown');
+    });
+
+    test('PageUp moves from (9,0) to (0,0)', async ({ page }) => {
+        await testCellFocusChange(page, { row: 9, col: 0}, { row: 0, col: 0}, 'PageUp');
+    });
   });
 };
 

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { NzSelectFocusDirective } from '@zaybu/focusly-nz';
 import { BaseComponent } from '../base/base.component';
 import { FormsModule } from '@angular/forms';

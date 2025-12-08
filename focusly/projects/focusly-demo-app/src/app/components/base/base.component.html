@@ -60,7 +60,7 @@
               </td>
 
               <td class="cell-center">
-                <input
+                <input [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
                   focusly
                   class="cell-checkbox"
                   type="checkbox"
@@ -72,7 +72,7 @@
               </td>
 
               <td>
-                <input
+                <input [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
                   focusly
                   class="cell-input wide"
                   type="text"
