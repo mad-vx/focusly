@@ -43,10 +43,14 @@
             <span class="info-icon" (click)="openToolkitInfo()">ℹ️</span>
           </h2>
 
-          <input type="radio" [checked]="toolkit() === 'none'" (click)="toolkit.set('none')" />
+          <input data-test-id="toolkit-vanilla"
+            type="radio" 
+            [checked]="toolkit() === 'none'" 
+            (click)="toolkit.set('none')"
+          />
           <label>Vanilla HTML</label>
 
-          <input
+          <input data-test-id="toolkit-ngzorro"
             type="radio"
             [checked]="toolkit() === 'ngzorro'"
             (click)="toolkit.set('ngzorro')"
