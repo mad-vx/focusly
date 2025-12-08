@@ -38,7 +38,7 @@
                 <span class="currency">{{ row.ccy }}</span>
               </td>
               <td>
-                <input
+                <input [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
                   focusly
                   class="cell-input num"
                   type="number"

@@ -27,7 +27,10 @@
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\"",
     "changeset:changeset": "changeset",
     "changeset:version-packages": "changeset version",
-    "changeset:release": "changeset publish"
+    "changeset:release": "changeset publish",
+    "test:playwright": "playwright test",
+    "test:playwright:debug": "playwright test --debug",
+    "test:playwright:headed": "playwright test --headed"
   },
   "workspaces": [
     "projects/focusly",
@@ -53,6 +56,7 @@
     "@angular/cli": "^20.3.8",
     "@angular/compiler-cli": "^20.3.9",
     "@changesets/cli": "^2.29.7",
+    "@playwright/test": "^1.57.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
