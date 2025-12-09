@@ -1,17 +1,22 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, Locator } from '@playwright/test';
 
 async function testCellFocusChange(page: Page, from: {row: number, col: number},  to: {row: number, col: number}, keyPress: string) {
-  const fromCell = page.getByTestId(`grid-cell-${from.row}-${from.col}`);
+  const fromCell = setCellFocus(page, from);
   //const toCell = page.getByTestId(`grid-cell-${to.row}-${to.col}`);
-  await fromCell.waitFor();
-  await fromCell.focus();
   await page.keyboard.press(keyPress);
   await expectCellToContainActiveElement(page, to.row, to.col);
   //await expect(toCell).toBeFocused();
 }
 
-async function setToolkit(page: Page, mode: 'vanilla' | 'ngzorro') {
-  if (mode === 'vanilla') {
+async function setCellFocus(page: Page, from: {row: number, col: number}): Promise<Locator> {
+  const cell = page.getByTestId(`grid-cell-${from.row}-${from.col}`);
+  await cell.waitFor();
+  await cell.focus();
+  return cell;
+}
+
+async function setToolkit(page: Page, mode: 'Vanilla' | 'NG-Zorro') {
+  if (mode === 'Vanilla') {
     await page.getByTestId('toolkit-vanilla').click();
   } else {
     await page.getByTestId('toolkit-ngzorro').click();
@@ -36,7 +41,7 @@ async function expectCellToContainActiveElement(page: Page, row: number, col: nu
     .toBe(expectedId);
 }
 
-function defineGridNavigationTests(mode: 'vanilla' | 'ngzorro') {
+function defineGridNavigationTests(mode: 'Vanilla' | 'NG-Zorro') {
   test.describe(`${mode} basic grid navigation`, () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
@@ -75,8 +80,42 @@ function defineGridNavigationTests(mode: 'vanilla' | 'ngzorro') {
     test('PageUp moves from (9,0) to (0,0)', async ({ page }) => {
         await testCellFocusChange(page, { row: 9, col: 0}, { row: 0, col: 0}, 'PageUp');
     });
+
+    test.only('Grid walk - multiple keypress', async ({ page }) => {
+        await setCellFocus(page, { row: 0, col: 0});
+        await page.keyboard.press('Alt+ArrowRight');
+        await expectCellToContainActiveElement(page, 0, 1);
+        await page.keyboard.press('Alt+ArrowRight');
+        await expectCellToContainActiveElement(page, 0, 2);
+        await page.keyboard.press('Alt+ArrowRight');
+        await expectCellToContainActiveElement(page, 0, 3);
+        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press('Alt+ArrowDown');
+        await expectCellToContainActiveElement(page, 3, 3);
+        await page.keyboard.press('Home');
+        await expectCellToContainActiveElement(page, 3, 0);
+        await page.keyboard.press('PageDown');
+        await expectCellToContainActiveElement(page, 9, 0);
+        await page.keyboard.press('End');
+        await expectCellToContainActiveElement(page, 9, 3);
+        await page.keyboard.press('PageUp');
+        await expectCellToContainActiveElement(page, 0, 3);
+        await page.keyboard.press('Alt+ArrowLeft');
+        await page.keyboard.press('Alt+ArrowLeft');
+        await expectCellToContainActiveElement(page, 0, 1);
+        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press('Alt+ArrowDown');
+        await expectCellToContainActiveElement(page, 4, 1);
+        await page.keyboard.press('Alt+ArrowUp');
+        await page.keyboard.press('Alt+ArrowUp');
+        await page.keyboard.press('Alt+ArrowUp');
+        await expectCellToContainActiveElement(page, 1, 1);
+    });
   });
 };
 
-defineGridNavigationTests('vanilla');
-defineGridNavigationTests('ngzorro');
+defineGridNavigationTests('Vanilla');
+defineGridNavigationTests('NG-Zorro');
