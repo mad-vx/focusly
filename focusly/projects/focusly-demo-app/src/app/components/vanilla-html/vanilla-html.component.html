@@ -1,9 +1,10 @@
 <ng-template #nzSide let-row let-group="group">
   <select
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
     #nzSide
     focusly
     class="cell-input"
-    [focuslyGroup]="1"
+    [focuslyGroup]="group"
     [focuslyRow]="row.rowIndex"
     [focuslyColumn]="1"
   >

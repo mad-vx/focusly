@@ -44,3 +44,35 @@
   color: #555;
   font-style: italic;
 }
+
+.info-icon {
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-left: 8px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.info-icon:hover {
+  opacity: 1;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 24px 0;
+
+  > div {
+    flex: 0.5;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.right-instructions h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+}

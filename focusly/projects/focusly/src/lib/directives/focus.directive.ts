@@ -12,7 +12,7 @@ import {
   effect,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FocusService } from '../services/focus.service';
+import { FocuslyService } from '../services/focus.service';
 import { FocusItem } from '../models/focus-item.model';
 
 @Directive({
@@ -52,7 +52,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private _focuslyScope: number | undefined;
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  protected readonly focusService = inject(FocusService);
+  protected readonly focusService = inject(FocuslyService);
   private readonly injector = inject(Injector);
 
   private readonly uniqueId = crypto.randomUUID();
@@ -93,22 +93,6 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    * NOTE: NO SIDE EFFECTS HERE.
    */
   readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focus));
-
-  /**
-   * Keyboard navigation mapping.
-   */
-  readonly keyHandlers: Record<string, () => void> = {
-    'alt+arrowdown': () => this.focusService.down(),
-    'alt+arrowup': () => this.focusService.up(),
-    'alt+arrowleft': () => this.focusService.left(),
-    'alt+arrowright': () => this.focusService.right(),
-    home: () => this.focusService.home(),
-    end: () => this.focusService.end(),
-    pageup: () => this.focusService.pageUp(),
-    pagedown: () => this.focusService.pageDown(),
-    tab: () => this.focusService.down(),
-    'shift+tab': () => this.focusService.up(),
-  };
 
   @HostBinding('class.focusly-active')
   get activeClass(): boolean {
@@ -190,12 +174,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @HostListener('keydown', ['$event'])
   protected handleKeydown(e: KeyboardEvent): void {
-    const key = [e.altKey ? 'alt' : '', e.shiftKey ? 'shift' : '', e.key.toLowerCase()]
-      .filter(Boolean)
-      .join('+');
-
-    const handler = this.keyHandlers[key];
-
+    const handler = this.focusService.getHandlerForKeyboardEvent(e);
     if (handler) {
       e.preventDefault();
       e.stopPropagation();

@@ -1,0 +1,69 @@
+<section class="focusly-keymap-config">
+  @if (title()) {
+    <header>
+      <h3>{{ title() }}</h3>
+    </header>
+  }
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Modifier</th>
+        <th>Key</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (action of keyPressActionsToDisplay(); track action) {
+        <tr>
+          <td>{{ action }}</td>
+
+          <td>
+            <select (change)="onModifierChange(action, $any($event.target).value)">
+              @for (mod of modifierOptions; track mod.value) {
+                <option
+                  [value]="mod.value"
+                  [selected]="mod.value === getModifierForAction(action)"
+                >
+                  {{ mod.label }}
+                </option>
+              }
+            </select>
+          </td>
+
+          <td>
+            <select (change)="onKeyChange(action, $any($event.target).value)">
+              <option
+                value=""
+                [selected]="getKeyForAction(action) === ''"
+              >
+                Select key…
+              </option>
+
+              @for (opt of keyOptions; track opt.value) {
+                <option
+                  [value]="opt.value"
+                  [selected]="opt.value === getKeyForAction(action)"
+                >
+                  {{ opt.label }}
+                </option>
+              }
+            </select>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if(showKeyMapCode()) {
+    <section class="focusly-keymap-json">
+      <p>
+        Key mappings can be set at runtime and/or build time. 
+        This configuration component is available in the <code>@zaybu/focusly-config</code> project to include in your applications.
+      </p>
+      <p>
+        For build time configuration, use the code below in your application bootstrap.
+      </p>
+      <pre><code>{{ keyMapCode() }}</code></pre>
+    </section>
+  }
+</section>

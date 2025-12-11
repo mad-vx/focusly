@@ -8,9 +8,7 @@
       Use <strong>Alt + Arrow Keys</strong> to move between interactive cells, and press
       <strong>Enter</strong> to trigger the contextual action for that panel.
     </p>
-  </section>
 
-  <section class="instructions">
     <h2>Keyboard Navigation</h2>
     <ul>
       <li><strong>Alt + ↑ / ↓ / ← / →</strong> – Move between fields</li>
@@ -25,30 +23,81 @@
     </p>
   </section>
 
-  <section class="instructions">
-    <h2>Component Toolkit Independant</h2>
-    <p>
-      Focusly is designed to work seamlessly across all UI component toolkits. In this demo you can
-      switch between Vanilla HTML and NG-ZORRO. Toolkit-specific support is implemented as a thin
-      extension of the base directive, meaning the core navigation logic stays centralised and clean
-      while each UI library only adds a few small, tailored overrides. This keeps behaviour
-      consistent, predictable, and incredibly easy to maintain.
-    </p>
-    <p>
-      <input type="radio" [checked]="toolkit() === 'none'" (click)="toolkit.set('none')" /><label
-        >Vanilla HTML</label
-      >
-      <input
-        type="radio"
-        [checked]="toolkit() === 'ngzorro'"
-        (click)="toolkit.set('ngzorro')"
-      /><label>Ng-Zorro</label>
-    </p>
-  </section>
-
   @if (toolkit() === 'ngzorro') {
     <app-ng-zorro></app-ng-zorro>
   } @else {
     <app-vanilla-html></app-vanilla-html>
+  }
+
+  <div class="header-row">
+    <div>
+      <button type="button" class="config-button" (click)="openConfig()">
+        Configure Key Mappings
+      </button>
+    </div>
+    <div>
+      <section class="instructions right-instructions">
+        <div>
+          <h2>
+            Component Toolkit Independent
+            <span class="info-icon" (click)="openToolkitInfo()">ℹ️</span>
+          </h2>
+
+          <input data-test-id="toolkit-vanilla"
+            type="radio" 
+            [checked]="toolkit() === 'none'" 
+            (click)="toolkit.set('none')"
+          />
+          <label>Vanilla HTML</label>
+
+          <input data-test-id="toolkit-ngzorro"
+            type="radio"
+            [checked]="toolkit() === 'ngzorro'"
+            (click)="toolkit.set('ngzorro')"
+          />
+          <label>NG-ZORRO</label>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  @if (showConfig()) {
+    <div class="modal-backdrop" (click)="closeConfig()">
+      <div class="modal-dialog" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+          <h2>Keymap Configuration</h2>
+          <button type="button" class="close-button" (click)="closeConfig()">×</button>
+        </header>
+
+        <div class="modal-body">
+          <focusly-config [showKeyMapCode]="true"></focusly-config>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showToolkitInfo()) {
+    <div class="modal-backdrop" (click)="closeToolkitInfo()">
+      <div class="modal-dialog" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+          <h2>Component Toolkit Independence</h2>
+          <button type="button" class="close-button" (click)="closeToolkitInfo()">×</button>
+        </header>
+
+        <div class="modal-body">
+          <p>
+            Focusly is designed to work seamlessly across all UI component toolkits. In this demo you can
+            switch between Vanilla HTML and NG-ZORRO. Toolkit-specific support is implemented as a thin
+            extension of the base directive, meaning the core navigation logic stays centralised and clean
+            while each UI library only adds a few small, tailored overrides. This keeps behaviour
+            consistent, predictable, and incredibly easy to maintain.        
+          </p>
+          <p>
+            NG-ZORRO Focusly project and library
+            <a href="https://www.npmjs.com/package/@zaybu/focusly-nz"><pre><code>@zaybu/focusly-nz</code></pre></a>
+          </p>
+        </div>
+      </div>
+    </div>
   }
 </main>
