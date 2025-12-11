@@ -38,7 +38,8 @@
                 <span class="currency">{{ row.ccy }}</span>
               </td>
               <td>
-                <input [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+                <input
+                  [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
                   focusly
                   class="cell-input num"
                   type="number"
@@ -60,7 +61,8 @@
               </td>
 
               <td class="cell-center">
-                <input [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
+                <input
+                  [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
                   focusly
                   class="cell-checkbox"
                   type="checkbox"
@@ -72,7 +74,8 @@
               </td>
 
               <td>
-                <input [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
+                <input
+                  [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
                   focusly
                   class="cell-input wide"
                   type="text"

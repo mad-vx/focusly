@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { FocuslyKeyMap, KeyPressAction, FOCUSLY_SERVICE_API } from '@zaybu/focusly';
 
 type ModifierOption = 'none' | 'ctrl' | 'alt' | 'shift';
@@ -8,7 +17,7 @@ interface ModifierOptionItem {
 }
 
 interface KeyOptionItem {
-  value: string; 
+  value: string;
   label: string;
 }
 @Component({
@@ -17,7 +26,7 @@ interface KeyOptionItem {
   templateUrl: './focusly-config.component.html',
   styleUrls: ['./focusly-config.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true
+  standalone: true,
 })
 export class FocuslyConfigComponent {
   private readonly focusService = inject(FOCUSLY_SERVICE_API);
@@ -25,7 +34,7 @@ export class FocuslyConfigComponent {
   showKeyMapCode = input(false);
   title = input<string | undefined>(undefined);
   keyMapChange = output<FocuslyKeyMap>();
-  
+
   readonly modifierOptions: ModifierOptionItem[] = [
     { value: 'none', label: 'None' },
     { value: 'ctrl', label: 'Ctrl' },
@@ -44,7 +53,9 @@ export class FocuslyConfigComponent {
     { value: 'end', label: 'End' },
     { value: 'enter', label: 'Enter' },
     { value: ' ', label: 'Space' },
-    ... 'abcdefghijklmnopqrstuvwxyz1234567890'.split('').map(char => ({ value: char, label: char }))
+    ...'abcdefghijklmnopqrstuvwxyz1234567890'
+      .split('')
+      .map((char) => ({ value: char, label: char })),
   ];
 
   private readonly _keyMapValue = signal<FocuslyKeyMap>({});
@@ -62,7 +73,7 @@ export class FocuslyConfigComponent {
   readonly keyMapCode = computed(() => {
     const map = this.keyMapValue();
 
-    const actions = (Object.keys(map) as KeyPressAction[]);
+    const actions = Object.keys(map) as KeyPressAction[];
 
     const lines: string[] = [];
     lines.push('provideFocuslyKeymap({');
@@ -71,7 +82,7 @@ export class FocuslyConfigComponent {
       const rawChord = map[action];
       const chord = this.normalizeChord(rawChord);
       if (!chord) {
-        continue; 
+        continue;
       }
 
       const parts = chord.split('+');
@@ -121,7 +132,7 @@ export class FocuslyConfigComponent {
     if (parts.length === 1) return 'none';
 
     const candidate = parts[0] as ModifierOption;
-    const valid = this.modifierOptions.some(m => m.value === candidate);
+    const valid = this.modifierOptions.some((m) => m.value === candidate);
     return valid ? candidate : 'none';
   }
 
@@ -158,7 +169,7 @@ export class FocuslyConfigComponent {
   onChordInput(action: KeyPressAction, rawValue: string): void {
     const value = rawValue.trim();
 
-    this._keyMapValue.update(current => ({
+    this._keyMapValue.update((current) => ({
       ...current,
       [action]: value || undefined,
     }));

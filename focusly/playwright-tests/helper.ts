@@ -1,11 +1,16 @@
-import { Locator, Page, expect } from "@playwright/test";
-import { FocuslyKeyChord } from "@zaybu/focusly";
-import { TestKeyMap } from "./keymaps";
+import { Locator, Page, expect } from '@playwright/test';
+import { FocuslyKeyChord } from '@zaybu/focusly';
+import { TestKeyMap } from './keymaps';
 
 export const TOOLKITS = ['Vanilla', 'NG-Zorro'] as const;
 export type ToolkitType = (typeof TOOLKITS)[number];
 
-export async function testCellFocusChange(page: Page, from: {row: number, col: number},  to: {row: number, col: number}, keyChords: FocuslyKeyChord | undefined) {
+export async function testCellFocusChange(
+  page: Page,
+  from: { row: number; col: number },
+  to: { row: number; col: number },
+  keyChords: FocuslyKeyChord | undefined,
+) {
   const fromCell = await setCellFocus(page, from);
   //const toCell = page.getByTestId(`grid-cell-${to.row}-${to.col}`);
   if (keyChords) {
@@ -15,7 +20,10 @@ export async function testCellFocusChange(page: Page, from: {row: number, col: n
   //await expect(toCell).toBeFocused();
 }
 
-export async function setCellFocus(page: Page, from: {row: number, col: number}): Promise<Locator> {
+export async function setCellFocus(
+  page: Page,
+  from: { row: number; col: number },
+): Promise<Locator> {
   const cell = page.getByTestId(`grid-cell-${from.row}-${from.col}`);
   await cell.waitFor();
   await cell.focus();
@@ -40,17 +48,20 @@ export async function expectCellToContainActiveElement(page: Page, row: number, 
   const expectedId = `grid-cell-${row}-${col}`;
 
   await expect
-    .poll(async () => {
-      return await page.evaluate((id) => {
-        const active = document.activeElement as HTMLElement | null;
-        if (!active) return null;
+    .poll(
+      async () => {
+        return await page.evaluate((id) => {
+          const active = document.activeElement as HTMLElement | null;
+          if (!active) return null;
 
-        const cell = active.closest<HTMLElement>('[data-test-id^="grid-cell-"]');
-        return cell?.getAttribute('data-test-id') ?? null;
-      }, expectedId);
-    }, {  
-      message: `Expected focus to be inside ${expectedId}`,
-    })
+          const cell = active.closest<HTMLElement>('[data-test-id^="grid-cell-"]');
+          return cell?.getAttribute('data-test-id') ?? null;
+        }, expectedId);
+      },
+      {
+        message: `Expected focus to be inside ${expectedId}`,
+      },
+    )
     .toBe(expectedId);
 }
 
@@ -72,7 +83,7 @@ export function toKeyPressString(keyChord: FocuslyKeyChord | undefined): string 
     arrowdown: 'ArrowDown',
     arrowleft: 'ArrowLeft',
     arrowright: 'ArrowRight',
-    arrowkeyup: 'ArrowUp',    // in case your lib uses this form
+    arrowkeyup: 'ArrowUp', // in case your lib uses this form
     arrowkeydown: 'ArrowDown',
     arrowkeyleft: 'ArrowLeft',
     arrowkeyright: 'ArrowRight',
@@ -84,8 +95,8 @@ export function toKeyPressString(keyChord: FocuslyKeyChord | undefined): string 
 
   return chord
     .split('+')
-    .map(part => part.trim())
-    .map(part => {
+    .map((part) => part.trim())
+    .map((part) => {
       const lower = part.toLowerCase();
       if (modifierMap[lower]) return modifierMap[lower];
       if (keyMap[lower]) return keyMap[lower];

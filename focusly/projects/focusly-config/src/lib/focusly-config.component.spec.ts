@@ -8,9 +8,8 @@ describe('FocuslyConfig', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FocuslyConfigComponent]
-    })
-    .compileComponents();
+      imports: [FocuslyConfigComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FocuslyConfigComponent);
     component = fixture.componentInstance;

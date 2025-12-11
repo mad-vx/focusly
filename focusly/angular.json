@@ -173,10 +173,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/focusly-config/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }

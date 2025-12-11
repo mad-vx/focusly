@@ -1,4 +1,4 @@
-import { FocuslyKeyMap } from "@zaybu/focusly";
+import { FocuslyKeyMap } from '@zaybu/focusly';
 
 declare global {
   interface Window {

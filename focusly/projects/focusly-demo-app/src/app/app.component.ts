@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   readonly showConfig = signal(false);
   readonly showToolkitInfo = signal(false);
 
-  focuslyService = inject(FOCUSLY_SERVICE_API)
+  focuslyService = inject(FOCUSLY_SERVICE_API);
   openConfig(): void {
     this.showConfig.set(true);
   }

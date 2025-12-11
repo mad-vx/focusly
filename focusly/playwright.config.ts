@@ -14,7 +14,7 @@ export default defineConfig({
   },
 
   webServer: {
-    command: 'ng serve focusly-demo-app', 
+    command: 'ng serve focusly-demo-app',
     port: 4200,
     reuseExistingServer: !process.env['CI'],
     timeout: 120_000,
@@ -24,6 +24,6 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    }
+    },
   ],
 });

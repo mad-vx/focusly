@@ -309,7 +309,6 @@ input[type='button'],
   text-align: center;
 }
 
-
 .focusly-keymap-config {
   display: block;
   max-width: 600px;
@@ -317,7 +316,12 @@ input[type='button'],
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px 20px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
 }
 
 .focusly-keymap-config header h3 {
@@ -384,7 +388,6 @@ input[type='button'],
   font-weight: 600;
   color: #222;
 }
-
 
 .config-button {
   padding: 6px 12px;

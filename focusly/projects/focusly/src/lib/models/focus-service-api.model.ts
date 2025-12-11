@@ -7,10 +7,7 @@ export interface FocuslyServiceApi {
   updateKeymap(partial: FocuslyKeyMap): void;
 }
 
-export const FOCUSLY_SERVICE_API = new InjectionToken<FocuslyServiceApi>(
-  'FOCUSLY_SERVICE_API',
-  {
-    providedIn: 'root',
-    factory: () => inject(FocuslyService)
-  },
-);
+export const FOCUSLY_SERVICE_API = new InjectionToken<FocuslyServiceApi>('FOCUSLY_SERVICE_API', {
+  providedIn: 'root',
+  factory: () => inject(FocuslyService),
+});

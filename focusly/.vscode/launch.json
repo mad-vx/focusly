@@ -21,11 +21,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
-      "args": [
-        "test",
-        "playwright-tests/demo-app.spec.ts",
-        "--project=chromium"
-      ],
+      "args": ["test", "playwright-tests/demo-app.spec.ts", "--project=chromium"],
       "cwd": "${workspaceFolder}",
       "env": {
         "PWDEBUG": "1"
