@@ -1,6 +1,4 @@
-import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyMap } from '@zaybu/focusly';
-import { createKeyChord } from '../projects/focusly/src/lib/models/key-chord.model';
-
+import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyMap, createKeyChord } from '@zaybu/focusly';
 export interface TestKeyMap {
   name: string;
   map: FocuslyKeyMap;
