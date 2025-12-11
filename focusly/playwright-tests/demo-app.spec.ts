@@ -1,121 +1,86 @@
-import { test, expect, Page, Locator } from '@playwright/test';
+import { test } from '@playwright/test';
+import { TestKeyMap, testKeyMaps } from './keymaps';
+import { TOOLKITS, ToolkitType, expectCellToContainActiveElement, setCellFocus, setToolkit, testCellFocusChange, toKeyPressString, updateFocuslyKeymap } from './helper';
 
-async function testCellFocusChange(page: Page, from: {row: number, col: number},  to: {row: number, col: number}, keyPress: string) {
-  const fromCell = setCellFocus(page, from);
-  //const toCell = page.getByTestId(`grid-cell-${to.row}-${to.col}`);
-  await page.keyboard.press(keyPress);
-  await expectCellToContainActiveElement(page, to.row, to.col);
-  //await expect(toCell).toBeFocused();
-}
-
-async function setCellFocus(page: Page, from: {row: number, col: number}): Promise<Locator> {
-  const cell = page.getByTestId(`grid-cell-${from.row}-${from.col}`);
-  await cell.waitFor();
-  await cell.focus();
-  return cell;
-}
-
-async function setToolkit(page: Page, mode: 'Vanilla' | 'NG-Zorro') {
-  if (mode === 'Vanilla') {
-    await page.getByTestId('toolkit-vanilla').click();
-  } else {
-    await page.getByTestId('toolkit-ngzorro').click();
-  }
-}
-
-async function expectCellToContainActiveElement(page: Page, row: number, col: number) {
-  const expectedId = `grid-cell-${row}-${col}`;
-
-  await expect
-    .poll(async () => {
-      return await page.evaluate((id) => {
-        const active = document.activeElement as HTMLElement | null;
-        if (!active) return null;
-
-        const cell = active.closest<HTMLElement>('[data-test-id^="grid-cell-"]');
-        return cell?.getAttribute('data-test-id') ?? null;
-      }, expectedId);
-    }, {  
-      message: `Expected focus to be inside ${expectedId}`,
-    })
-    .toBe(expectedId);
-}
-
-function defineGridNavigationTests(mode: 'Vanilla' | 'NG-Zorro') {
-  test.describe(`${mode} basic grid navigation`, () => {
+function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap) {
+  test.describe(`${toolkitType} - ${keyMap.name} - basic grid navigation`, () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
-        await setToolkit(page, mode);
+        await setToolkit(page, toolkitType);
+        await updateFocuslyKeymap(page, keyMap);
     });
 
-    test('Alt+ArrowDown moves from (0,0) to (1,0)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 0, col: 0}, { row: 1, col: 0}, 'Alt+ArrowDown');
+    test(`${toKeyPressString(keyMap.map.down)} moves from (0,0) to (1,0)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 0}, { row: 1, col: 0}, keyMap.map.down);
     });
 
-    test('Alt+ArrowUp moves from (1,0) to (0,0)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 1, col: 0}, { row: 0, col: 0}, 'Alt+ArrowUp');
+    test(`${toKeyPressString(keyMap.map.up)} moves from (1,0) to (0,0)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 1, col: 0}, { row: 0, col: 0}, keyMap.map.up);
     });
 
-    test('Alt+ArrowRight moves from (0,0) to (0,1)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 1}, 'Alt+ArrowRight');
+    test(`${toKeyPressString(keyMap.map.right)} moves from (0,0) to (0,1)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 1}, keyMap.map.right);
     });
 
-    test('Alt+ArrowLeft moves from (0,1) to (0,0)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 1}, 'Alt+ArrowRight');
-        await testCellFocusChange(page, { row: 0, col: 1}, { row: 0, col: 0}, 'Alt+ArrowLeft');
+    test(`${toKeyPressString(keyMap.map.left)} moves from (0,1) to (0,0)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 1}, keyMap.map.right);
+        await testCellFocusChange(page, { row: 0, col: 1}, { row: 0, col: 0}, keyMap.map.left);
     });
 
-    test('End moves from (0,0) to (0,3)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 3}, 'End');
+    test(`${toKeyPressString(keyMap.map.end)} moves from (0,0) to (0,3)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 0}, { row: 0, col: 3}, keyMap.map.end);
     });
 
-    test('Home moves from (0,3) to (0,0)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 0, col: 3}, { row: 0, col: 0}, 'Home');
+    test(`${toKeyPressString(keyMap.map.home)} moves from (0,3) to (0,0)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 3}, { row: 0, col: 0}, keyMap.map.home);
     });
 
-    test('PageDown moves from (0,3) to (9, 3)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 0, col: 3}, { row: 9, col: 3}, 'PageDown');
+    test(`${toKeyPressString(keyMap.map.pageDown)} moves from (0,3) to (9, 3)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 0, col: 3}, { row: 9, col: 3}, keyMap.map.pageDown);
     });
 
-    test('PageUp moves from (9,0) to (0,0)', async ({ page }) => {
-        await testCellFocusChange(page, { row: 9, col: 0}, { row: 0, col: 0}, 'PageUp');
+    test(`${toKeyPressString(keyMap.map.pageUp)} moves from (9,0) to (0,0)`, async ({ page }) => {
+        await testCellFocusChange(page, { row: 9, col: 0}, { row: 0, col: 0}, keyMap.map.pageUp);
     });
 
-    test.only('Grid walk - multiple keypress', async ({ page }) => {
+    test(`${toolkitType} - ${keyMap.name} - multiple keypress`, async ({ page }) => {
         await setCellFocus(page, { row: 0, col: 0});
-        await page.keyboard.press('Alt+ArrowRight');
+        await page.keyboard.press(toKeyPressString(keyMap.map.right));
         await expectCellToContainActiveElement(page, 0, 1);
-        await page.keyboard.press('Alt+ArrowRight');
+        await page.keyboard.press(toKeyPressString(keyMap.map.right));
         await expectCellToContainActiveElement(page, 0, 2);
-        await page.keyboard.press('Alt+ArrowRight');
+        await page.keyboard.press(toKeyPressString(keyMap.map.right));
         await expectCellToContainActiveElement(page, 0, 3);
-        await page.keyboard.press('Alt+ArrowDown');
-        await page.keyboard.press('Alt+ArrowDown');
-        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
         await expectCellToContainActiveElement(page, 3, 3);
-        await page.keyboard.press('Home');
-        await expectCellToContainActiveElement(page, 3, 0);
-        await page.keyboard.press('PageDown');
-        await expectCellToContainActiveElement(page, 9, 0);
-        await page.keyboard.press('End');
-        await expectCellToContainActiveElement(page, 9, 3);
-        await page.keyboard.press('PageUp');
+        await page.keyboard.press(toKeyPressString(keyMap.map.pageUp));
         await expectCellToContainActiveElement(page, 0, 3);
-        await page.keyboard.press('Alt+ArrowLeft');
-        await page.keyboard.press('Alt+ArrowLeft');
+        await page.keyboard.press(toKeyPressString(keyMap.map.pageDown));
+        await expectCellToContainActiveElement(page, 9, 3);
+        await page.keyboard.press(toKeyPressString(keyMap.map.end));
+        await expectCellToContainActiveElement(page, 9, 3);
+        await page.keyboard.press(toKeyPressString(keyMap.map.pageUp));
+        await expectCellToContainActiveElement(page, 0, 3);
+        await page.keyboard.press(toKeyPressString(keyMap.map.left));
+        await page.keyboard.press(toKeyPressString(keyMap.map.left));
         await expectCellToContainActiveElement(page, 0, 1);
-        await page.keyboard.press('Alt+ArrowDown');
-        await page.keyboard.press('Alt+ArrowDown');
-        await page.keyboard.press('Alt+ArrowDown');
-        await page.keyboard.press('Alt+ArrowDown');
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
+        await page.keyboard.press(toKeyPressString(keyMap.map.down));
         await expectCellToContainActiveElement(page, 4, 1);
-        await page.keyboard.press('Alt+ArrowUp');
-        await page.keyboard.press('Alt+ArrowUp');
-        await page.keyboard.press('Alt+ArrowUp');
+        await page.keyboard.press(toKeyPressString(keyMap.map.up));
+        await page.keyboard.press(toKeyPressString(keyMap.map.up));
+        await page.keyboard.press(toKeyPressString(keyMap.map.up));
         await expectCellToContainActiveElement(page, 1, 1);
     });
   });
 };
 
-defineGridNavigationTests('Vanilla');
-defineGridNavigationTests('NG-Zorro');
+TOOLKITS.forEach((toolkit) => {
+  testKeyMaps.forEach((keymap) => {
+    defineGridNavigationTests(toolkit, keymap);
+  });
+});
