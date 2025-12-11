@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { NgZorroComponent } from './components/ng-zorro/ng-zorro.component';
 import { VanillaHtmlComponent } from './components/vanilla-html/vanilla-html.component';
-import { FocuslyConfigComponent } from 'focusly-config';
+import { FocuslyConfigComponent } from '@zaybu/focusly-config';
 import { FOCUSLY_SERVICE_API, FocuslyKeyMap } from '@zaybu/focusly';
 
 @Component({
