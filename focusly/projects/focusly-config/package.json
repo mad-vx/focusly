@@ -1,10 +1,44 @@
 {
   "name": "@zaybu/focusly-config",
-  "version": "1.0.0",
+  "version": "1.0.2",
+  "description": "Configuration component for @zaybu/focusly library",
+  "keywords": [
+    "angular",
+    "angular library",
+    "angular directive",
+    "focus",
+    "focus management",
+    "keyboard",
+    "keyboard navigation",
+    "keyboard shortcuts",
+    "accessibility",
+    "a11y",
+    "forms",
+    "tables",
+    "grids",
+    "navigation",
+    "signals",
+    "angular signals",
+    "ux",
+    "ui",
+    "usability",
+    "frontend"
+  ],
+  "author": "Mark Evans",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mad-vx/focusly.git"
+  },
+  "homepage": "https://github.com/mad-vx/focusly#readme",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0",
-    "@zaybu/focusly": "^1.0.0"
+    "@zaybu/focusly": "^1.0.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -1,6 +1,6 @@
 {
   "name": "@zaybu/focusly",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Intuitive, elegant keyboard navigation for Angular — built with Signals for instant reactivity.",
   "keywords": [
     "angular",
@@ -31,6 +31,10 @@
     "url": "https://github.com/mad-vx/focusly.git"
   },
   "homepage": "https://github.com/mad-vx/focusly#readme",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/core": ">=16.0.0 <21.0.0",
     "@angular/common": ">=16.0.0 <21.0.0"
