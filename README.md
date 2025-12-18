@@ -1,4 +1,4 @@
-# 🎯 Focusly – Intuitive, Elegant Keyboard Navigation for Angular
+# 🎯 Focusly – Intuitive, Elegant Keyboard Navigation for Angular (v16+)
 
 **Focusly** is a lightweight Angular library that brings **intuitive, keyboard-driven navigation** to web applications.
 
@@ -102,3 +102,23 @@ https://mad-vx.github.io/focusly/
 
 💡 Comments, Suggestions & Questions (GitHub Discussions)
 https://github.com/mad-vx/focusly/discussions
+
+## Angular Compatibility
+
+@zaybu/focusly requires **Angular v16+**
+
+This is due to the use of Angular Signals and other modern framework APIs
+
+## 💼 Commercial Support & Consultancy
+
+If you would like help integrating **Focusly** into your Angular application — including:
+
+- Keyboard navigation architecture
+- Accessibility improvements (WCAG)
+- Custom keybinding strategies
+- Grid, dashboard, or complex UI navigation
+- Integration with NgZorro, Material UI, or custom design systems
+
+…professional consultancy and implementation support is available.
+
+📩 Contact: mn8s@hotmail.com
