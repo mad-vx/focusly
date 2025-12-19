@@ -31,7 +31,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   @Input({ required: true }) set focuslyGroup(scope: number) {
-    this._focuslyScope = scope;
+    this._focuslyGroup = scope;
     this.focusService.registerItemFocus(this.focus);
   }
 
@@ -44,12 +44,12 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   get focuslyGroup(): number | undefined {
-    return this._focuslyScope;
+    return this._focuslyGroup;
   }
 
   private _focuslyColumn: number | undefined;
   private _focuslyRow: number | undefined;
-  private _focuslyScope: number | undefined;
+  private _focuslyGroup: number | undefined;
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly focusService = inject(FocuslyService);
