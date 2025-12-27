@@ -37,7 +37,7 @@ export class FocuslyService implements FocuslyServiceApi {
     pageDown: () => this.pageDown(),
   };
 
-  readonly keyHandlers = computed<Record<KeyPressAction, () => void>>(() => {
+  readonly keyHandlers = computed<Record<string, () => void>>(() => {
     const effective = this.keyMap();
     const handlers: Record<string, () => void> = {};
 
@@ -60,26 +60,9 @@ export class FocuslyService implements FocuslyServiceApi {
     return handlers;
   });
 
-  readonly keyHandlersByChord = computed<Record<string, () => void>>(() => {
-    const map = this.keyMap();
-
-    const handlers: Record<string, () => void> = {};
-
-    for (const [action, keyChord] of Object.entries(map) as [KeyPressAction, string][]) {
-      if (!keyChord) continue;
-
-      const fn = this.keyPressActionHandlers[action];
-      if (!fn) continue;
-
-      handlers[keyChord] = fn;
-    }
-
-    return handlers;
-  });
-
   getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
     const chord = this.chordFromKeyboardEvent(e);
-    return this.keyHandlersByChord()[chord];
+    return this.keyHandlers()[chord];
   }
 
   private getScopeList(scope: number, create = false): FocusItem[] {

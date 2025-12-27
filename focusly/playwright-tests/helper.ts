@@ -11,13 +11,14 @@ export async function testCellFocusChange(
   to: { row: number; col: number },
   keyChords: FocuslyKeyChord | undefined,
 ) {
-  const fromCell = await setCellFocus(page, from);
-  //const toCell = page.getByTestId(`grid-cell-${to.row}-${to.col}`);
-  if (keyChords) {
-    await page.keyboard.press(toKeyPressString(keyChords));
+  const chords = toChordArray(keyChords);
+
+  for (const chord of chords.length ? chords : ['']) {
+    page.pause();
+    await setCellFocus(page, from);
+    if (chord) await page.keyboard.press(toKeyPressString(chord));
+    await expectCellToContainActiveElement(page, to.row, to.col);
   }
-  await expectCellToContainActiveElement(page, to.row, to.col);
-  //await expect(toCell).toBeFocused();
 }
 
 export async function setCellFocus(
@@ -108,4 +109,9 @@ export function toKeyPressString(keyChord: FocuslyKeyChord | undefined): string 
       return part;
     })
     .join('+');
+}
+
+export function toChordArray(keyChord: FocuslyKeyChord | undefined): string[] {
+  if (!keyChord) return [];
+  return Array.isArray(keyChord) ? keyChord : [keyChord];
 }
