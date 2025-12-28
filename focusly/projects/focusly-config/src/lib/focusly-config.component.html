@@ -6,21 +6,32 @@
   }
 
   <table>
-    <thead>
-      <tr>
-        <th>Action</th>
+<thead>
+  <tr>
+    <th>Action</th>
+    <th colspan="2">Key assignment 1</th>
+    <th colspan="2" class="optional-group">
+      Key assignment 2 <span class="optional-badge">Optional</span>
+    </th>
+  </tr>
 
-        <th colspan="2">Key assignment 1</th>
-        <th colspan="2">Key assignment 2 (optional)</th>
-      </tr>
-      <tr>
-        <th></th>
-        <th>Modifier</th>
-        <th>Key</th>
-        <th>Modifier</th>
-        <th>Key</th>
-      </tr>
-    </thead>
+  <tr class="subhead">
+    <th></th>
+    <th>Modifier</th>
+    <th>Key</th>
+    <th class="optional-group">Modifier</th>
+    <th class="optional-group">Key</th>
+  </tr>
+
+  <tr class="hint-row">
+    <th></th>
+    <th colspan="2" class="hint">Primary shortcut</th>
+    <th colspan="2" class="hint optional-group">
+      Alternative shortcut (leave as None / Select key to disable)
+    </th>
+  </tr>
+</thead>
+
 
     <tbody>
       @for (action of keyPressActionsToDisplay(); track action) {
@@ -54,7 +65,7 @@
               }
             </select>
           </td>
-          <td>
+          <td [class.optional-disabled]="!hasSecondChord(action)">
             <select (change)="onModifierChange(action, 1, $any($event.target).value)">
               @for (mod of modifierOptions; track mod.value) {
                 <option
@@ -67,7 +78,7 @@
             </select>
           </td>
 
-          <td>
+          <td [class.optional-disabled]="!hasSecondChord(action)">
             <select (change)="onKeyChange(action, 1, $any($event.target).value)">
               <option value="" [selected]="getKeyForAction(action, 1) === ''">
                 Select key…
