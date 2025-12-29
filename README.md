@@ -23,6 +23,7 @@ Focusly was designed to make keyboard navigation **predictable, accessible, and 
 - ⚡ Works with provideZonelessChangeDetection() - ensures optimal performance in zone-less Angular apps
 - 🔄 Fully reactive and framework-native (no DOM listeners or external deps)
 - 🪶 Small, simple, and zero-dependency
+- ⌨️ Multiple key assignments per action — support alternative keyboard shortcuts for the same navigation intent
 
 ---
 
@@ -33,6 +34,19 @@ Each focusable element declares:
 - A **row** and **column** – to describe its position within that group
 
 Focusly tracks the user’s current focus position and responds to keyboard events to move to the appropriate neighbour.
+
+### Multiple Key Assignments
+
+Focusly allows multiple keyboard shortcuts to trigger the same navigation action.
+
+This makes it easy to:
+
+- Support alternative shortcuts (e.g. Alt + Arrow or Ctrl + WASD)
+- Preserve muscle memory when migrating from existing systems
+- Offer platform-specific or user-preferred keybindings
+- Improve accessibility by providing redundant input paths
+
+Each navigation action (up, down, left, right, etc.) may be bound to one or more key chords, all of which behave identically at runtime.
 
 ---
 
