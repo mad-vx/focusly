@@ -4,25 +4,73 @@
       <h3>{{ title() }}</h3>
     </header>
   }
+
   <table>
-    <thead>
-      <tr>
-        <th>Action</th>
-        <th>Modifier</th>
-        <th>Key</th>
-      </tr>
-    </thead>
+<thead>
+  <tr>
+    <th>Action</th>
+    <th colspan="2">Key assignment 1</th>
+    <th colspan="2" class="optional-group">
+      Key assignment 2 <span class="optional-badge">Optional</span>
+    </th>
+  </tr>
+
+  <tr class="subhead">
+    <th></th>
+    <th>Modifier</th>
+    <th>Key</th>
+    <th class="optional-group">Modifier</th>
+    <th class="optional-group">Key</th>
+  </tr>
+
+  <tr class="hint-row">
+    <th></th>
+    <th colspan="2" class="hint">Primary shortcut</th>
+    <th colspan="2" class="hint optional-group">
+      Alternative shortcut (leave as None / Select key to disable)
+    </th>
+  </tr>
+</thead>
+
+
     <tbody>
       @for (action of keyPressActionsToDisplay(); track action) {
         <tr>
           <td>{{ action }}</td>
-
           <td>
-            <select (change)="onModifierChange(action, $any($event.target).value)">
+            <select (change)="onModifierChange(action, 0, $any($event.target).value)">
               @for (mod of modifierOptions; track mod.value) {
                 <option
                   [value]="mod.value"
-                  [selected]="mod.value === getModifierForAction(action)"
+                  [selected]="mod.value === getModifierForAction(action, 0)"
+                >
+                  {{ mod.label }}
+                </option>
+              }
+            </select>
+          </td>
+          <td>
+            <select (change)="onKeyChange(action, 0, $any($event.target).value)">
+              <option value="" [selected]="getKeyForAction(action, 0) === ''">
+                Select key…
+              </option>
+
+              @for (opt of keyOptions; track opt.value) {
+                <option
+                  [value]="opt.value"
+                  [selected]="opt.value === getKeyForAction(action, 0)"
+                >
+                  {{ opt.label }}
+                </option>
+              }
+            </select>
+          </td>
+          <td [class.optional-disabled]="!hasSecondChord(action)">
+            <select (change)="onModifierChange(action, 1, $any($event.target).value)">
+              @for (mod of modifierOptions; track mod.value) {
+                <option
+                  [value]="mod.value"
+                  [selected]="mod.value === getModifierForAction(action, 1)"
                 >
                   {{ mod.label }}
                 </option>
@@ -30,19 +78,16 @@
             </select>
           </td>
 
-          <td>
-            <select (change)="onKeyChange(action, $any($event.target).value)">
-              <option
-                value=""
-                [selected]="getKeyForAction(action) === ''"
-              >
+          <td [class.optional-disabled]="!hasSecondChord(action)">
+            <select (change)="onKeyChange(action, 1, $any($event.target).value)">
+              <option value="" [selected]="getKeyForAction(action, 1) === ''">
                 Select key…
               </option>
 
               @for (opt of keyOptions; track opt.value) {
                 <option
                   [value]="opt.value"
-                  [selected]="opt.value === getKeyForAction(action)"
+                  [selected]="opt.value === getKeyForAction(action, 1)"
                 >
                   {{ opt.label }}
                 </option>
@@ -54,15 +99,14 @@
     </tbody>
   </table>
 
-  @if(showKeyMapCode()) {
+  @if (showKeyMapCode()) {
     <section class="focusly-keymap-json">
       <p>
-        Key mappings can be set at runtime and/or build time. 
-        This configuration component is available in the <code>@zaybu/focusly-config</code> project to include in your applications.
+        Key mappings can be set at runtime and/or build time. <br/>
+        Multiple key assigment support (only 2 shown here). <br/>
+        This configuration component is available in the <a href="https://www.npmjs.com/package/@zaybu/focusly-config" target="_blank"><code>@zaybu/focusly-config</code></a> project to include in your applications.
       </p>
-      <p>
-        For build time configuration, use the code below in your application bootstrap.
-      </p>
+      <p>For build time configuration, use the code below in your application bootstrap.</p>
       <pre><code>{{ keyMapCode() }}</code></pre>
     </section>
   }

@@ -1,3 +1,5 @@
+import { FocuslyKeyChord } from './key-press-action.model';
+
 export type ModifierKey = 'alt' | 'ctrl' | 'shift';
 
 export interface KeyChordConfig {
@@ -13,7 +15,7 @@ export interface KeyChordConfig {
  * - key lowercased
  * - joined by '+', e.g. "ctrl+arrowup"
  */
-export function createKeyChord(config: KeyChordConfig): string {
+function canonicaliseKeyChord(config: KeyChordConfig): string {
   const parts: string[] = [];
 
   if (config.alt) parts.push('alt');
@@ -23,4 +25,18 @@ export function createKeyChord(config: KeyChordConfig): string {
   parts.push(config.key.toLowerCase());
 
   return parts.join('+');
+}
+
+export function createKeyChord(config: KeyChordConfig): string;
+export function createKeyChord(...configs: KeyChordConfig[]): FocuslyKeyChord;
+export function createKeyChord(...configs: KeyChordConfig[]): FocuslyKeyChord {
+  if (configs.length === 0) {
+    throw new Error('createKeyChord requires at least one KeyChordConfig');
+  }
+
+  const chords = configs.map(canonicaliseKeyChord);
+
+  const deduped = Array.from(new Set(chords));
+
+  return deduped.length === 1 ? deduped[0] : deduped;
 }

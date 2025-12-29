@@ -1,52 +1,53 @@
-/* In focusly-config.component.css inside the library */
-
 .focusly-keymap-config {
-  display: block;
-  font-family: inherit;
-  font-size: 13px;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-.focusly-keymap-config header h3 {
-  margin: 0 0 8px;
-  font-size: 14px;
-  font-weight: 600;
-}
+  th,
+  td {
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+  }
 
-.focusly-keymap-config table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  th:nth-child(4),
+  td:nth-child(4) {
+    border-left: 2px solid rgba(0, 0, 0, 0.12);
+  }
 
-.focusly-keymap-config th,
-.focusly-keymap-config td {
-  padding: 4px 6px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
+  .optional-group {
+    background: rgba(0, 0, 0, 0.03);
+  }
 
-.focusly-keymap-config thead th {
-  font-weight: 600;
-}
+  .optional-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    opacity: 0.85;
+  }
 
-.focusly-keymap-config select {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 3px 4px;
-  font-size: inherit;
-}
+  .optional-disabled {
+    opacity: 0.55;
+  }
 
-.focusly-keymap-json h4 {
-  margin: 0 0 4px;
-  font-size: 12px;
-  font-weight: 600;
-}
+  .hint-row th,
+  .hint-row td {
+    padding-top: 0;
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
 
-.focusly-keymap-json pre {
-  margin: 0;
-  padding: 8px;
-  background: #f5f5f5;
-  border-radius: 4px;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
-  font-size: 12px;
-  overflow-x: auto;
+  .subhead th {
+    font-weight: 600;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  select {
+    width: 100%;
+    min-width: 6rem;
+  }
 }
