@@ -137,9 +137,11 @@ export class FocuslyConfigComponent {
     const chord = this.composeChord(modifier, keyValue);
     this.setChord(action, slotIndex, chord);
   }
-  
+
   hasSecondChord(action: KeyPressAction): boolean {
-    return this.getKeyForAction(action, 1) !== '' || this.getModifierForAction(action, 1) !== 'none';
+    return (
+      this.getKeyForAction(action, 1) !== '' || this.getModifierForAction(action, 1) !== 'none'
+    );
   }
 
   private setChord(action: KeyPressAction, slotIndex: 0 | 1, rawValue: string): void {
