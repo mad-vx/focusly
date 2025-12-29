@@ -1,5 +1,11 @@
 # @zaybu/focusly
 
+## 1.1.1
+
+### Patch Changes
+
+- Readme file include
+
 ## 1.1.0
 
 ### Minor Changes
