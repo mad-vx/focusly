@@ -1,6 +1,6 @@
 {
   "name": "@zaybu/focusly",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Intuitive, elegant keyboard navigation for Angular — built with Signals for instant reactivity.",
   "keywords": [
     "angular",
