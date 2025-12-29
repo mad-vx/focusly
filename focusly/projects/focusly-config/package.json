@@ -36,9 +36,9 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0",
-    "@zaybu/focusly": "^1.0.1"
+    "@angular/common": ">=16 <21",
+    "@angular/core": ">=16 <21",
+    "@zaybu/focusly": ">=1.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
