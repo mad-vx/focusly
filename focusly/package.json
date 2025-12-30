@@ -27,7 +27,6 @@
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\"",
     "changeset:changeset": "changeset",
     "changeset:version-packages": "changeset version",
-    "changeset:release": "changeset publish",
     "test:playwright": "playwright test",
     "test:playwright:debug": "playwright test --debug",
     "test:playwright:headed": "playwright test --headed"
