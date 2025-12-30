@@ -14,7 +14,6 @@ export async function testCellFocusChange(
   const chords = toChordArray(keyChords);
 
   for (const chord of chords.length ? chords : ['']) {
-    page.pause();
     await setCellFocus(page, from);
     if (chord) await page.keyboard.press(toKeyPressString(chord));
     await expectCellToContainActiveElement(page, to.row, to.col);
@@ -27,6 +26,15 @@ export async function setCellFocus(
 ): Promise<Locator> {
   const cell = page.getByTestId(`grid-cell-${from.row}-${from.col}`);
   await cell.waitFor();
+
+  // Special case for UI element (e.g nz-input-number)
+  const spin = cell.locator('input[role="spinbutton"]');
+  if (await spin.count()) {
+    await spin.focus();
+    return spin;
+  }
+
+  // fallback
   await cell.focus();
   return cell;
 }
