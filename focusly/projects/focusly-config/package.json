@@ -36,8 +36,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/common": ">=16 <21",
-    "@angular/core": ">=16 <21",
+    "@angular/common": ">=16",
+    "@angular/core": ">=16",
     "@zaybu/focusly": ">=1.1.1"
   },
   "dependencies": {
