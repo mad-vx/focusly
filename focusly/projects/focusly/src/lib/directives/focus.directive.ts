@@ -22,17 +22,17 @@ import { FocusItem } from '../models/focus-item.model';
 export class FocuslyDirective implements OnInit, OnDestroy {
   @Input({ required: true }) set focuslyColumn(column: number) {
     this._focuslyColumn = column;
-    this.focusService.registerItemFocus(this.focus);
+    this.focusService.registerItemFocus(this.focusItem);
   }
 
   @Input({ required: true }) set focuslyRow(row: number) {
     this._focuslyRow = row;
-    this.focusService.registerItemFocus(this.focus);
+    this.focusService.registerItemFocus(this.focusItem);
   }
 
   @Input({ required: true }) set focuslyGroup(scope: number) {
     this._focuslyScope = scope;
-    this.focusService.registerItemFocus(this.focus);
+    this.focusService.registerItemFocus(this.focusItem);
   }
 
   get focuslyColumn(): number | undefined {
@@ -62,7 +62,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    * Public-facing FocusItem snapshot for this host element.
    * Always built from current inputs.
    */
-  protected get focus(): FocusItem {
+  protected get focusItem(): FocusItem {
     return {
       column: this.focuslyColumn,
       row: this.focuslyRow,
@@ -92,7 +92,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    * Pure computed: "Am I currently the active focus item?"
    * NOTE: NO SIDE EFFECTS HERE.
    */
-  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focus));
+  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focusItem));
 
   @HostBinding('class.focusly-active')
   get activeClass(): boolean {
@@ -102,7 +102,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   constructor() {
     // Handle "end of grid" / limit hit behaviour
     this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
-      if (this.focusService.isCurrentFocus(this.focus)) {
+      if (this.focusService.isCurrentFocus(this.focusItem)) {
         const host = this.elementRef.nativeElement;
         // Defer blur/focus to after the current CD cycle
         queueMicrotask(() => {
@@ -144,11 +144,11 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.focusService.registerItemFocus(this.focus);
+    this.focusService.registerItemFocus(this.focusItem);
   }
 
   ngOnDestroy(): void {
-    this.focusService.unRegisterItemFocus(this.focus);
+    this.focusService.unRegisterItemFocus(this.focusItem);
     this.limitHitSubscription.unsubscribe();
   }
 
@@ -158,7 +158,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   @HostListener('focus', ['$event'])
   @HostListener('focusin', ['$event'])
   protected handleFocusIn(event: FocusEvent): void {
-    this.focusService.onFocus(this.focus);
+    this.focusService.onFocus(this.focusItem);
     this.onFocusIn(event);
   }
 

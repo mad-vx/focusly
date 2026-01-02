@@ -23,6 +23,7 @@ import { KeyDisplayComponent } from '../key-display.component';
 })
 export class BaseComponent {
   @Input() buyOrSellTemplate?: TemplateRef<TradeCellContext>;
+  @Input() quantityTemplate?: TemplateRef<TradeCellContext>;
 
   tradeRows: TradeRow[] = [
     {

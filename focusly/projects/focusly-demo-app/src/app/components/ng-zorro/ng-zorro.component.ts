@@ -1,13 +1,22 @@
 import { Component } from '@angular/core';
-import { NzSelectFocusDirective } from '@zaybu/focusly-nz';
+import { NzInputNumberFocusDirective, NzSelectFocusDirective } from '@zaybu/focusly-nz';
 import { BaseComponent } from '../base/base.component';
 import { FormsModule } from '@angular/forms';
 import { BaseDemoGrid } from '../abstract/base-demo-grid';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-ng-zorro',
-  imports: [NzSelectModule, NzSelectFocusDirective, FormsModule, BaseComponent],
+  imports: [
+    NzSelectModule,
+    NzSelectFocusDirective,
+    NzInputNumberFocusDirective,
+    FormsModule,
+    BaseComponent,
+    NzInputNumberModule,
+    NzInputNumberFocusDirective,
+  ],
   templateUrl: './ng-zorro.component.html',
   styleUrl: './ng-zorro.component.scss',
   standalone: true,

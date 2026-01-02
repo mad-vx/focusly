@@ -1,4 +1,17 @@
-<ng-template #nzSide let-row let-group="group">
+<ng-template #quantity let-row let-group="group">
+  <input
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+    focusly
+    class="cell-input num"
+    type="number"
+    [focuslyGroup]="1"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="0"
+    [value]="row.qty"
+  />
+</ng-template>
+
+<ng-template #buySell let-row let-group="group">
   <select
     [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
     #nzSide
@@ -13,4 +26,5 @@
   </select>
 </ng-template>
 
-<app-base-component [buyOrSellTemplate]="nzSide"> </app-base-component>
+<app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
+</app-base-component>
