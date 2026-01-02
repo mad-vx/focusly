@@ -1,5 +1,11 @@
 # @zaybu/focusly
 
+## 1.1.2
+
+### Patch Changes
+
+- 81fb103: Support for NzInputNumber component from NG-ZORRO. New directive added to the @zaybu/focusly-nz library
+
 ## 1.1.1
 
 ### Patch Changes

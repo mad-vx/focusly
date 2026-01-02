@@ -4,7 +4,7 @@
   "commit": false,
   "fixed": [["@zaybu/focusly", "@zaybu/focusly-config", "@zaybu/focusly-nz"]],
   "linked": [],
-  "access": "restricted",
+  "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": []

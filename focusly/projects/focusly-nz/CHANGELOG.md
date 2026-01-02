@@ -1,5 +1,12 @@
 # @zaybu/focusly-nz
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies [81fb103]
+  - @zaybu/focusly@1.1.2
+
 ## 1.1.1
 
 ### Patch Changes
