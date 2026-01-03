@@ -55,6 +55,12 @@
             [checked]="toolkit() === 'ngzorro'"
             (click)="toolkit.set('ngzorro')"
           />
+
+          <input data-test-id="toolkit-material"
+            type="radio"
+            [checked]="toolkit() === 'material'"
+            (click)="toolkit.set('material')"
+          />
           <label>NG-ZORRO</label>
         </div>
       </section>

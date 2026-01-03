@@ -177,6 +177,36 @@
           }
         }
       }
+    },
+    "focusly-material": {
+      "projectType": "library",
+      "root": "projects/focusly-material",
+      "sourceRoot": "projects/focusly-material/src",
+      "prefix": "zaybu",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/focusly-material/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/focusly-material/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/focusly-material/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "schematics": {
