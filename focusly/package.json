@@ -16,6 +16,7 @@
     "watch:nz": "ng build focusly-nz --watch",
     "build:config": "ng build focusly-config",
     "watch:config": "ng build focusly-config --watch",
+    "build:libs": "ng build focusly && ng build focusly-config && ng build focusly-nz && ng build focusly-material && npm run copy-readme", 
     "dev": "concurrently \"ng build focusly --watch\" \"ng serve focusly-demo-app -o\"",
     "copy-readme": "copy ..\\README.md dist\\focusly\\README.md",
     "pack": "cd ./dist/focusly && npm pack",
