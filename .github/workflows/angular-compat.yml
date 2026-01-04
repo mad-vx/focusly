@@ -39,7 +39,15 @@ jobs:
               if (obj && obj[name]) obj[name] = range;
             };
 
-            const ng = '^${{ matrix.angular }}.0.0';
+            const major = Number('${{ matrix.angular }}');
+            const ng = '^' + major + '.0.0';
+
+            // zone.js must match Angular peer expectations
+            // (Angular 16 expects ~0.13; Angular 17/18 typically work with ~0.14; Angular 19/20 use ~0.15)
+            const zone =
+              major <= 16 ? '~0.13.0' :
+              major <= 18 ? '~0.14.0' :
+              '~0.15.0';
 
             // runtime Angular deps
             for (const p of [
@@ -64,6 +72,9 @@ jobs:
             setRange(pkg.dependencies, 'ng-zorro-antd', ng);
             setRange(pkg.dependencies, '@angular/material', ng);
             setRange(pkg.dependencies, '@angular/cdk', ng);
+
+            // zone.js alignment
+            setRange(pkg.dependencies, 'zone.js', zone);
 
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
