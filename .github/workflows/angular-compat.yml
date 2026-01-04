@@ -16,7 +16,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: focusly   # 👈 your Angular workspace folder
+        working-directory: focusly
 
     steps:
       - name: Checkout
@@ -27,38 +27,48 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: focusly/package-lock.json  # 👈 lockfile location
+          cache-dependency-path: focusly/package-lock.json
 
-      - name: Install repo deps (lockfile)
-        run: npm ci
-
-      - name: Apply Angular v${{ matrix.angular }} overrides
+      - name: Set Angular deps to v${{ matrix.angular }}
         run: |
           node -e "
             const fs=require('fs');
-            const path='package.json';
-            const pkg=JSON.parse(fs.readFileSync(path,'utf8'));
-            pkg.overrides = Object.assign({}, pkg.overrides, {
-              '@angular/animations': '^${{ matrix.angular }}',
-              '@angular/common': '^${{ matrix.angular }}',
-              '@angular/compiler': '^${{ matrix.angular }}',
-              '@angular/compiler-cli': '^${{ matrix.angular }}',
-              '@angular/core': '^${{ matrix.angular }}',
-              '@angular/forms': '^${{ matrix.angular }}',
-              '@angular/platform-browser': '^${{ matrix.angular }}',
-              '@angular/platform-browser-dynamic': '^${{ matrix.angular }}',
-              '@angular/router': '^${{ matrix.angular }}',
-              '@angular/cli': '^${{ matrix.angular }}',
-              '@angular/build': '^${{ matrix.angular }}',
-              'ng-packagr': '^${{ matrix.angular }}',
-              '@angular/material': '^${{ matrix.angular }}',
-              '@angular/cdk': '^${{ matrix.angular }}',
-              'ng-zorro-antd': '^${{ matrix.angular }}'
-            });
-            fs.writeFileSync(path, JSON.stringify(pkg, null, 2));
+            const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+
+            const setRange = (obj, name, range) => {
+              if (obj && obj[name]) obj[name] = range;
+            };
+
+            const ng = '^${{ matrix.angular }}.0.0';
+
+            // runtime Angular deps
+            for (const p of [
+              '@angular/common',
+              '@angular/compiler',
+              '@angular/core',
+              '@angular/forms',
+              '@angular/platform-browser',
+              '@angular/platform-browser-dynamic',
+              '@angular/router'
+            ]) setRange(pkg.dependencies, p, ng);
+
+            // tooling
+            for (const p of [
+              '@angular/build',
+              '@angular/cli',
+              '@angular/compiler-cli',
+              'ng-packagr'
+            ]) setRange(pkg.devDependencies, p, ng);
+
+            // toolkits if present
+            setRange(pkg.dependencies, 'ng-zorro-antd', ng);
+            setRange(pkg.dependencies, '@angular/material', ng);
+            setRange(pkg.dependencies, '@angular/cdk', ng);
+
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
 
-      - name: Clean install (lockfile will be re-resolved)
+      - name: Fresh install
         run: |
           rm -rf node_modules package-lock.json
           npm install
