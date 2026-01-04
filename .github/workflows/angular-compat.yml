@@ -1,9 +1,10 @@
 name: Angular compatibility (build libs)
 
 on:
+  pull_request:
   push:
     branches: [ main ]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   build-libs:
@@ -12,6 +13,10 @@ jobs:
       fail-fast: false
       matrix:
         angular: [16, 17, 18, 19, 20]
+
+    defaults:
+      run:
+        working-directory: focusly   # 👈 your Angular workspace folder
 
     steps:
       - name: Checkout
@@ -22,6 +27,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: focusly/package-lock.json  # 👈 lockfile location
 
       - name: Install repo deps (lockfile)
         run: npm ci
@@ -32,7 +38,7 @@ jobs:
             @angular/cli@^${{ matrix.angular }} \
             @angular/compiler-cli@^${{ matrix.angular }} \
             @angular/build@^${{ matrix.angular }} \
-            ng-packagr@^${{ matrix.angular }}
+            ng-packagr@^${{ matrix.angular }} \
 
       - name: Align Angular runtime packages to v${{ matrix.angular }}
         run: |
@@ -44,13 +50,3 @@ jobs:
             @angular/platform-browser@^${{ matrix.angular }} \
             @angular/platform-browser-dynamic@^${{ matrix.angular }} \
             @angular/router@^${{ matrix.angular }}
-
-      - name: Align UI toolkit deps for v${{ matrix.angular }}
-        run: |
-          npm i --no-save \
-            ng-zorro-antd@^${{ matrix.angular }} \
-            @angular/material@^${{ matrix.angular }} \
-            @angular/cdk@^${{ matrix.angular }}
-
-      - name: Build libraries
-        run: npm run build:libs
