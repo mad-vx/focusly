@@ -49,6 +49,13 @@ jobs:
               major <= 18 ? '~0.14.0' :
               '~0.15.0';
 
+            const ts =
+              major <= 16 ? '~5.1.6' :
+              major === 17 ? '~5.2.2' :
+              major === 18 ? '~5.4.5' :
+              major === 19 ? '~5.6.3' :
+              '~5.9.3';
+
             // runtime Angular deps
             for (const p of [
               '@angular/common',
@@ -73,8 +80,9 @@ jobs:
             setRange(pkg.dependencies, '@angular/material', ng);
             setRange(pkg.dependencies, '@angular/cdk', ng);
 
-            // zone.js alignment
+            // alignment
             setRange(pkg.dependencies, 'zone.js', zone);
+            setRange(pkg.devDependencies, 'typescript', ts);
 
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
