@@ -1,0 +1,56 @@
+name: Angular compatibility (build libs)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-libs:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        angular: [16, 17, 18, 19, 20]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install repo deps (lockfile)
+        run: npm ci
+
+      - name: Switch Angular toolchain to v${{ matrix.angular }}
+        run: |
+          npm i -D --no-save \
+            @angular/cli@^${{ matrix.angular }} \
+            @angular/compiler-cli@^${{ matrix.angular }} \
+            @angular/build@^${{ matrix.angular }} \
+            ng-packagr@^${{ matrix.angular }}
+
+      - name: Align Angular runtime packages to v${{ matrix.angular }}
+        run: |
+          npm i --no-save \
+            @angular/core@^${{ matrix.angular }} \
+            @angular/common@^${{ matrix.angular }} \
+            @angular/compiler@^${{ matrix.angular }} \
+            @angular/forms@^${{ matrix.angular }} \
+            @angular/platform-browser@^${{ matrix.angular }} \
+            @angular/platform-browser-dynamic@^${{ matrix.angular }} \
+            @angular/router@^${{ matrix.angular }}
+
+      - name: Align UI toolkit deps for v${{ matrix.angular }}
+        run: |
+          npm i --no-save \
+            ng-zorro-antd@^${{ matrix.angular }} \
+            @angular/material@^${{ matrix.angular }} \
+            @angular/cdk@^${{ matrix.angular }}
+
+      - name: Build libraries
+        run: npm run build:libs
