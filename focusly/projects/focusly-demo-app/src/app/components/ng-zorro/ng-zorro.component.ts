@@ -18,7 +18,6 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     NzInputNumberFocusDirective,
   ],
   templateUrl: './ng-zorro.component.html',
-  styleUrl: './ng-zorro.component.scss',
   standalone: true,
 })
 export class NgZorroComponent extends BaseDemoGrid {

@@ -14,6 +14,8 @@
     "watch:lib": "ng build focusly --watch",
     "build:nz": "ng build focusly-nz",
     "watch:nz": "ng build focusly-nz --watch",
+    "build:mat": "ng build focusly-material",
+    "watch:mat": "ng build focusly-material --watch",
     "build:config": "ng build focusly-config",
     "watch:config": "ng build focusly-config --watch",
     "dev": "concurrently \"ng build focusly --watch\" \"ng serve focusly-demo-app -o\"",
@@ -21,9 +23,11 @@
     "pack": "cd ./dist/focusly && npm pack",
     "pack:config": "cd ./dist/focusly-config && npm pack",
     "pack:nz": "cd ./dist/focusly-nz && npm pack",
+    "pack:material": "cd ./dist/focusly-material && npm pack",
     "publish": "cd ./dist/focusly && npm publish",
     "publish:config": "cd ./dist/focusly-config && npm publish --access public",
     "publish:nz": "cd ./dist/focusly-nz && npm publish --access public",
+    "publish:material": "cd ./dist/focusly-material && npm publish --access public",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\"",
     "changeset:changeset": "changeset",
     "changeset:version-packages": "changeset version",
@@ -34,7 +38,8 @@
   "workspaces": [
     "projects/focusly",
     "projects/focusly-config",
-    "projects/focusly-nz"
+    "projects/focusly-nz",
+    "projects/focusly-material"
   ],
   "private": true,
   "dependencies": {

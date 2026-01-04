@@ -8,12 +8,8 @@
     "paths": {
       "@zaybu/focusly": ["./dist/focusly", "./projects/focusly/src/public-api.ts"],
       "@zaybu/focusly-nz": ["./dist/focusly-nz"],
-      "@zaybu/focusly-config": [
-        "./dist/focusly-config"
-      ],
-      "focusly-material": [
-        "./dist/focusly-material"
-      ]
+      "@zaybu/focusly-config": ["./dist/focusly-config"],
+      "@zaybu/focusly-material": ["./dist/focusly-material"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -34,13 +30,5 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  },
-  "references": [
-    {
-      "path": "./projects/focusly-material/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/focusly-material/tsconfig.spec.json"
-    }
-  ]
+  }
 }

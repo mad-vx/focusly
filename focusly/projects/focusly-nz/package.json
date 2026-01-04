@@ -36,11 +36,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "devDependencies": {
+    "@zaybu/focusly": "workspace:*"
+  },
   "peerDependencies": {
-    "@zaybu/focusly": "^1.1.2",
-    "@angular/core": ">=16",
-    "@angular/common": ">=16",
-    "ng-zorro-antd": ">=16"
+    "@angular/core": ">=16 <21",
+    "@angular/common": ">=16 <21",
+    "ng-zorro-antd": ">=16 <21",
+    "@zaybu/focusly": "^1.1.2"
   },
   "peerDependenciesMeta": {
     "ng-zorro-antd": {

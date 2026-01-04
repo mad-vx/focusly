@@ -159,6 +159,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/focusly-config/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/focusly-config/tsconfig.lib.prod.json"
@@ -186,6 +189,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/focusly-material/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/focusly-material/tsconfig.lib.prod.json"
@@ -200,10 +206,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/focusly-material/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }

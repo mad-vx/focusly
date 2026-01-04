@@ -1,16 +1,17 @@
 {
-  "name": "focusly-material",
+  "name": "@zaybu/focusly-material",
   "version": "1.1.2",
   "peerDependencies": {
-    "@angular/core": ">=16",
-    "@angular/common": ">=16",
-    "@angular/material": ">=16",
-    "@angular/cdk": ">=16",
-    "@zaybu/focusly": "1.1.2"
+    "@angular/core": ">=16 <21",
+    "@angular/common": ">=16 <21",
+    "@angular/material": ">=16 <21",
+    "@angular/cdk": ">=16 <21",
+    "@zaybu/focusly": "^1.1.2"
   },
   "devDependencies": {
-    "@angular/material": ">=16",
-    "@angular/cdk": ">=16"
+    "@angular/material": "^20.3.0",
+    "@angular/cdk": "^20.3.0",
+    "@zaybu/focusly": "workspace:*"
   },
   "dependencies": {
     "tslib": "^2.3.0"

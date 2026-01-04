@@ -35,10 +35,13 @@
   "publishConfig": {
     "access": "public"
   },
+  "devDependencies": {
+    "@zaybu/focusly": "workspace:*"
+  },
   "peerDependencies": {
-    "@angular/common": ">=16",
-    "@angular/core": ">=16",
-    "@zaybu/focusly": ">=1.1.2"
+    "@angular/core": ">=16 <21",
+    "@angular/common": ">=16 <21",
+    "@zaybu/focusly": "^1.1.2"
   },
   "dependencies": {
     "tslib": "^2.3.0"
