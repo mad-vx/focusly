@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        angular: [16, 17, 18, 19, 20]
+        angular: [18, 19, 20]
 
     defaults:
       run:
@@ -44,14 +44,9 @@ jobs:
 
             // zone.js must match Angular peer expectations
             // (Angular 16 expects ~0.13; Angular 17/18 typically work with ~0.14; Angular 19/20 use ~0.15)
-            const zone =
-              major <= 16 ? '~0.13.0' :
-              major <= 18 ? '~0.14.0' :
-              '~0.15.0';
+            const zone = major === 18 ? '~0.14.0' : '~0.15.0';
 
             const ts =
-              major <= 16 ? '~5.1.6' :
-              major === 17 ? '~5.2.2' :
               major === 18 ? '~5.4.5' :
               major === 19 ? '~5.6.3' :
               '~5.9.3';

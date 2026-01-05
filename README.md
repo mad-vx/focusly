@@ -120,6 +120,7 @@ https://github.com/mad-vx/focusly/discussions
 ## Angular Compatibility
 
 @zaybu/focusly requires **Angular v16+**
+Supports Angular 16+. CI builds are verified against Angular 18–20.
 
 This is due to the use of Angular Signals and other modern framework APIs
 
