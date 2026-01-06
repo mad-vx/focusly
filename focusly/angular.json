@@ -159,6 +159,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/focusly-config/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/focusly-config/tsconfig.lib.prod.json"

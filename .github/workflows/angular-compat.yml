@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        angular: [18, 19, 20]
+        angular: [19, 20]
 
     defaults:
       run:
