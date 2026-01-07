@@ -9,12 +9,14 @@ import {
   testCellFocusChange,
   toKeyPressString,
   updateFocuslyKeymap,
+  waitForGridReady,
 } from './helper';
 
 function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap) {
   test.describe(`${toolkitType} - ${keyMap.name} - basic grid navigation`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto('/');
+      await waitForGridReady(page);
       await setToolkit(page, toolkitType);
       await updateFocuslyKeymap(page, keyMap);
     });

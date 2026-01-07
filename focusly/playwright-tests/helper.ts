@@ -123,3 +123,12 @@ export function toChordArray(keyChord: FocuslyKeyChord | undefined): string[] {
   if (!keyChord) return [];
   return Array.isArray(keyChord) ? keyChord : [keyChord];
 }
+
+export async function waitForGridReady(page: Page) {
+  await page.waitForLoadState('domcontentloaded');
+
+  await expect(page.locator('[data-test-id="grid"]')).toBeVisible();
+  await expect(page.locator('[data-test-id^="grid-cell-"]').first()).toBeVisible();
+
+  await page.waitForTimeout(50);
+}
