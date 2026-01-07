@@ -125,10 +125,13 @@ export function toChordArray(keyChord: FocuslyKeyChord | undefined): string[] {
 }
 
 export async function waitForGridReady(page: Page) {
-  await page.waitForLoadState('domcontentloaded');
+  const timeout = process.env['CI'] ? 20000 : 8000;
 
-  await expect(page.locator('[data-test-id="grid"]')).toBeVisible();
-  await expect(page.locator('[data-test-id^="grid-cell-"]').first()).toBeVisible();
+  const firstCell = page.locator('[data-test-id="grid-cell-0-0"]');
+  await expect(firstCell).toBeVisible({ timeout });
 
-  await page.waitForTimeout(50);
+  await firstCell.click();
+  await expect.poll(async () => {
+    return await page.evaluate(() => document.activeElement?.id ?? null);
+  }, { timeout }).toBe('grid-cell-0-0');
 }
