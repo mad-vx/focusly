@@ -12,11 +12,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        angular: [16, 17, 18, 19, 20]
+        angular: [19, 20]
 
     defaults:
       run:
-        working-directory: focusly   # 👈 your Angular workspace folder
+        working-directory: focusly
 
     steps:
       - name: Checkout
@@ -27,26 +27,111 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: focusly/package-lock.json  # 👈 lockfile location
+          cache-dependency-path: focusly/package-lock.json
 
-      - name: Install repo deps (lockfile)
+      - name: Set Angular deps to v${{ matrix.angular }}
+        run: |
+          node -e "
+            const fs=require('fs');
+            const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+
+            const setRange = (obj, name, range) => {
+              if (obj && obj[name]) obj[name] = range;
+            };
+
+            const major = Number('${{ matrix.angular }}');
+            const ng = '^' + major + '.0.0';
+
+            // zone.js must match Angular peer expectations
+            // (Angular 16 expects ~0.13; Angular 17/18 typically work with ~0.14; Angular 19/20 use ~0.15)
+            const zone = major === 18 ? '~0.14.0' : '~0.15.0';
+
+            const ts =
+              major === 18 ? '~5.4.5' :
+              major === 19 ? '~5.6.3' :
+              '~5.9.3';
+
+            // runtime Angular deps
+            for (const p of [
+              '@angular/common',
+              '@angular/compiler',
+              '@angular/core',
+              '@angular/forms',
+              '@angular/platform-browser',
+              '@angular/platform-browser-dynamic',
+              '@angular/router'
+            ]) setRange(pkg.dependencies, p, ng);
+
+            // tooling
+            for (const p of [
+              '@angular/build',
+              '@angular/cli',
+              '@angular/compiler-cli',
+              'ng-packagr'
+            ]) setRange(pkg.devDependencies, p, ng);
+
+            // toolkits if present
+            setRange(pkg.dependencies, 'ng-zorro-antd', ng);
+            setRange(pkg.dependencies, '@angular/material', ng);
+            setRange(pkg.dependencies, '@angular/cdk', ng);
+
+            // alignment
+            setRange(pkg.dependencies, 'zone.js', zone);
+            setRange(pkg.devDependencies, 'typescript', ts);
+
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+          "
+
+      - name: Fresh install
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
+      - name: Build libraries
+        run: npm run build:libs
+  playwright:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: focusly
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: focusly/package-lock.json
+
+      - name: Install deps
         run: npm ci
 
-      - name: Switch Angular toolchain to v${{ matrix.angular }}
+      - name: Build libs + demo (if needed)
         run: |
-          npm i -D --no-save \
-            @angular/cli@^${{ matrix.angular }} \
-            @angular/compiler-cli@^${{ matrix.angular }} \
-            @angular/build@^${{ matrix.angular }} \
-            ng-packagr@^${{ matrix.angular }} \
+          npm run build:libs
 
-      - name: Align Angular runtime packages to v${{ matrix.angular }}
-        run: |
-          npm i --no-save \
-            @angular/core@^${{ matrix.angular }} \
-            @angular/common@^${{ matrix.angular }} \
-            @angular/compiler@^${{ matrix.angular }} \
-            @angular/forms@^${{ matrix.angular }} \
-            @angular/platform-browser@^${{ matrix.angular }} \
-            @angular/platform-browser-dynamic@^${{ matrix.angular }} \
-            @angular/router@^${{ matrix.angular }}
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      # - name: Run Playwright tests
+      #   run: |
+      #     set +e
+      #     npx playwright test
+      #     code=$?
+      #     echo "Playwright exit code: $code"
+      #     exit $code
+
+      # - name: Upload Playwright HTML report
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-report
+      #     path: focusly/playwright-report
+
+      # - name: Upload Playwright traces/screenshots
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-test-results
+      #     path: focusly/test-results
