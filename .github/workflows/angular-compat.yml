@@ -61,6 +61,7 @@ jobs:
 
             // runtime Angular deps
             for (const p of [
+              '@angular/animations',
               '@angular/common',
               '@angular/compiler',
               '@angular/core',
