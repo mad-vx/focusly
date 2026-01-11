@@ -76,3 +76,88 @@
   gap: 6px;
   margin: 0 0 6px;
 }
+
+
+.toolkit-picker {
+  display: grid;
+  gap: 10px;
+}
+
+.toolkit-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.info-btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.toolkit-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toolkit-radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.toolkit-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 10px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.03);
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.toolkit-icon {
+  width: 22px;
+  height: 22px;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 18px;
+  line-height: 1;
+}
+
+.toolkit-text {
+  font-size: 14px;
+}
+
+.toolkit-option:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.toolkit-radio:checked + .toolkit-option {
+  border-color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.toolkit-radio:checked + .toolkit-option .toolkit-icon {
+  border-color: rgba(0, 0, 0, 0.45);
+}
+
+.toolkit-radio:focus-visible + .toolkit-option {
+  outline: 3px solid rgba(0, 0, 0, 0.35);
+  outline-offset: 2px;
+}
