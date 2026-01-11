@@ -39,9 +39,9 @@
     "@zaybu/focusly": "workspace:*"
   },
   "peerDependencies": {
-    "@angular/core": ">=16 <21",
-    "@angular/common": ">=16 <21",
-    "@zaybu/focusly": "^1.1.2"
+    "@angular/core": ">=16 <22",
+    "@angular/common": ">=16 <22",
+    "@zaybu/focusly": ">=1.1.2"
   },
   "dependencies": {
     "tslib": "^2.3.0"

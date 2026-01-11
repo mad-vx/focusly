@@ -36,8 +36,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/core": ">=16 <21",
-    "@angular/common": ">=16 <21"
+    "@angular/core": ">=16 <22",
+    "@angular/common": ">=16 <22"
   },
   "dependencies": {
     "tslib": "^2.3.0"

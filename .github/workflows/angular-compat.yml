@@ -1,0 +1,148 @@
+name: Angular compatibility (build libs)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-libs:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        angular: [19, 20, 21]
+
+    defaults:
+      run:
+        working-directory: focusly
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node (Angular 21 needs >=20.19.0)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: npm
+          cache-dependency-path: focusly/package-lock.json
+
+      # For Angular 21: use the repo's real lockfile (fast + deterministic)
+      - name: Install deps (v21 uses lockfile)
+        if: matrix.angular == 21
+        run: npm ci
+
+      # For Angular 19/20: rewrite deps + fresh install
+      - name: Set Angular deps to v${{ matrix.angular }}
+        if: matrix.angular != 21
+        run: |
+          node -e "
+            const fs=require('fs');
+            const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+
+            const setRange = (obj, name, range) => {
+              if (obj && obj[name]) obj[name] = range;
+            };
+
+            const major = Number('${{ matrix.angular }}');
+            const ng = '^' + major + '.0.0';
+
+            // TypeScript ranges by Angular version (per Angular docs)
+            // 19.x: >=5.5 <5.9
+            // 20.0-20.1: >=5.8 <5.9 ; 20.2+: >=5.8 <6
+            const ts =
+              major === 19 ? '~5.6.3' :
+              '~5.9.3'; // v20 can use 5.9.x
+
+            // zone.js: v19/v20 commonly align with 0.15.x in modern workspaces
+            const zone = '~0.15.0';
+
+            // runtime Angular deps
+            for (const p of [
+              '@angular/animations',
+              '@angular/common',
+              '@angular/compiler',
+              '@angular/core',
+              '@angular/forms',
+              '@angular/platform-browser',
+              '@angular/platform-browser-dynamic',
+              '@angular/router'
+            ]) setRange(pkg.dependencies, p, ng);
+
+            // tooling (your workspace uses @angular/build builders)
+            for (const p of [
+              '@angular/build',
+              '@angular/cli',
+              '@angular/compiler-cli',
+              'ng-packagr'
+            ]) setRange(pkg.devDependencies, p, ng);
+
+            // toolkits if present
+            setRange(pkg.dependencies, 'ng-zorro-antd', ng);
+            setRange(pkg.dependencies, '@angular/material', ng);
+            setRange(pkg.dependencies, '@angular/cdk', ng);
+
+            // alignment
+            setRange(pkg.dependencies, 'zone.js', zone);
+            setRange(pkg.devDependencies, 'typescript', ts);
+
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+          "
+
+      - name: Fresh install (v19/v20)
+        if: matrix.angular != 21
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
+      - name: Build libraries
+        run: npm run build:libs
+
+  # playwright:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: focusly
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: npm
+  #         cache-dependency-path: focusly/package-lock.json
+
+  #     - name: Install deps
+  #       run: npm ci
+
+  #     - name: Build libs + demo (if needed)
+  #       run: |
+  #         npm run build:libs
+
+      #- name: Install Playwright browsers
+      #  run: npx playwright install --with-deps
+
+      # - name: Run Playwright tests
+      #   run: |
+      #     set +e
+      #     npx playwright test
+      #     code=$?
+      #     echo "Playwright exit code: $code"
+      #     exit $code
+
+      # - name: Upload Playwright HTML report
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-report
+      #     path: focusly/playwright-report
+
+      # - name: Upload Playwright traces/screenshots
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-test-results
+      #     path: focusly/test-results

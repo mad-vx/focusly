@@ -40,10 +40,10 @@
     "@zaybu/focusly": "workspace:*"
   },
   "peerDependencies": {
-    "@angular/core": ">=16 <21",
-    "@angular/common": ">=16 <21",
-    "ng-zorro-antd": ">=16 <21",
-    "@zaybu/focusly": "^1.1.2"
+    "@zaybu/focusly": "^1.1.2",
+    "@angular/core": ">=16 <22",
+    "@angular/common": ">=16 <22",
+    "ng-zorro-antd": ">=16 <22"
   },
   "peerDependenciesMeta": {
     "ng-zorro-antd": {
