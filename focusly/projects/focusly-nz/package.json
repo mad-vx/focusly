@@ -38,9 +38,9 @@
   },
   "peerDependencies": {
     "@zaybu/focusly": "^1.1.2",
-    "@angular/core": ">=16",
-    "@angular/common": ">=16",
-    "ng-zorro-antd": ">=16"
+    "@angular/core": ">=16 <22",
+    "@angular/common": ">=16 <22",
+    "ng-zorro-antd": ">=16 <22"
   },
   "peerDependenciesMeta": {
     "ng-zorro-antd": {
