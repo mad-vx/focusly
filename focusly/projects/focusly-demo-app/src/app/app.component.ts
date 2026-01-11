@@ -12,7 +12,7 @@ import { FOCUSLY_SERVICE_API, FocuslyKeyMap } from '@zaybu/focusly';
   standalone: true,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  toolkit = signal<'none' | 'ngzorro'>('none');
+  toolkit = signal<'none' | 'ngzorro' | 'material'>('none');
 
   readonly showConfig = signal(false);
   readonly showToolkitInfo = signal(false);

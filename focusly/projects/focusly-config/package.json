@@ -35,6 +35,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "devDependencies": {
+    "@zaybu/focusly": "workspace:*"
+  },
   "peerDependencies": {
     "@angular/core": ">=16 <22",
     "@angular/common": ">=16 <22",

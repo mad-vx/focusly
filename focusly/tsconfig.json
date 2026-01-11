@@ -8,7 +8,8 @@
     "paths": {
       "@zaybu/focusly": ["./dist/focusly", "./projects/focusly/src/public-api.ts"],
       "@zaybu/focusly-nz": ["./dist/focusly-nz"],
-      "@zaybu/focusly-config": ["./dist/focusly-config"]
+      "@zaybu/focusly-config": ["./dist/focusly-config"],
+      "@zaybu/focusly-material": ["./dist/focusly-material"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
