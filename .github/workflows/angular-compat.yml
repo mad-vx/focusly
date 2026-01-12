@@ -53,6 +53,8 @@ jobs:
             const ngExact = angularVersionMap[major];
             if (!ngExact) throw new Error('No pinned Angular version for major ' + major);
 
+            const zorro = '^' + major + '.0.0';
+
             // TypeScript choices for your lanes
             const ts =
               major === 19 ? '~5.6.3' :
@@ -106,7 +108,8 @@ jobs:
               setIfPresent(pkg.dependencies, 'zone.js', zone);
               setIfPresent(pkg.devDependencies, 'typescript', ts);
 
-              // IMPORTANT: we do NOT rewrite ng-zorro-antd here to reduce variability
+              setIfPresent(pkg.dependencies, 'ng-zorro-antd', zorro);
+              setIfPresent(pkg.devDependencies, 'ng-zorro-antd', zorro);
 
               fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
             };
