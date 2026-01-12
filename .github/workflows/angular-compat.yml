@@ -34,7 +34,7 @@ jobs:
         if: matrix.angular == 21
         run: npm ci
 
-      # For Angular 19/20: rewrite deps + fresh install
+      # For Angular 19/20: rewrite deps + fresh install (pinned versions)
       - name: Set Angular deps to v${{ matrix.angular }}
         if: matrix.angular != 21
         run: |
@@ -43,8 +43,17 @@ jobs:
             const path = require('path');
 
             const major = Number('${{ matrix.angular }}');
-            const ng = '^' + major + '.0.0';
 
+            // Pin exact Angular patch versions to keep npm resolution deterministic
+            const angularVersionMap = {
+              19: '19.2.18',
+              20: '20.3.16',
+            };
+
+            const ngExact = angularVersionMap[major];
+            if (!ngExact) throw new Error('No pinned Angular version for major ' + major);
+
+            // TypeScript choices for your lanes
             const ts =
               major === 19 ? '~5.6.3' :
               '~5.9.3';
@@ -74,31 +83,30 @@ jobs:
               '@angular/cdk'
             ];
 
-            const setRange = (obj, name, range) => {
-              if (obj && obj[name]) obj[name] = range;
+            const setIfPresent = (obj, name, value) => {
+              if (obj && obj[name]) obj[name] = value;
             };
 
             const patch = (pkgPath) => {
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
               // runtime deps
-              for (const p of angularRuntime) setRange(pkg.dependencies, p, ng);
+              for (const p of angularRuntime) setIfPresent(pkg.dependencies, p, ngExact);
 
-              // tooling
-              for (const p of angularTooling) setRange(pkg.devDependencies, p, ng);
+              // tooling deps
+              for (const p of angularTooling) setIfPresent(pkg.devDependencies, p, ngExact);
 
-              // toolkits (material/cdk) - could be deps OR devDeps depending on package
+              // material/cdk can be in deps OR devDeps depending on package
               for (const p of angularToolkits) {
-                setRange(pkg.dependencies, p, ng);
-                setRange(pkg.devDependencies, p, ng);
+                setIfPresent(pkg.dependencies, p, ngExact);
+                setIfPresent(pkg.devDependencies, p, ngExact);
               }
 
-              // other libs you were rewriting (only if present)
-              setRange(pkg.dependencies, 'ng-zorro-antd', ng);
-
               // alignment
-              setRange(pkg.dependencies, 'zone.js', zone);
-              setRange(pkg.devDependencies, 'typescript', ts);
+              setIfPresent(pkg.dependencies, 'zone.js', zone);
+              setIfPresent(pkg.devDependencies, 'typescript', ts);
+
+              // IMPORTANT: we do NOT rewrite ng-zorro-antd here to reduce variability
 
               fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
             };
@@ -115,7 +123,15 @@ jobs:
               }
             }
           "
- 
+
+      - name: Debug pinned versions (v19/v20)
+        if: matrix.angular != 21
+        run: |
+          node -p "require('./package.json').dependencies['@angular/core']"
+          node -p "require('./package.json').dependencies['@angular/animations']"
+          node -p "require('./projects/focusly-material/package.json').devDependencies['@angular/material'] || 'no material devDependency'"
+          node -p "require('./projects/focusly-material/package.json').devDependencies['@angular/cdk'] || 'no cdk devDependency'"
+
       - name: Fresh install (v19/v20)
         if: matrix.angular != 21
         run: |
