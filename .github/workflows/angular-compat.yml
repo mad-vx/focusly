@@ -106,6 +106,8 @@ jobs:
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
               if (isRoot) {
+                delete pkg.overrides?.['@angular/build'];
+
                 pkg.overrides = pkg.overrides || {};
 
                 for (const p of angularRuntime) {
@@ -118,8 +120,7 @@ jobs:
 
                 // Safety for occasionally pulled-in Angular packages
                 pkg.overrides['@angular/platform-server'] = ngExact;
-                pkg.overrides['@angular/ssr'] = ngExact;
-                pkg.overrides['@angular/build'] = ngBuildExact;
+                pkg.overrides['@angular/ssr'] = ngExact;         
               }
 
               // runtime deps
@@ -138,6 +139,7 @@ jobs:
               setIfPresent(pkg.dependencies, 'zone.js', zone);
               setIfPresent(pkg.devDependencies, 'typescript', ts);
               setIfPresent(pkg.devDependencies, 'ng-packagr', ngPackagrRange);
+              setIfPresent(pkg.devDependencies, '@angular/build', ngBuildExact);
 
               setIfPresent(pkg.dependencies, 'ng-zorro-antd', zorro);
               setIfPresent(pkg.devDependencies, 'ng-zorro-antd', zorro);
