@@ -76,8 +76,7 @@ jobs:
             const angularTooling = [
               '@angular/build',
               '@angular/cli',
-              '@angular/compiler-cli',
-              'ng-packagr'
+              '@angular/compiler-cli'
             ];
 
             const angularToolkits = [
@@ -88,6 +87,13 @@ jobs:
             const setIfPresent = (obj, name, value) => {
               if (obj && obj[name]) obj[name] = value;
             };
+
+            const ngPackagrMap = {
+              19: '^19.0.0',
+              20: '^20.0.0',
+            };
+            const ngPackagrRange = ngPackagrMap[major];
+            if (!ngPackagrRange) throw new Error('No ng-packagr mapping for major ' + major);
 
             const patch = (pkgPath, isRoot) => {
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
@@ -123,7 +129,8 @@ jobs:
               // alignment
               setIfPresent(pkg.dependencies, 'zone.js', zone);
               setIfPresent(pkg.devDependencies, 'typescript', ts);
-
+              setIfPresent(pkg.devDependencies, 'ng-packagr', ngPackagrRange);
+              
               setIfPresent(pkg.dependencies, 'ng-zorro-antd', zorro);
               setIfPresent(pkg.devDependencies, 'ng-zorro-antd', zorro);
 
