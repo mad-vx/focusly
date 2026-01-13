@@ -94,13 +94,13 @@ jobs:
             const ngPackagrRange = ngPackagrMap[major];
             if (!ngPackagrRange) throw new Error('No ng-packagr mapping for major ' + major);
 
-            const angularBuildVersionMap = {
+            const angularToolingVersionMap = {
               19: '19.2.18',
               20: '20.3.0',
             };
 
-            const ngBuildExact = angularBuildVersionMap[major];
-            if (!ngBuildExact) throw new Error('No pinned @angular/build version for major ' + major);
+            const ngToolingExact = angularToolingVersionMap[major];
+            if (!ngToolingExact) throw new Error('No pinned tooling version for major ' + major);
 
             const patch = (pkgPath, isRoot) => {
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
@@ -127,7 +127,7 @@ jobs:
               for (const p of angularRuntime) setIfPresent(pkg.dependencies, p, ngExact);
 
               // tooling deps
-              for (const p of angularTooling) setIfPresent(pkg.devDependencies, p, ngExact);
+              for (const p of angularTooling) setIfPresent(pkg.devDependencies, p, ngToolingExact);
 
               // material/cdk can be in deps OR devDeps depending on package
               for (const p of angularToolkits) {
@@ -139,7 +139,7 @@ jobs:
               setIfPresent(pkg.dependencies, 'zone.js', zone);
               setIfPresent(pkg.devDependencies, 'typescript', ts);
               setIfPresent(pkg.devDependencies, 'ng-packagr', ngPackagrRange);
-              setIfPresent(pkg.devDependencies, '@angular/build', ngBuildExact);
+              setIfPresent(pkg.devDependencies, '@angular/build', ngToolingExact);
 
               setIfPresent(pkg.dependencies, 'ng-zorro-antd', zorro);
               setIfPresent(pkg.devDependencies, 'ng-zorro-antd', zorro);
