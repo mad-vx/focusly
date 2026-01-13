@@ -74,7 +74,6 @@ jobs:
             ];
 
             const angularTooling = [
-              '@angular/build',
               '@angular/cli',
               '@angular/compiler-cli'
             ];
@@ -95,6 +94,14 @@ jobs:
             const ngPackagrRange = ngPackagrMap[major];
             if (!ngPackagrRange) throw new Error('No ng-packagr mapping for major ' + major);
 
+            const angularBuildVersionMap = {
+              19: '19.2.18',
+              20: '20.3.0',
+            };
+
+            const ngBuildExact = angularBuildVersionMap[major];
+            if (!ngBuildExact) throw new Error('No pinned @angular/build version for major ' + major);
+
             const patch = (pkgPath, isRoot) => {
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
@@ -112,6 +119,7 @@ jobs:
                 // Safety for occasionally pulled-in Angular packages
                 pkg.overrides['@angular/platform-server'] = ngExact;
                 pkg.overrides['@angular/ssr'] = ngExact;
+                pkg.overrides['@angular/build'] = ngBuildExact;
               }
 
               // runtime deps
@@ -130,7 +138,7 @@ jobs:
               setIfPresent(pkg.dependencies, 'zone.js', zone);
               setIfPresent(pkg.devDependencies, 'typescript', ts);
               setIfPresent(pkg.devDependencies, 'ng-packagr', ngPackagrRange);
-              
+
               setIfPresent(pkg.dependencies, 'ng-zorro-antd', zorro);
               setIfPresent(pkg.devDependencies, 'ng-zorro-antd', zorro);
 
