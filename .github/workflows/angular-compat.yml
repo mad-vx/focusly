@@ -89,8 +89,24 @@ jobs:
               if (obj && obj[name]) obj[name] = value;
             };
 
-            const patch = (pkgPath) => {
+            const patch = (pkgPath, isRoot) => {
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+
+              if (isRoot) {
+                pkg.overrides = pkg.overrides || {};
+
+                for (const p of angularRuntime) {
+                  pkg.overrides[p] = ngExact;
+                }
+
+                for (const p of angularToolkits) {
+                  pkg.overrides[p] = ngExact;
+                }
+
+                // Safety for occasionally pulled-in Angular packages
+                pkg.overrides['@angular/platform-server'] = ngExact;
+                pkg.overrides['@angular/ssr'] = ngExact;
+              }
 
               // runtime deps
               for (const p of angularRuntime) setIfPresent(pkg.dependencies, p, ngExact);
@@ -115,16 +131,18 @@ jobs:
             };
 
             // patch root package.json
-            patch(path.join(process.cwd(), 'package.json'));
+            patch(path.join(process.cwd(), 'package.json'), true);
 
             // patch all workspace project package.json files
             const projectsDir = path.join(process.cwd(), 'projects');
             if (fs.existsSync(projectsDir)) {
               for (const dir of fs.readdirSync(projectsDir)) {
                 const pkgPath = path.join(projectsDir, dir, 'package.json');
-                if (fs.existsSync(pkgPath)) patch(pkgPath);
+                if (fs.existsSync(pkgPath)) patch(pkgPath, false);
               }
             }
+
+            node -p "require('./package.json').overrides['@angular/forms']"
           "
 
       - name: Debug pinned versions (v19/v20)
