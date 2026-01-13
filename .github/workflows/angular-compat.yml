@@ -115,7 +115,7 @@ jobs:
                 }
 
                 for (const p of angularToolkits) {
-                  pkg.overrides[p] = ngExact;
+                  pkg.overrides[p] = ngToolingExact;
                 }
 
                 // Safety for occasionally pulled-in Angular packages
@@ -131,8 +131,8 @@ jobs:
 
               // material/cdk can be in deps OR devDeps depending on package
               for (const p of angularToolkits) {
-                setIfPresent(pkg.dependencies, p, ngExact);
-                setIfPresent(pkg.devDependencies, p, ngExact);
+                setIfPresent(pkg.dependencies, p, ngToolingExact);
+                setIfPresent(pkg.devDependencies, p, ngToolingExact);
               }
 
               // alignment
