@@ -98,9 +98,15 @@ jobs:
               19: '19.2.18',
               20: '20.3.0',
             };
-
             const ngToolingExact = angularToolingVersionMap[major];
             if (!ngToolingExact) throw new Error('No pinned tooling version for major ' + major);
+
+            const angularToolkitVersionMap = {
+              19: '^19.2.0',
+              20: '^20.2.0',   
+            };
+            const ngToolkitExact = angularToolkitVersionMap[major];
+            if (!ngToolkitExact) throw new Error('No toolkit range for major ' + major);
 
             const patch = (pkgPath, isRoot) => {
               const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
@@ -115,7 +121,7 @@ jobs:
                 }
 
                 for (const p of angularToolkits) {
-                  pkg.overrides[p] = ngToolingExact;
+                  pkg.overrides[p] = ngToolkitExact;
                 }
 
                 // Safety for occasionally pulled-in Angular packages
@@ -131,8 +137,8 @@ jobs:
 
               // material/cdk can be in deps OR devDeps depending on package
               for (const p of angularToolkits) {
-                setIfPresent(pkg.dependencies, p, ngToolingExact);
-                setIfPresent(pkg.devDependencies, p, ngToolingExact);
+                setIfPresent(pkg.dependencies, p, ngToolkitExact);
+                setIfPresent(pkg.devDependencies, p, ngToolkitExact);
               }
 
               // alignment
