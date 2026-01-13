@@ -141,8 +141,6 @@ jobs:
                 if (fs.existsSync(pkgPath)) patch(pkgPath, false);
               }
             }
-
-            node -p "require('./package.json').overrides['@angular/forms']"
           "
 
       - name: Debug pinned versions (v19/v20)
