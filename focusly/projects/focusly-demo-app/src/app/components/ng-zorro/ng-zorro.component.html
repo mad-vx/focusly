@@ -10,7 +10,7 @@
   />
 </ng-template>
 
-<ng-template #nzSide let-row let-group="group">
+<ng-template #buySell let-row let-group="group">
   <nz-select
     [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
     nz-select-focusly
@@ -25,5 +25,5 @@
   </nz-select>
 </ng-template>
 
-<app-base-component [buyOrSellTemplate]="nzSide" [quantityTemplate]="quantity">
+<app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>

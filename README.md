@@ -98,6 +98,12 @@ The benefits are substantial:
 
 This design allows Focusly to be both highly opinionated in the places that matter (accessibility, deterministic movement, and predictable focus handling), and highly extensible wherever component libraries differ.
 
+🎯 Ng-Zorro Focusly Project
+https://www.npmjs.com/package/@zaybu/focusly-nz
+
+🎯 Angular Material Focusly Project
+https://www.npmjs.com/package/@zaybu/focusly-material
+
 ## 🚀 Quick Links
 
 Try Focusly, explore the code, or join the discussion:

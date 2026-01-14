@@ -3,16 +3,17 @@ import { NgZorroComponent } from './components/ng-zorro/ng-zorro.component';
 import { VanillaHtmlComponent } from './components/vanilla-html/vanilla-html.component';
 import { FocuslyConfigComponent } from '@zaybu/focusly-config';
 import { FOCUSLY_SERVICE_API, FocuslyKeyMap } from '@zaybu/focusly';
+import { MaterialComponent } from './components/material/material/material.component';
 
 @Component({
   selector: 'app-root',
-  imports: [NgZorroComponent, VanillaHtmlComponent, FocuslyConfigComponent],
+  imports: [NgZorroComponent, MaterialComponent, VanillaHtmlComponent, FocuslyConfigComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   standalone: true,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  toolkit = signal<'none' | 'ngzorro'>('none');
+  toolkit = signal<'none' | 'ngzorro' | 'material'>('none');
 
   readonly showConfig = signal(false);
   readonly showToolkitInfo = signal(false);

@@ -1,0 +1,36 @@
+<ng-template #quantity let-row let-group="group">
+  <mat-form-field class="qty-field">
+    <mat-label>Qty</mat-label>
+    <input
+      matInput
+      type="number"
+      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+      focusly
+      placeholder="Qty"
+      [focuslyGroup]="1"
+      [focuslyRow]="row.rowIndex"
+      [focuslyColumn]="0"
+      [(ngModel)]="row.qty"
+    />
+  </mat-form-field>
+</ng-template>
+
+<ng-template #buySell let-row let-group="group">
+  <mat-form-field class="side-field">
+    <mat-label>Side</mat-label>
+    <mat-select
+      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
+      mat-select-focusly
+      class="cell-input"
+      [focuslyGroup]="group"
+      [focuslyRow]="row.rowIndex"
+      [focuslyColumn]="1"
+    >
+      <mat-option value="Buy">Buy</mat-option>
+      <mat-option value="Sell">Sell</mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
+</app-base-component>

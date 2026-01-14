@@ -131,7 +131,12 @@ export async function waitForGridReady(page: Page) {
   await expect(firstCell).toBeVisible({ timeout });
 
   await firstCell.click();
-  await expect.poll(async () => {
-    return await page.evaluate(() => document.activeElement?.id ?? null);
-  }, { timeout }).toBe('grid-cell-0-0');
+  await expect
+    .poll(
+      async () => {
+        return await page.evaluate(() => document.activeElement?.id ?? null);
+      },
+      { timeout },
+    )
+    .toBe('grid-cell-0-0');
 }

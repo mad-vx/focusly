@@ -6,7 +6,6 @@ import { BaseComponent } from '../base/base.component';
   selector: 'app-vanilla-html',
   imports: [FocuslyDirective, BaseComponent],
   templateUrl: './vanilla-html.component.html',
-  styleUrl: './vanilla-html.component.scss',
   standalone: true,
 })
 export class VanillaHtmlComponent {}
