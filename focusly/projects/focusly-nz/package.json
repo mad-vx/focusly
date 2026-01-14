@@ -1,6 +1,6 @@
 {
   "name": "@zaybu/focusly-nz",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "NG-ZORRO extension package for the Focusly keyboard navigation framework",
   "keywords": [
     "angular",
@@ -37,10 +37,10 @@
     "access": "public"
   },
   "devDependencies": {
-    "@zaybu/focusly": "^1.1.2"
+    "@zaybu/focusly": "^1.2.0"
   },
   "peerDependencies": {
-    "@zaybu/focusly": "^1.1.2",
+    "@zaybu/focusly": "^1.2.0",
     "@angular/core": ">=16 <22",
     "@angular/common": ">=16 <22",
     "ng-zorro-antd": ">=16 <22"
