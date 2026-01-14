@@ -59,11 +59,10 @@
               id="toolkit-none"
               name="toolkit"
               type="radio"
-              data-test-id="toolkit-vanilla"
               [checked]="toolkit() === 'none'"
               (change)="toolkit.set('none')"
             />
-            <label class="toolkit-option" for="toolkit-none">
+            <label class="toolkit-option" for="toolkit-none" data-test-id="toolkit-vanilla">
               <span class="toolkit-icon" aria-hidden="true">🌐</span>
               <span class="toolkit-text">Vanilla</span>
             </label>
@@ -73,11 +72,10 @@
               id="toolkit-ngzorro"
               name="toolkit"
               type="radio"
-              data-test-id="toolkit-ngzorro"
               [checked]="toolkit() === 'ngzorro'"
               (change)="toolkit.set('ngzorro')"
             />
-            <label class="toolkit-option" for="toolkit-ngzorro">
+            <label class="toolkit-option" for="toolkit-ngzorro" data-test-id="toolkit-ngzorro">
               <span class="toolkit-icon" aria-hidden="true">
                 <svg width="20px" height="20px" viewBox="0 0 106 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                   <defs>
@@ -121,11 +119,10 @@
               id="toolkit-material"
               name="toolkit"
               type="radio"
-              data-test-id="toolkit-material"
               [checked]="toolkit() === 'material'"
               (change)="toolkit.set('material')"
             />
-            <label class="toolkit-option" for="toolkit-material">
+            <label class="toolkit-option" for="toolkit-material" data-test-id="toolkit-material">
               <span class="toolkit-icon" aria-hidden="true">
                 <svg x="0px" y="0px" width="20px" height="20px" viewBox="0 0 960 960"><polygon points="562.6,109.8 804.1,629.5 829.2,233.1"></polygon><polygon points="624.9,655.9 334.3,655.9 297.2,745.8 479.6,849.8 662,745.8"></polygon><polygon  points="384.1,539.3 575.2,539.3 479.6,307"></polygon><polygon points="396.6,109.8 130,233.1 155.1,629.5"></polygon></svg>
               </span>

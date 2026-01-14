@@ -9,7 +9,7 @@ import {
   testCellFocusChange,
   toKeyPressString,
   updateFocuslyKeymap,
-  //waitForGridReady,
+  waitForGridReady,
 } from './helper';
 
 function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap) {
@@ -18,10 +18,10 @@ function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap)
       await page.goto('/');
 
       await setToolkit(page, toolkitType);
-      //await waitForGridReady(page);
+      await waitForGridReady(page);
 
       await updateFocuslyKeymap(page, keyMap);
-      //await waitForGridReady(page);
+      await waitForGridReady(page);
     });
 
     test(`${toKeyPressString(keyMap.map.down)} moves from (0,0) to (1,0)`, async ({ page }) => {
