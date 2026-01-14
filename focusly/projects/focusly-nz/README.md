@@ -6,8 +6,6 @@ This package adds lightweight, NG-ZORRO-specific integration to the core `@zaybu
 For full documentation on Focusly’s architecture, navigation model, design philosophy, signals-based internals, and advanced features, please see the main Focusly README:  
 👉 **https://www.npmjs.com/package/@zaybu/focusly**
 
-🎯 Focusly Core Project https://www.npmjs.com/package/@zaybu/focusly
-
 ---
 
 ## 📦 Installation
