@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectFocusDirective } from '../../../../../../focusly-material/src/lib/directives/mat-select.directive';
+import { MatSelectFocusDirective } from '@zaybu/focusly-material';
 
 @Component({
   selector: 'app-material',
