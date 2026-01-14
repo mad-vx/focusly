@@ -17,4 +17,3 @@ Install Focusly core + this Angular Material extension:
 ```bash
 npm install @zaybu/focusly @zaybu/focusly-material
 ```
-

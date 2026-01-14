@@ -6,32 +6,31 @@
   }
 
   <table>
-<thead>
-  <tr>
-    <th>Action</th>
-    <th colspan="2">Key assignment 1</th>
-    <th colspan="2" class="optional-group">
-      Key assignment 2 <span class="optional-badge">Optional</span>
-    </th>
-  </tr>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th colspan="2">Key assignment 1</th>
+        <th colspan="2" class="optional-group">
+          Key assignment 2 <span class="optional-badge">Optional</span>
+        </th>
+      </tr>
 
-  <tr class="subhead">
-    <th></th>
-    <th>Modifier</th>
-    <th>Key</th>
-    <th class="optional-group">Modifier</th>
-    <th class="optional-group">Key</th>
-  </tr>
+      <tr class="subhead">
+        <th></th>
+        <th>Modifier</th>
+        <th>Key</th>
+        <th class="optional-group">Modifier</th>
+        <th class="optional-group">Key</th>
+      </tr>
 
-  <tr class="hint-row">
-    <th></th>
-    <th colspan="2" class="hint">Primary shortcut</th>
-    <th colspan="2" class="hint optional-group">
-      Alternative shortcut (leave as None / Select key to disable)
-    </th>
-  </tr>
-</thead>
-
+      <tr class="hint-row">
+        <th></th>
+        <th colspan="2" class="hint">Primary shortcut</th>
+        <th colspan="2" class="hint optional-group">
+          Alternative shortcut (leave as None / Select key to disable)
+        </th>
+      </tr>
+    </thead>
 
     <tbody>
       @for (action of keyPressActionsToDisplay(); track action) {
@@ -51,15 +50,10 @@
           </td>
           <td>
             <select (change)="onKeyChange(action, 0, $any($event.target).value)">
-              <option value="" [selected]="getKeyForAction(action, 0) === ''">
-                Select key…
-              </option>
+              <option value="" [selected]="getKeyForAction(action, 0) === ''">Select key…</option>
 
               @for (opt of keyOptions; track opt.value) {
-                <option
-                  [value]="opt.value"
-                  [selected]="opt.value === getKeyForAction(action, 0)"
-                >
+                <option [value]="opt.value" [selected]="opt.value === getKeyForAction(action, 0)">
                   {{ opt.label }}
                 </option>
               }
@@ -80,15 +74,10 @@
 
           <td [class.optional-disabled]="!hasSecondChord(action)">
             <select (change)="onKeyChange(action, 1, $any($event.target).value)">
-              <option value="" [selected]="getKeyForAction(action, 1) === ''">
-                Select key…
-              </option>
+              <option value="" [selected]="getKeyForAction(action, 1) === ''">Select key…</option>
 
               @for (opt of keyOptions; track opt.value) {
-                <option
-                  [value]="opt.value"
-                  [selected]="opt.value === getKeyForAction(action, 1)"
-                >
+                <option [value]="opt.value" [selected]="opt.value === getKeyForAction(action, 1)">
                   {{ opt.label }}
                 </option>
               }
@@ -102,9 +91,13 @@
   @if (showKeyMapCode()) {
     <section class="focusly-keymap-json">
       <p>
-        Key mappings can be set at runtime and/or build time. <br/>
-        Multiple key assigment support (only 2 shown here). <br/>
-        This configuration component is available in the <a href="https://www.npmjs.com/package/@zaybu/focusly-config" target="_blank"><code>&#64;zaybu/focusly-config</code></a> project to include in your applications.
+        Key mappings can be set at runtime and/or build time. <br />
+        Multiple key assigment support (only 2 shown here). <br />
+        This configuration component is available in the
+        <a href="https://www.npmjs.com/package/@zaybu/focusly-config" target="_blank"
+          ><code>&#64;zaybu/focusly-config</code></a
+        >
+        project to include in your applications.
       </p>
       <p>For build time configuration, use the code below in your application bootstrap.</p>
       <pre><code>{{ keyMapCode() }}</code></pre>

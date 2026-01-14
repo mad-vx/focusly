@@ -8,20 +8,10 @@ import { FocuslyDirective } from '@zaybu/focusly';
 })
 export class MatSelectFocusDirective extends FocuslyDirective {
   protected matSelect = inject(MatSelect);
-
-  // Track mouse usage so we know whether to close the dropdown on blur
   private mouseClick = false;
 
   constructor() {
     super();
-
-    // this.selectCustomElement = () => {
-    //   this.matSelect.focus();
-    // };
-
-    // this.onElementFocus = () => {
-    //   // Intentionally empty
-    // };
   }
 
   protected override onFocusOut(event: FocusEvent): void {
