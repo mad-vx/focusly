@@ -12,6 +12,21 @@ import {
   waitForGridReady,
 } from './helper';
 
+const TOOLKIT_FILTER = process.env['FOCUSLY_TOOLKIT'];
+const KEYMAP_FILTER = process.env['FOCUSLY_KEYMAP'];
+
+const toolkitsToRun = TOOLKIT_FILTER
+  ? TOOLKITS.filter(t => t === TOOLKIT_FILTER)
+  : TOOLKITS;
+
+const keymapsToRun = (KEYMAP_FILTER ? testKeyMaps.filter(k => k.name === KEYMAP_FILTER) : testKeyMaps);
+
+toolkitsToRun.forEach((toolkit) => {
+  keymapsToRun.forEach((keymap) => {
+    defineGridNavigationTests(toolkit, keymap);
+  });
+});
+
 function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap) {
   test.describe(`${toolkitType} - ${keyMap.name} - basic grid navigation`, () => {
     test.beforeEach(async ({ page }) => {
@@ -94,9 +109,3 @@ function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap)
     });
   });
 }
-
-TOOLKITS.forEach((toolkit) => {
-  testKeyMaps.forEach((keymap) => {
-    defineGridNavigationTests(toolkit, keymap);
-  });
-});
