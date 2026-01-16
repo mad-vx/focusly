@@ -19,9 +19,8 @@
   <mat-form-field class="side-field">
     <mat-label>Side</mat-label>
     <mat-select
-      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
       mat-select-focusly
-      class="cell-input"
+      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"      
       [focuslyGroup]="group"
       [focuslyRow]="row.rowIndex"
       [focuslyColumn]="1"

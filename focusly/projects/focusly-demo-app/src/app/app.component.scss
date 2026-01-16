@@ -2,8 +2,7 @@
   background: #f9fafb;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 1.5rem 2rem;
-  margin: 1.5rem 0 2rem;
+   padding: 1.5rem 2rem;
   max-width: 700px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -31,7 +30,6 @@
   border: 1px solid #e3e3e3;
   border-radius: 6px;
   padding: 0.6rem 0.9rem;
-  margin-bottom: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -61,10 +59,10 @@
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 24px 0;
+  margin: 24px 0 0 0;
 
   > div {
-    flex: 0.5;
+    flex: 1;
     display: flex;
     justify-content: center;
   }
@@ -77,18 +75,6 @@
   margin: 0 0 6px;
 }
 
-.toolkit-picker {
-  display: grid;
-  gap: 10px;
-}
-
-.toolkit-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-}
-
 .info-btn {
   border: 0;
   background: transparent;
@@ -97,8 +83,15 @@
   border-radius: 8px;
 }
 
+.toolkit-title {
+  display: inline-flex;
+  color: #1a237e;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
 .toolkit-options {
-  display: flex;
+  display: inline-flex;
   gap: 10px;
   flex-wrap: wrap;
 }

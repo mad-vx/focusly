@@ -1,6 +1,19 @@
 @import 'ng-zorro-antd/ng-zorro-antd.css';
 @import '@angular/material/prebuilt-themes/azure-blue.css';
 
+// Force Material components to white background
+.mat-mdc-form-field .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #fff !important;
+}
+
+.mat-mdc-form-field-appearance-outline .mat-mdc-text-field-wrapper {
+  background-color: #fff !important;
+}
+
+.mat-mdc-select-panel {
+  background-color: #fff !important;
+}
+
 /* Global Styles */
 main {
   display: flex;
