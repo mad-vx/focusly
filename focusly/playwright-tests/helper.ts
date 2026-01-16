@@ -2,7 +2,7 @@ import { Locator, Page, expect } from '@playwright/test';
 import { FocuslyKeyChord } from '@zaybu/focusly';
 import { TestKeyMap } from './keymaps';
 
-export const TOOLKITS = ['Vanilla', 'NG-Zorro'] as const;
+export const TOOLKITS = ['Vanilla', 'NG-Zorro', 'Material'] as const;
 export type ToolkitType = (typeof TOOLKITS)[number];
 
 export async function testCellFocusChange(
@@ -42,7 +42,11 @@ export async function setCellFocus(
 export async function setToolkit(page: Page, toolkitType: ToolkitType) {
   if (toolkitType === 'Vanilla') {
     await page.getByTestId('toolkit-vanilla').click();
-  } else {
+  }
+  else if (toolkitType === 'Material') {
+    await page.getByTestId('toolkit-material').click();
+  }  
+  else {
     await page.getByTestId('toolkit-ngzorro').click();
   }
 }
@@ -126,10 +130,7 @@ export function toChordArray(keyChord: FocuslyKeyChord | undefined): string[] {
 
 export async function waitForGridReady(page: Page) {
   await page.waitForLoadState('domcontentloaded');
-
-  await expect(page.locator('[data-test-id="grid"]')).toBeVisible();
   await expect(page.locator('[data-test-id^="grid-cell-"]').first()).toBeVisible();
-
   await page.waitForTimeout(50);
 }
 

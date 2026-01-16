@@ -23,25 +23,11 @@
     </p>
   </section>
 
-  @if (toolkit() === 'ngzorro') {
-    <app-ng-zorro></app-ng-zorro>
-  } 
-  @else if (toolkit() === 'material') {
-    <app-material></app-material>
-  }
-  @else {
-    <app-vanilla-html></app-vanilla-html>
-  } 
   <div class="header-row">
     <div>
-      <button type="button" class="config-button" (click)="openConfig()">
-        Configure Key Mappings
-      </button>
-    </div>
-    <div>
       <section class="instructions right-instructions">
-        <div class="toolkit-picker" role="radiogroup" aria-label="Select UI toolkit">
-          <h2 class="toolkit-title">
+        <div  role="radiogroup" aria-label="Select UI toolkit">
+          <span class="toolkit-title">
             Component Toolkit Independent
             <button
               type="button"
@@ -51,8 +37,7 @@
             >
               ℹ️
             </button>
-          </h2>
-
+          </span>
           <div class="toolkit-options">
             <input
               class="toolkit-radio"
@@ -129,10 +114,23 @@
               <span class="toolkit-text">Material</span>
             </label>
           </div>
+                <button type="button" class="config-button" (click)="openConfig()">
+        Configure Key Mappings
+      </button>
         </div>
       </section>
     </div>
   </div>
+
+  @if (toolkit() === 'ngzorro') {
+    <app-ng-zorro></app-ng-zorro>
+  } 
+  @else if (toolkit() === 'material') {
+    <app-material></app-material>
+  }
+  @else {
+    <app-vanilla-html></app-vanilla-html>
+  } 
 
   @if (showConfig()) {
     <div class="modal-backdrop" (click)="closeConfig()">
@@ -160,14 +158,15 @@
         <div class="modal-body">
           <p>
             Focusly is designed to work seamlessly across all UI component toolkits. In this demo you can
-            switch between Vanilla HTML and NG-ZORRO. Toolkit-specific support is implemented as a thin
+            switch between Vanilla HTML, Ng-Zorro and Angular Material. Toolkit-specific support is implemented as a thin
             extension of the base directive, meaning the core navigation logic stays centralised and clean
             while each UI library only adds a few small, tailored overrides. This keeps behaviour
             consistent, predictable, and incredibly easy to maintain.        
           </p>
           <p>
-            NG-ZORRO Focusly project and library
+            Toolkit extension projects
             <a href="https://www.npmjs.com/package/@zaybu/focusly-nz"><pre><code>@zaybu/focusly-nz</code></pre></a>
+            <a href="https://www.npmjs.com/package/@zaybu/focusly-material"><pre><code>@zaybu/focusly-material</code></pre></a>
           </p>
         </div>
       </div>
