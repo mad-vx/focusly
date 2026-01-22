@@ -9,7 +9,7 @@
     "build:demo": "ng build focusly-demo-app",
     "build:demo:watch": "ng build focusly-demo-app --watch",
     "build:demo:prod": "ng build focusly-demo-app --configuration production",
-    "build:demo:ghpages": "ng build focusly-demo-app --configuration production --base-href /focusly-demo/browser",
+    "build:demo:ghpages": "ng build focusly-demo-app --configuration production --base-href ./",
     "build:lib": "ng build focusly && npm run copy-readme",
     "watch:lib": "ng build focusly --watch",
     "build:nz": "ng build focusly-nz",
