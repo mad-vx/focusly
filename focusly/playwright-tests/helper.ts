@@ -42,11 +42,9 @@ export async function setCellFocus(
 export async function setToolkit(page: Page, toolkitType: ToolkitType) {
   if (toolkitType === 'Vanilla') {
     await page.getByTestId('toolkit-vanilla').click();
-  }
-  else if (toolkitType === 'Material') {
+  } else if (toolkitType === 'Material') {
     await page.getByTestId('toolkit-material').click();
-  }  
-  else {
+  } else {
     await page.getByTestId('toolkit-ngzorro').click();
   }
 }
@@ -133,4 +131,3 @@ export async function waitForGridReady(page: Page) {
   await expect(page.locator('[data-test-id^="grid-cell-"]').first()).toBeVisible();
   await page.waitForTimeout(50);
 }
-

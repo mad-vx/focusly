@@ -14,7 +14,7 @@ import { tradeData } from '../../model/trade-data.model';
     NgTemplateOutlet,
     FocuslyDirective,
     FocuslyEnterKeySubscriberComponent,
-    FocuslyListenerComponent
+    FocuslyListenerComponent,
   ],
   templateUrl: './base-full.component.html',
   styleUrl: './base-full.component.scss',

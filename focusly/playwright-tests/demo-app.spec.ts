@@ -15,11 +15,11 @@ import {
 const TOOLKIT_FILTER = process.env['FOCUSLY_TOOLKIT'];
 const KEYMAP_FILTER = process.env['FOCUSLY_KEYMAP'];
 
-const toolkitsToRun = TOOLKIT_FILTER
-  ? TOOLKITS.filter(t => t === TOOLKIT_FILTER)
-  : TOOLKITS;
+const toolkitsToRun = TOOLKIT_FILTER ? TOOLKITS.filter((t) => t === TOOLKIT_FILTER) : TOOLKITS;
 
-const keymapsToRun = (KEYMAP_FILTER ? testKeyMaps.filter(k => k.name === KEYMAP_FILTER) : testKeyMaps);
+const keymapsToRun = KEYMAP_FILTER
+  ? testKeyMaps.filter((k) => k.name === KEYMAP_FILTER)
+  : testKeyMaps;
 
 toolkitsToRun.forEach((toolkit) => {
   keymapsToRun.forEach((keymap) => {
