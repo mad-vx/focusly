@@ -6,6 +6,9 @@ export interface TradeRow {
   side: 'Buy' | 'Sell';
   riskOk: boolean;
   notes: string;
+  tradeDate?: string;               // yyyy-MM-dd (HTML date input friendly)
+  urgency?: 'Low' | 'Medium' | 'High';
+  rating?: number;  
 }
 export interface TradeCellContext {
   $implicit: TradeRow; // expose row as implicit for concise templates

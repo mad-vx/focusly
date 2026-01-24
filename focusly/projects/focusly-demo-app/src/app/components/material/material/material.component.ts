@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectFocusDirective } from '@zaybu/focusly-material';
+import { BaseFullComponent } from '../../base-full/base-full.component';
 
 @Component({
   selector: 'app-material',
@@ -17,6 +18,7 @@ import { MatSelectFocusDirective } from '@zaybu/focusly-material';
     MatSelectModule,
     FocuslyDirective,
     BaseComponent,
+    BaseFullComponent,
     MatSelectFocusDirective,
   ],
   templateUrl: './material.component.html',

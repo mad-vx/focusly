@@ -43,8 +43,6 @@ export class BaseComponent {
     country: 'UK',
   };
 
-  rows = [0, 1, 2, 3, 4, 5, 6];
-
   activeSaveButton = signal<1 | 2 | null>(null);
   lastActionMessage: string | null = null;
   showToast = false;

@@ -25,5 +25,74 @@
   </nz-select>
 </ng-template>
 
+<ng-template #tradeDate let-row let-group="group">
+  <nz-date-picker
+    focusly
+    class="cell-input"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-4'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="4"
+    nzFormat="yyyy-MM-dd"
+    nzPlaceHolder="Trade date"
+  ></nz-date-picker>
+</ng-template>
+
+<ng-template #urgency let-row let-group="group">
+  <nz-radio-group
+    focusly
+    class="cell-input"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-5'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="5"
+    [(ngModel)]="row.urgency"
+    nzButtonStyle="solid"
+  >
+    <label nz-radio-button nzValue="Low">Low</label>
+    <label nz-radio-button nzValue="Medium">Med</label>
+    <label nz-radio-button nzValue="High">High</label>
+  </nz-radio-group>
+</ng-template>
+
+<ng-template #rating let-row let-group="group">
+  <nz-slider
+    focusly
+    class="cell-slider"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-6'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="6"
+    [(ngModel)]="row.rating"
+    [nzMin]="0"
+    [nzMax]="100"
+    [nzStep]="5"
+    [nzTooltipVisible]="'default'"
+  ></nz-slider>
+</ng-template>
+
+<ng-template #action let-row let-group="group">
+  <button
+    nz-button
+    nzType="default"
+    nzSize="small"
+    focusly
+    class="cell-action-btn"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-7'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="7"
+  >
+    Amend
+  </button>
+</ng-template>
+
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
+<app-base-full-component [buyOrSellTemplate]="buySell" 
+    [quantityTemplate]="quantity" 
+    [tradeDateTemplate]="tradeDate" 
+    [urgencyTemplate]="urgency" 
+    [ratingTemplate]="rating"
+    [actionTemplate]="action">
+</app-base-full-component>

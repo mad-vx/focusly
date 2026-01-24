@@ -1,6 +1,6 @@
 import { TradeRow } from './trade-row.model';
 
-export var tradeData: TradeRow[] = [
+export const tradeData: TradeRow[] = [
   {
     symbol: 'AAPL',
     ccy: 'USD',
@@ -8,6 +8,9 @@ export var tradeData: TradeRow[] = [
     side: 'Buy',
     riskOk: true,
     notes: 'Strong Q4 earnings',
+    tradeDate: '2024-10-14',
+    urgency: 'High',
+    rating: 85,
     rowIndex: 0,
   },
   {
@@ -17,9 +20,23 @@ export var tradeData: TradeRow[] = [
     side: 'Sell',
     riskOk: false,
     notes: 'Volatile week',
+    tradeDate: '2024-10-15',
+    urgency: 'High',
+    rating: 60,
     rowIndex: 1,
   },
-  { symbol: 'AMZN', ccy: 'USD', qty: 60, side: 'Buy', riskOk: true, notes: '', rowIndex: 2 },
+  {
+    symbol: 'AMZN',
+    ccy: 'USD',
+    qty: 60,
+    side: 'Buy',
+    riskOk: true,
+    notes: '',
+    tradeDate: '2024-10-16',
+    urgency: 'Medium',
+    rating: 72,
+    rowIndex: 2,
+  },
   {
     symbol: 'MSFT',
     ccy: 'USD',
@@ -27,6 +44,9 @@ export var tradeData: TradeRow[] = [
     side: 'Sell',
     riskOk: true,
     notes: 'Tech rotation',
+    tradeDate: '2024-10-17',
+    urgency: 'Low',
+    rating: 55,
     rowIndex: 3,
   },
   {
@@ -36,9 +56,23 @@ export var tradeData: TradeRow[] = [
     side: 'Buy',
     riskOk: false,
     notes: 'Chip shortage',
+    tradeDate: '2024-10-18',
+    urgency: 'High',
+    rating: 90,
     rowIndex: 4,
   },
-  { symbol: 'GOOG', ccy: 'USD', qty: 75, side: 'Buy', riskOk: true, notes: '', rowIndex: 5 },
+  {
+    symbol: 'GOOG',
+    ccy: 'USD',
+    qty: 75,
+    side: 'Buy',
+    riskOk: true,
+    notes: '',
+    tradeDate: '2024-10-18',
+    urgency: 'Medium',
+    rating: 78,
+    rowIndex: 5,
+  },
   {
     symbol: 'META',
     ccy: 'USD',
@@ -46,6 +80,9 @@ export var tradeData: TradeRow[] = [
     side: 'Sell',
     riskOk: true,
     notes: 'High valuation',
+    tradeDate: '2024-10-19',
+    urgency: 'Low',
+    rating: 50,
     rowIndex: 6,
   },
   {
@@ -55,6 +92,9 @@ export var tradeData: TradeRow[] = [
     side: 'Buy',
     riskOk: false,
     notes: 'China reopening',
+    tradeDate: '2024-10-20',
+    urgency: 'Medium',
+    rating: 65,
     rowIndex: 7,
   },
   {
@@ -64,6 +104,9 @@ export var tradeData: TradeRow[] = [
     side: 'Buy',
     riskOk: true,
     notes: 'Subscriber growth',
+    tradeDate: '2024-10-21',
+    urgency: 'Low',
+    rating: 70,
     rowIndex: 8,
   },
   {
@@ -73,6 +116,9 @@ export var tradeData: TradeRow[] = [
     side: 'Sell',
     riskOk: false,
     notes: 'Earnings miss',
+    tradeDate: '2024-10-22',
+    urgency: 'High',
+    rating: 40,
     rowIndex: 9,
   },
 ];

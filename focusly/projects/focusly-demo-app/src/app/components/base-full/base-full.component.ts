@@ -9,18 +9,16 @@ import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { tradeData } from '../../model/trade-data.model';
 
 @Component({
-  selector: 'app-base-component',
+  selector: 'app-base-full-component',
   imports: [
     NgTemplateOutlet,
-    FocuslyDirective,
-    FocuslyEnterKeySubscriberComponent,
-    FocuslyListenerComponent,
+    FocuslyDirective
   ],
   templateUrl: './base-full.component.html',
   styleUrl: './base-full.component.scss',
   standalone: true,
 })
-export class BaseBigComponent {
+export class BaseFullComponent {
   @Input() buyOrSellTemplate?: TemplateRef<TradeCellContext>;
   @Input() quantityTemplate?: TemplateRef<TradeCellContext>;
   @Input() tradeDateTemplate?: TemplateRef<TradeCellContext>;
