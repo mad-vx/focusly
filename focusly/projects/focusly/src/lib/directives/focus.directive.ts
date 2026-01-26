@@ -14,12 +14,16 @@ import {
 import { Subscription } from 'rxjs';
 import { FocuslyService } from '../services/focus.service';
 import { FocusItem } from '../models/focus-item.model';
+import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
 
 @Directive({
   selector: '[focusly]',
   standalone: true,
 })
 export class FocuslyDirective implements OnInit, OnDestroy {
+
+  private readonly groupHost = inject(FocuslyGroupHostDirective, { optional: true });
+  
   @Input({ required: true }) set focuslyColumn(column: number) {
     this._focuslyColumn = column;
     this.focusService.registerItemFocus(this.focusItem);
@@ -30,8 +34,8 @@ export class FocuslyDirective implements OnInit, OnDestroy {
     this.focusService.registerItemFocus(this.focusItem);
   }
 
-  @Input({ required: true }) set focuslyGroup(scope: number) {
-    this._focuslyScope = scope;
+  @Input({ required: false }) set focuslyGroup(group: number) {
+    this._focuslyGroup = group;
     this.focusService.registerItemFocus(this.focusItem);
   }
 
@@ -44,12 +48,12 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   get focuslyGroup(): number | undefined {
-    return this._focuslyScope;
+    return this._focuslyGroup;
   }
 
   private _focuslyColumn: number | undefined;
   private _focuslyRow: number | undefined;
-  private _focuslyScope: number | undefined;
+  private _focuslyGroup: number | undefined;
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly focusService = inject(FocuslyService);
