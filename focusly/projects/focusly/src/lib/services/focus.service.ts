@@ -11,12 +11,19 @@ import {
 import { createKeyChord } from '../models/key-chord.model';
 import { FocuslyServiceApi } from '../models/focus-service-api.model';
 
+type GroupStore = {
+  byId: Map<string, FocusItem>;
+  byCell: Map<string, FocusItem>; // key = `${row}:${col}`
+  maxRow: number;
+  maxCol: number;
+};
+
 @Injectable({ providedIn: 'root' })
 export class FocuslyService implements FocuslyServiceApi {
   private endStopSubject = new Subject<FocusItem>();
   readonly endStopHit$ = this.endStopSubject.asObservable();
 
-  private focusRegistry = new Map<number, FocusItem[]>();
+  private focusRegistry = new Map<number, GroupStore>();
   readonly currentFocus = signal<FocusItem | null>(null);
 
   private focusKeyMap = inject<FocuslyKeyMap>(FOCUSLY_KEYMAP);
@@ -50,7 +57,6 @@ export class FocuslyService implements FocuslyServiceApi {
       if (!fn) continue;
 
       const keyPresses = Array.isArray(keyPressConfig) ? keyPressConfig : [keyPressConfig];
-
       for (const keyPress of keyPresses) {
         if (!keyPress) continue;
         handlers[keyPress] = fn;
@@ -65,22 +71,52 @@ export class FocuslyService implements FocuslyServiceApi {
     return this.keyHandlers()[chord];
   }
 
-  private getScopeList(scope: number, create = false): FocusItem[] {
-    let list = this.focusRegistry.get(scope);
-    if (!list && create) {
-      list = [];
-      this.focusRegistry.set(scope, list);
-    }
-    return list ?? [];
-  }
-
   updateKeymap(partial: FocuslyKeyMap) {
     this._keymap.update((current) => ({ ...current, ...partial }));
   }
 
+  private cellKey(row: number, col: number): string {
+    return `${row}:${col}`;
+  }
+
+  private getOrCreateStore(groupId: number): GroupStore {
+    let store = this.focusRegistry.get(groupId);
+    if (!store) {
+      store = { byId: new Map(), byCell: new Map(), maxRow: 0, maxCol: 0 };
+      this.focusRegistry.set(groupId, store);
+    }
+    return store;
+  }
+
+  private getStore(groupId: number | undefined): GroupStore | undefined {
+    if (groupId == null) return undefined;
+    return this.focusRegistry.get(groupId);
+  }
+
+  private recomputeMaxima(store: GroupStore): void {
+    // Only called when we *might* have removed the current max row/col
+    let maxRow = 0;
+    let maxCol = 0;
+
+    for (const item of store.byId.values()) {
+      if (item.row != null && item.row > maxRow) maxRow = item.row;
+      if (item.column != null && item.column > maxCol) maxCol = item.column;
+    }
+
+    store.maxRow = maxRow;
+    store.maxCol = maxCol;
+  }
+
+  // ---------------- Public API ----------------
+
   onFocus(focus: FocusItem): void {
-    const list = this.getScopeList(focus.groupId);
-    const found = list.find((r) => r.id === focus.id);
+    const store = this.getStore(focus.groupId);
+    if (!store) {
+      this.currentFocus.set(focus);
+      return;
+    }
+
+    const found = store.byId.get(focus.id);
     this.currentFocus.set(found ?? focus);
   }
 
@@ -126,62 +162,76 @@ export class FocuslyService implements FocuslyServiceApi {
     const max = this.currentFocusMaxRow();
     this.moveRow(max - currentFocus.row, (row) => row <= max);
   }
-
+  
   registerItemFocus(focus: FocusItem): void {
-    if (focus.groupId === undefined || focus.column === undefined || focus.row === undefined)
-      return;
+    if (focus.groupId === undefined || focus.column === undefined || focus.row === undefined) return;
 
-    const list = this.getScopeList(focus.groupId, true);
-    const index = list.findIndex((r) => r.id === focus.id);
+    const store = this.getOrCreateStore(focus.groupId);
 
-    if (index >= 0) {
-      list[index] = focus;
-    } else {
-      list.push(focus);
+    // If this id already exists, remove its old cell mapping (row/col might have changed)
+    const existing = store.byId.get(focus.id);
+    if (existing) {
+      store.byCell.delete(this.cellKey(existing.row!, existing.column!));
     }
+
+    store.byId.set(focus.id, focus);
+    store.byCell.set(this.cellKey(focus.row, focus.column), focus);
+
+    if (focus.row > store.maxRow) store.maxRow = focus.row;
+    if (focus.column > store.maxCol) store.maxCol = focus.column;
   }
 
   unRegisterItemFocus(focus: FocusItem): void {
-    const list = this.focusRegistry.get(focus.groupId);
-    if (!list) return;
+    const store = this.getStore(focus.groupId);
+    if (!store) return;
 
-    const index = list.findIndex((r) => r.id === focus.id);
-    if (index >= 0) list.splice(index, 1);
-    if (list.length === 0) this.focusRegistry.delete(focus.groupId);
+    const existing = store.byId.get(focus.id);
+    if (!existing) return;
+
+    store.byId.delete(focus.id);
+    store.byCell.delete(this.cellKey(existing.row!, existing.column!));
+
+    if (store.byId.size === 0) {
+      this.focusRegistry.delete(focus.groupId!);
+      return;
+    }
+
+    // If we removed a max boundary recompute
+    if (existing.row === store.maxRow || existing.column === store.maxCol) {
+      this.recomputeMaxima(store);
+    }
   }
+
 
   isCurrentFocus(focus: FocusItem): boolean {
     const currentFocus = this.currentFocus();
     return !!currentFocus && currentFocus.id === focus.id;
-  }
+  }  
+  private findRegisteredFocus(column: number, row: number, groupId?: number): FocusItem | undefined {
+        const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
+    if (effectiveGroup == null) return undefined;
 
-  private findRegisteredFocus(
-    column: number,
-    row: number,
-    groupId?: number,
-  ): FocusItem | undefined {
-    const effectiveScope = groupId ?? this.currentFocus()?.groupId;
-    if (effectiveScope == null) return undefined;
+    const store = this.focusRegistry.get(effectiveGroup);
+    if (!store) return undefined;
 
-    const list = this.focusRegistry.get(effectiveScope);
-    if (!list) return undefined;
-
-    return list.find((r) => r.column === column && r.row === row && r.groupId === effectiveScope);
+    return store.byCell.get(this.cellKey(row, column));
   }
 
   private moveRow(offset: number, endCondition: (row: number) => boolean): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
+
     this.moveFocus(currentFocus.row, offset, endCondition, (row) =>
-      this.findRegisteredFocus(currentFocus!.column, row),
+      this.findRegisteredFocus(currentFocus.column, row, currentFocus.groupId),
     );
   }
 
   private moveColumn(offset: number, endCondition: (column: number) => boolean): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
+
     this.moveFocus(currentFocus.column, offset, endCondition, (col) =>
-      this.findRegisteredFocus(col, currentFocus!.row),
+      this.findRegisteredFocus(col, currentFocus.row, currentFocus.groupId),
     );
   }
 
@@ -212,17 +262,13 @@ export class FocuslyService implements FocuslyServiceApi {
   private currentFocusMaxRow(): number {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return 0;
-    const list = this.focusRegistry.get(currentFocus.groupId) ?? [];
-    if (list.length === 0) return 0;
-    return list.reduce((max, f) => (f.row > max ? f.row : max), list[0].row);
+    return this.focusRegistry.get(currentFocus.groupId)?.maxRow ?? 0;
   }
 
   private currentFocusMaxColumn(): number {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return 0;
-    const list = this.focusRegistry.get(currentFocus.groupId) ?? [];
-    if (list.length === 0) return 0;
-    return list.reduce((max, f) => (f.column > max ? f.column : max), list[0].column);
+    return this.focusRegistry.get(currentFocus.groupId)?.maxCol ?? 0;
   }
 
   private chordFromKeyboardEvent(e: KeyboardEvent): string {
