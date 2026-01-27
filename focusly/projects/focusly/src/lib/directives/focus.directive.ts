@@ -62,15 +62,15 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private readonly uniqueId = crypto.randomUUID();
   private readonly limitHitSubscription: Subscription;
 
-  /**
-   * Public-facing FocusItem snapshot for this host element.
-   * Always built from current inputs.
-   */
+  get resolvedGroup(): number | undefined {
+    return this.focuslyGroup ?? this.groupHost?.resolveGroup();
+  }
+
   protected get focusItem(): FocusItem {
     return {
       column: this.focuslyColumn,
       row: this.focuslyRow,
-      groupId: this.focuslyGroup,
+      groupId: this.resolvedGroup,
       id: this.uniqueId,
     } as FocusItem;
   }
@@ -92,11 +92,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    */
   protected selectCustomElement: (() => void) | undefined;
 
-  /**
-   * Pure computed: "Am I currently the active focus item?"
-   * NOTE: NO SIDE EFFECTS HERE.
-   */
-  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focusItem));
+  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.uniqueId));
 
   @HostBinding('class.focusly-active')
   get activeClass(): boolean {
@@ -104,9 +100,8 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    // Handle "end of grid" / limit hit behaviour
     this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
-      if (this.focusService.isCurrentFocus(this.focusItem)) {
+      if (this.focusService.isCurrentFocus(this.uniqueId)) {
         const host = this.elementRef.nativeElement;
         // Defer blur/focus to after the current CD cycle
         queueMicrotask(() => {

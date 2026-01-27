@@ -127,12 +127,15 @@ export class FocuslyService implements FocuslyServiceApi {
   up(): void {
     this.moveRow(-1, (row) => row >= 0);
   }
+
   down(): void {
     this.moveRow(1, (row) => row <= this.currentFocusMaxRow());
   }
+
   left(): void {
     this.moveColumn(-1, (col) => col >= 0);
   }
+
   right(): void {
     this.moveColumn(1, (col) => col <= this.currentFocusMaxColumn());
   }
@@ -202,11 +205,11 @@ export class FocuslyService implements FocuslyServiceApi {
     }
   }
 
-
-  isCurrentFocus(focus: FocusItem): boolean {
+  isCurrentFocus(id: string): boolean {
     const currentFocus = this.currentFocus();
-    return !!currentFocus && currentFocus.id === focus.id;
+    return !!currentFocus && currentFocus.id === id;
   }  
+
   private findRegisteredFocus(column: number, row: number, groupId?: number): FocusItem | undefined {
         const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
     if (effectiveGroup == null) return undefined;
