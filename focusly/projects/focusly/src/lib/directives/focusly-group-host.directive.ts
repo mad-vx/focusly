@@ -17,17 +17,16 @@ import { Directive, Input, Optional, inject } from '@angular/core';
   standalone: true,
 })
 export class FocuslyGroupHostDirective {
+  @Input({ required: true }) focuslyGroupHost!: number;
 
-  @Input({ required: true })  focuslyGroupHost!: number;
-
-//   /**
-//    * Optional parent host for nested groups.
-//    * Useful for debugging/dev warnings, or if you ever want to “bubble” context.
-//    */
-//   readonly parent: FocuslyGroupHostDirective | null = inject(FocuslyGroupHostDirective, {
-//     optional: true,
-//     skipSelf: true,
-//   });
+  //   /**
+  //    * Optional parent host for nested groups.
+  //    * Useful for debugging/dev warnings, or if you ever want to “bubble” context.
+  //    */
+  //   readonly parent: FocuslyGroupHostDirective | null = inject(FocuslyGroupHostDirective, {
+  //     optional: true,
+  //     skipSelf: true,
+  //   });
 
   /**
    * Resolve the effective group for this host.

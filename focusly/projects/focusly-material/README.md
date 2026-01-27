@@ -19,13 +19,8 @@ npm install @zaybu/focusly @zaybu/focusly-material
 ## 📝 Example Usage
 
 ```html
-<mat-select
-    mat-select-focusly
-    [focuslyGroup]="1"
-    [focuslyRow]="1"
-    [focuslyColumn]="1"
->
-    <mat-option value="Buy">Buy</mat-option>
-    <mat-option value="Sell">Sell</mat-option>
+<mat-select mat-select-focusly [focuslyGroup]="1" [focuslyRow]="1" [focuslyColumn]="1">
+  <mat-option value="Buy">Buy</mat-option>
+  <mat-option value="Sell">Sell</mat-option>
 </mat-select>
 ```

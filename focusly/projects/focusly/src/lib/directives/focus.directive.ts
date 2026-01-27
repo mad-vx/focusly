@@ -21,9 +21,8 @@ import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
   standalone: true,
 })
 export class FocuslyDirective implements OnInit, OnDestroy {
-
   private readonly groupHost = inject(FocuslyGroupHostDirective, { optional: true });
-  
+
   @Input({ required: true }) set focuslyColumn(column: number) {
     this._focuslyColumn = column;
     this.focusService.registerItemFocus(this.focusItem);
