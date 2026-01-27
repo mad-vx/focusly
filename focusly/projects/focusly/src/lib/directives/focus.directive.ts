@@ -25,17 +25,17 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   @Input({ required: true }) set focuslyColumn(column: number) {
     this._focuslyColumn = column;
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
   @Input({ required: true }) set focuslyRow(row: number) {
     this._focuslyRow = row;
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
   @Input({ required: false }) set focuslyGroup(group: number) {
     this._focuslyGroup = group;
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
   get focuslyColumn(): number | undefined {
@@ -60,6 +60,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   private readonly uniqueId = crypto.randomUUID();
   private readonly limitHitSubscription: Subscription;
+  private lastRegistered: FocusItem | null = null;
 
   get resolvedGroup(): number | undefined {
     return this.focuslyGroup ?? this.groupHost?.resolveGroup();
@@ -142,12 +143,38 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
   ngOnDestroy(): void {
-    this.focusService.unRegisterItemFocus(this.focusItem);
+    if (this.lastRegistered) {
+      this.focusService.unRegisterItemFocus(this.lastRegistered);
+      this.lastRegistered = null;
+    }
+
     this.limitHitSubscription.unsubscribe();
+  }
+
+  private syncRegistration(): void {
+    const next = this.focusItem;
+
+    // Only register when everything is present
+    if (next.groupId == null || next.row == null || next.column == null) {
+      // If we were previously registered, clean up
+      if (this.lastRegistered) {
+        this.focusService.unRegisterItemFocus(this.lastRegistered);
+        this.lastRegistered = null;
+      }
+      return;
+    }
+
+    // If the group changed since last time, unregister from the old group first
+    if (this.lastRegistered && this.lastRegistered.groupId !== next.groupId) {
+      this.focusService.unRegisterItemFocus(this.lastRegistered);
+    }
+
+    this.focusService.registerItemFocus(next);
+    this.lastRegistered = next;
   }
 
   // These are the ONLY @HostListener decorators; derived directives just
