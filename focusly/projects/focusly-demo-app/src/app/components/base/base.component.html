@@ -18,7 +18,7 @@
     <focusly-listener [keyDownEvents]="['Enter']">
       <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey()"> </focusly-enter-key-subscriber>
 
-      <table class="data-grid">
+      <table class="data-grid" [focuslyGroupHost]="1">
         <thead>
           <tr>
             <th>Symbol</th>
@@ -63,7 +63,6 @@
                   focusly
                   class="cell-checkbox"
                   type="checkbox"
-                  [focuslyGroup]="1"
                   [focuslyRow]="row.rowIndex"
                   [focuslyColumn]="2"
                   [checked]="row.riskOk"
@@ -76,7 +75,6 @@
                   focusly
                   class="cell-input wide"
                   type="text"
-                  [focuslyGroup]="1"
                   [focuslyRow]="row.rowIndex"
                   [focuslyColumn]="3"
                   [value]="row.notes"
@@ -111,7 +109,7 @@
     <focusly-listener [keyDownEvents]="['Enter']">
       <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey2()"> </focusly-enter-key-subscriber>
 
-      <table class="data-grid">
+      <table class="data-grid" [focuslyGroupHost]="2">
         <thead>
           <tr>
             <th>Field</th>
@@ -128,7 +126,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="0"
                 [focuslyColumn]="0"
                 [value]="customer.name"
@@ -142,7 +139,6 @@
               <select
                 focusly
                 class="cell-input"
-                [focuslyGroup]="2"
                 [focuslyRow]="2"
                 [focuslyColumn]="0"
               >
@@ -160,7 +156,6 @@
                 focusly
                 class="cell-input wide"
                 type="email"
-                [focuslyGroup]="2"
                 [focuslyRow]="3"
                 [focuslyColumn]="0"
                 [value]="customer.email"
@@ -175,7 +170,6 @@
                 focusly
                 class="cell-input wide"
                 type="tel"
-                [focuslyGroup]="2"
                 [focuslyRow]="4"
                 [focuslyColumn]="0"
                 [value]="customer.phone"
@@ -190,7 +184,6 @@
                 focusly
                 class="cell-input wide"
                 type="url"
-                [focuslyGroup]="2"
                 [focuslyRow]="5"
                 [focuslyColumn]="0"
                 [value]="customer.website"
@@ -205,7 +198,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="6"
                 [focuslyColumn]="0"
                 [value]="customer.address1"
@@ -220,7 +212,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="7"
                 [focuslyColumn]="0"
                 [value]="customer.address2"
@@ -235,7 +226,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="8"
                 [focuslyColumn]="0"
                 [value]="customer.address3"
@@ -250,7 +240,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="9"
                 [focuslyColumn]="0"
                 [value]="customer.city"
@@ -265,7 +254,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="10"
                 [focuslyColumn]="0"
                 [value]="customer.postcode"
@@ -280,7 +268,6 @@
                 focusly
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="2"
                 [focuslyRow]="11"
                 [focuslyColumn]="0"
                 [value]="customer.country"
