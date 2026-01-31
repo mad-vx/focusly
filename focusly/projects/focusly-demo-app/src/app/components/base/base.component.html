@@ -136,12 +136,7 @@
           <tr>
             <td class="cell-label">Account Status</td>
             <td>
-              <select
-                focusly
-                class="cell-input"
-                [focuslyRow]="2"
-                [focuslyColumn]="0"
-              >
+              <select focusly class="cell-input" [focuslyRow]="2" [focuslyColumn]="0">
                 <option [selected]="customer.status === 'Active'">Active</option>
                 <option [selected]="customer.status === 'On Hold'">On Hold</option>
                 <option [selected]="customer.status === 'Closed'">Closed</option>

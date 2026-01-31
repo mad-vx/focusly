@@ -7,7 +7,7 @@ import {
 } from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { KeyDisplayComponent } from '../key-display.component';
-import { FocuslyGroupHostDirective } from "@zaybu/focusly";
+import { FocuslyGroupHostDirective } from '@zaybu/focusly';
 
 @Component({
   selector: 'app-base-component',
@@ -16,8 +16,8 @@ import { FocuslyGroupHostDirective } from "@zaybu/focusly";
     FocuslyDirective,
     FocuslyEnterKeySubscriberComponent,
     FocuslyListenerComponent,
-    FocuslyGroupHostDirective
-],
+    FocuslyGroupHostDirective,
+  ],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss',
   standalone: true,
