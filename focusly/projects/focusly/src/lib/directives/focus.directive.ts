@@ -14,25 +14,28 @@ import {
 import { Subscription } from 'rxjs';
 import { FocuslyService } from '../services/focus.service';
 import { FocusItem } from '../models/focus-item.model';
+import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
 
 @Directive({
   selector: '[focusly]',
   standalone: true,
 })
 export class FocuslyDirective implements OnInit, OnDestroy {
+  private readonly groupHost = inject(FocuslyGroupHostDirective, { optional: true });
+
   @Input({ required: true }) set focuslyColumn(column: number) {
     this._focuslyColumn = column;
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
   @Input({ required: true }) set focuslyRow(row: number) {
     this._focuslyRow = row;
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
-  @Input({ required: true }) set focuslyGroup(scope: number) {
-    this._focuslyScope = scope;
-    this.focusService.registerItemFocus(this.focusItem);
+  @Input({ required: false }) set focuslyGroup(group: number) {
+    this._focuslyGroup = group;
+    this.syncRegistration();
   }
 
   get focuslyColumn(): number | undefined {
@@ -44,12 +47,12 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   get focuslyGroup(): number | undefined {
-    return this._focuslyScope;
+    return this._focuslyGroup;
   }
 
   private _focuslyColumn: number | undefined;
   private _focuslyRow: number | undefined;
-  private _focuslyScope: number | undefined;
+  private _focuslyGroup: number | undefined;
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly focusService = inject(FocuslyService);
@@ -57,16 +60,17 @@ export class FocuslyDirective implements OnInit, OnDestroy {
 
   private readonly uniqueId = crypto.randomUUID();
   private readonly limitHitSubscription: Subscription;
+  private lastRegistered: FocusItem | null = null;
 
-  /**
-   * Public-facing FocusItem snapshot for this host element.
-   * Always built from current inputs.
-   */
+  get resolvedGroup(): number | undefined {
+    return this.focuslyGroup ?? this.groupHost?.resolveGroup();
+  }
+
   protected get focusItem(): FocusItem {
     return {
       column: this.focuslyColumn,
       row: this.focuslyRow,
-      groupId: this.focuslyGroup,
+      groupId: this.resolvedGroup,
       id: this.uniqueId,
     } as FocusItem;
   }
@@ -88,11 +92,7 @@ export class FocuslyDirective implements OnInit, OnDestroy {
    */
   protected selectCustomElement: (() => void) | undefined;
 
-  /**
-   * Pure computed: "Am I currently the active focus item?"
-   * NOTE: NO SIDE EFFECTS HERE.
-   */
-  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focusItem));
+  readonly isActive = computed(() => this.focusService.isCurrentFocus(this.uniqueId));
 
   @HostBinding('class.focusly-active')
   get activeClass(): boolean {
@@ -100,9 +100,8 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    // Handle "end of grid" / limit hit behaviour
     this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocusItem) => {
-      if (this.focusService.isCurrentFocus(this.focusItem)) {
+      if (this.focusService.isCurrentFocus(this.uniqueId)) {
         const host = this.elementRef.nativeElement;
         // Defer blur/focus to after the current CD cycle
         queueMicrotask(() => {
@@ -144,12 +143,38 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.focusService.registerItemFocus(this.focusItem);
+    this.syncRegistration();
   }
 
   ngOnDestroy(): void {
-    this.focusService.unRegisterItemFocus(this.focusItem);
+    if (this.lastRegistered) {
+      this.focusService.unRegisterItemFocus(this.lastRegistered);
+      this.lastRegistered = null;
+    }
+
     this.limitHitSubscription.unsubscribe();
+  }
+
+  private syncRegistration(): void {
+    const next = this.focusItem;
+
+    // Only register when everything is present
+    if (next.groupId == null || next.row == null || next.column == null) {
+      // If we were previously registered, clean up
+      if (this.lastRegistered) {
+        this.focusService.unRegisterItemFocus(this.lastRegistered);
+        this.lastRegistered = null;
+      }
+      return;
+    }
+
+    // If the group changed since last time, unregister from the old group first
+    if (this.lastRegistered && this.lastRegistered.groupId !== next.groupId) {
+      this.focusService.unRegisterItemFocus(this.lastRegistered);
+    }
+
+    this.focusService.registerItemFocus(next);
+    this.lastRegistered = next;
   }
 
   // These are the ONLY @HostListener decorators; derived directives just

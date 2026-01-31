@@ -127,12 +127,15 @@ export class FocuslyService implements FocuslyServiceApi {
   up(): void {
     this.moveRow(-1, (row) => row >= 0);
   }
+
   down(): void {
     this.moveRow(1, (row) => row <= this.currentFocusMaxRow());
   }
+
   left(): void {
     this.moveColumn(-1, (col) => col >= 0);
   }
+
   right(): void {
     this.moveColumn(1, (col) => col <= this.currentFocusMaxColumn());
   }
@@ -162,9 +165,10 @@ export class FocuslyService implements FocuslyServiceApi {
     const max = this.currentFocusMaxRow();
     this.moveRow(max - currentFocus.row, (row) => row <= max);
   }
-  
+
   registerItemFocus(focus: FocusItem): void {
-    if (focus.groupId === undefined || focus.column === undefined || focus.row === undefined) return;
+    if (focus.groupId === undefined || focus.column === undefined || focus.row === undefined)
+      return;
 
     const store = this.getOrCreateStore(focus.groupId);
 
@@ -202,13 +206,17 @@ export class FocuslyService implements FocuslyServiceApi {
     }
   }
 
-
-  isCurrentFocus(focus: FocusItem): boolean {
+  isCurrentFocus(id: string): boolean {
     const currentFocus = this.currentFocus();
-    return !!currentFocus && currentFocus.id === focus.id;
-  }  
-  private findRegisteredFocus(column: number, row: number, groupId?: number): FocusItem | undefined {
-        const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
+    return !!currentFocus && currentFocus.id === id;
+  }
+
+  private findRegisteredFocus(
+    column: number,
+    row: number,
+    groupId?: number,
+  ): FocusItem | undefined {
+    const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
     if (effectiveGroup == null) return undefined;
 
     const store = this.focusRegistry.get(effectiveGroup);

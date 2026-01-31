@@ -7,7 +7,7 @@
       [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
       focusly
       placeholder="Qty"
-      [focuslyGroup]="1"
+      [focuslyGroup]="group"
       [focuslyRow]="row.rowIndex"
       [focuslyColumn]="0"
       [(ngModel)]="row.qty"
@@ -20,7 +20,7 @@
     <mat-label>Side</mat-label>
     <mat-select
       mat-select-focusly
-      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"      
+      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
       [focuslyGroup]="group"
       [focuslyRow]="row.rowIndex"
       [focuslyColumn]="1"
