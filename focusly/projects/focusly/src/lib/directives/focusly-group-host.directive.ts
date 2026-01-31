@@ -1,4 +1,4 @@
-import { Directive, input } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 /**
  * Attach to any container element to define a default Focusly group for all descendant
@@ -17,7 +17,16 @@ import { Directive, input } from '@angular/core';
   standalone: true,
 })
 export class FocuslyGroupHostDirective {
-  readonly focuslyGroupHost = input<number>();
+  private _groupId?: number;
+
+  @Input({ required: true })
+  set focuslyGroupHost(value: number) {
+    this._groupId = value;
+  }
+
+  get focuslyGroupHost(): number | undefined {
+    return this._groupId;
+  }
 
   //   /**
   //    * Optional parent host for nested groups.
@@ -34,6 +43,7 @@ export class FocuslyGroupHostDirective {
    * (e.g., supporting "inherit" sentinel values, merging config, etc).
    */
   resolveGroup(): number | undefined {
-    return this.focuslyGroupHost();
+    return this._groupId;
   }
+
 }
