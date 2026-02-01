@@ -1,10 +1,6 @@
 import { Component, Input, signal, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import {
-  FocuslyDirective,
-  FocuslyEnterKeySubscriberComponent,
-  FocuslyListenerComponent,
-} from '@zaybu/focusly';
+import { FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent, FocuslyShortcutDirective } from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { KeyDisplayComponent } from '../key-display.component';
 import { FocuslyGroupHostDirective } from '@zaybu/focusly';
@@ -14,10 +10,9 @@ import { FocuslyGroupHostDirective } from '@zaybu/focusly';
   imports: [
     NgTemplateOutlet,
     FocuslyDirective,
-    FocuslyEnterKeySubscriberComponent,
-    FocuslyListenerComponent,
     FocuslyGroupHostDirective,
-  ],
+    FocuslyShortcutDirective
+],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss',
   standalone: true,
