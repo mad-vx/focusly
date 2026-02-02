@@ -11,6 +11,20 @@ import { throttleTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocuslyListenerComponent } from '../focusly-listener/focusly-listener.component';
 
+/**
+ * @deprecated
+ * This component is deprecated and will be removed in a future version.
+ *
+ * Use {@link FocuslyShortcutDirective} instead:
+ *
+ * ```html
+ * <button
+ *   focuslyShortcut
+ *   [focuslyKey]="'enter'"
+ *   (focuslyAction)="onEnterKey()"
+ * >
+ * ```
+ */
 @Component({
   selector: 'focusly-subscriber',
   template: ``,
