@@ -10,6 +10,7 @@ import {
 } from '../models/key-press-action.model';
 import { createKeyChord } from '../models/key-chord.model';
 import { FocuslyServiceApi } from '../models/focus-service-api.model';
+import { FocuslyShortcutRegistration, ShortcutStore } from '../models/short-cut.model';
 
 type GroupStore = {
   byId: Map<string, FocusItem>;
@@ -66,7 +67,14 @@ export class FocuslyService implements FocuslyServiceApi {
     return handlers;
   });
 
+  private shortcutGlobal: ShortcutStore = { byChord: new Map(), byId: new Map() };
+  private shortcutByGroup = new Map<number, ShortcutStore>();
+  private shortcutByElement = new Map<string, ShortcutStore>();
+
   getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
+    const shortcut = this.getShortcutHandlerForKeyboardEvent(e);
+    if (shortcut) return () => shortcut(e);
+
     const chord = this.chordFromKeyboardEvent(e);
     return this.keyHandlers()[chord];
   }
@@ -211,6 +219,56 @@ export class FocuslyService implements FocuslyServiceApi {
     return !!currentFocus && currentFocus.id === id;
   }
 
+  registerShortcut(reg: FocuslyShortcutRegistration): void {
+    // Basic validation
+    if (!reg.keys?.length) return;
+
+    if (reg.scope === 'global') {
+      this.addToStore(this.shortcutGlobal, reg);
+      return;
+    }
+
+    if (reg.scope === 'group') {
+      if (reg.groupId == null) return;
+      const store = this.getOrCreateShortcutStore(this.shortcutByGroup, reg.groupId);
+      this.addToStore(store, reg);
+      return;
+    }
+
+    // element scope
+    if (reg.scope === 'element') {
+      if (!reg.elementId) return;
+      const store = this.getOrCreateShortcutStore(this.shortcutByElement, reg.elementId);
+      this.addToStore(store, reg);
+    }
+  }
+
+  unregisterShortcut(id: string): void {
+    // We don’t know where it lives, so remove from all stores fast via byId checks.
+    // Global
+    if (this.shortcutGlobal.byId.has(id)) this.removeFromStore(this.shortcutGlobal, id);
+
+    // Groups
+    for (const [groupId, store] of this.shortcutByGroup) {
+      if (store.byId.has(id)) {
+        this.removeFromStore(store, id);
+        if (store.byId.size === 0) this.shortcutByGroup.delete(groupId);
+        return;
+      }
+    }
+
+    // Elements
+    for (const [elementId, store] of this.shortcutByElement) {
+      if (store.byId.has(id)) {
+        this.removeFromStore(store, id);
+        if (store.byId.size === 0) this.shortcutByElement.delete(elementId);
+        return;
+      }
+    }
+  }
+
+  // ---------------- Private ----------------
+
   private findRegisteredFocus(
     column: number,
     row: number,
@@ -285,6 +343,95 @@ export class FocuslyService implements FocuslyServiceApi {
       alt: e.altKey,
       ctrl: e.ctrlKey,
       shift: e.shiftKey,
+      meta: e.metaKey
     });
   }
+
+  private getOrCreateShortcutStore(map: Map<any, ShortcutStore>, key: any): ShortcutStore {
+    let store = map.get(key);
+    if (!store) {
+      store = { byChord: new Map(), byId: new Map() };
+      map.set(key, store);
+    }
+    return store;
+  }
+
+  private addToStore(store: ShortcutStore, reg: FocuslyShortcutRegistration): void {
+    store.byId.set(reg.id, reg);
+
+    for (const chord of reg.keys) {
+      const list = store.byChord.get(chord) ?? [];
+      // upsert by id in case directive updates
+      const existingIndex = list.findIndex(x => x.id === reg.id);
+      if (existingIndex >= 0) list.splice(existingIndex, 1);
+      list.push(reg);
+      // keep highest priority first
+      list.sort((a, b) => b.priority - a.priority);
+      store.byChord.set(chord, list);
+    }
+  }
+
+  private removeFromStore(store: ShortcutStore, id: string): void {
+    const reg = store.byId.get(id);
+    if (!reg) return;
+    store.byId.delete(id);
+
+    for (const chord of reg.keys) {
+      const list = store.byChord.get(chord);
+      if (!list) continue;
+      const idx = list.findIndex(x => x.id === id);
+      if (idx >= 0) list.splice(idx, 1);
+      if (list.length === 0) store.byChord.delete(chord);
+    }
+  }
+
+  private getShortcutHandlerForKeyboardEvent(e: KeyboardEvent): ((e: KeyboardEvent) => void) | undefined {
+    const chord = this.chordFromKeyboardEvent(e);
+
+    // Optional: block when typing
+    const inTextInput = this.isTextInputTarget(e.target);
+    
+    const current = this.currentFocus();
+    const currentElementId = current?.id;
+    const currentGroupId = current?.groupId;
+
+    // 1) element scoped
+    if (currentElementId) {
+      const store = this.shortcutByElement.get(currentElementId);
+      const list = store?.byChord.get(chord);
+      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      if (hit) return (evt) => hit.invoke(evt);
+    }
+
+    // 2) group scoped
+    if (currentGroupId != null) {
+      const store = this.shortcutByGroup.get(currentGroupId);
+      const list = store?.byChord.get(chord);
+      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      if (hit) return (evt) => hit.invoke(evt);
+    }
+
+    // 3) global
+    {
+      const list = this.shortcutGlobal.byChord.get(chord);
+      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      if (hit) return (evt) => hit.invoke(evt);
+    }
+
+    return undefined;
+  }
+
+  private isTextInputTarget(target: EventTarget | null): boolean {
+    const el = target as HTMLElement | null;
+    if (!el) return false;
+    const tag = el.tagName?.toLowerCase();
+    if (tag === 'textarea') return true;
+    if (tag === 'input') {
+      const type = (el as HTMLInputElement).type?.toLowerCase();
+      // treat most input types as typing contexts
+      return !['checkbox','radio','button','submit','reset','range','color','file'].includes(type);
+    }
+    return el.isContentEditable === true;
+  }
+
 }

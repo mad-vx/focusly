@@ -15,79 +15,81 @@
       />
     </header>
 
-    <focusly-listener [keyDownEvents]="['Enter']">
-      <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey()"> </focusly-enter-key-subscriber>
+    <table class="data-grid" 
+      [focuslyGroupHost]="1"
+      focuslyShortcut
+      [focuslyKey]="'enter'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="onEnterKey()"
+    >
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Qty</th>
+          <th>Side</th>
+          <th>Risk OK?</th>
+          <th>Desk Notes</th>
+          <th></th>
+        </tr>
+      </thead>
 
-      <table class="data-grid" [focuslyGroupHost]="1">
-        <thead>
+      <tbody>
+        @for (row of tradeRows; track row.symbol) {
           <tr>
-            <th>Symbol</th>
-            <th>Qty</th>
-            <th>Side</th>
-            <th>Risk OK?</th>
-            <th>Desk Notes</th>
-            <th></th>
+            <td class="cell-label">
+              <span class="ticker">{{ row.symbol }}</span>
+              <span class="currency">{{ row.ccy }}</span>
+            </td>
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  quantityTemplate;
+                  context: { $implicit: row, row: row, group: 1 }
+                "
+              >
+              </ng-container>
+            </td>
+
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  buyOrSellTemplate;
+                  context: { $implicit: row, row: row, group: 1 }
+                "
+              >
+              </ng-container>
+            </td>
+
+            <td class="cell-center">
+              <input
+                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
+                focusly
+                class="cell-checkbox"
+                type="checkbox"
+                [focuslyRow]="row.rowIndex"
+                [focuslyColumn]="2"
+                [checked]="row.riskOk"
+              />
+            </td>
+
+            <td>
+              <input
+                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
+                focusly
+                class="cell-input wide"
+                type="text"
+                [focuslyRow]="row.rowIndex"
+                [focuslyColumn]="3"
+                [value]="row.notes"
+                placeholder="Internal note…"
+              />
+            </td>
+
+            <td class="cell-center"></td>
           </tr>
-        </thead>
-
-        <tbody>
-          @for (row of tradeRows; track row.symbol) {
-            <tr>
-              <td class="cell-label">
-                <span class="ticker">{{ row.symbol }}</span>
-                <span class="currency">{{ row.ccy }}</span>
-              </td>
-              <td>
-                <ng-container
-                  *ngTemplateOutlet="
-                    quantityTemplate;
-                    context: { $implicit: row, row: row, group: 1 }
-                  "
-                >
-                </ng-container>
-              </td>
-
-              <td>
-                <ng-container
-                  *ngTemplateOutlet="
-                    buyOrSellTemplate;
-                    context: { $implicit: row, row: row, group: 1 }
-                  "
-                >
-                </ng-container>
-              </td>
-
-              <td class="cell-center">
-                <input
-                  [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
-                  focusly
-                  class="cell-checkbox"
-                  type="checkbox"
-                  [focuslyRow]="row.rowIndex"
-                  [focuslyColumn]="2"
-                  [checked]="row.riskOk"
-                />
-              </td>
-
-              <td>
-                <input
-                  [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
-                  focusly
-                  class="cell-input wide"
-                  type="text"
-                  [focuslyRow]="row.rowIndex"
-                  [focuslyColumn]="3"
-                  [value]="row.notes"
-                  placeholder="Internal note…"
-                />
-              </td>
-
-              <td class="cell-center"></td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </focusly-listener>
+        }
+      </tbody>
+    </table>
   </section>
 
   <section class="panel">
@@ -106,173 +108,174 @@
       />
     </header>
 
-    <focusly-listener [keyDownEvents]="['Enter']">
-      <focusly-enter-key-subscriber (keyboardEvent)="onEnterKey2()"> </focusly-enter-key-subscriber>
+    <table class="data-grid" 
+      [focuslyGroupHost]="2"
+      focuslyShortcut
+      [focuslyKey]="'enter'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="onEnterKey2()">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Value</th>
+          <th></th>
+        </tr>
+      </thead>
 
-      <table class="data-grid" [focuslyGroupHost]="2">
-        <thead>
-          <tr>
-            <th>Field</th>
-            <th>Value</th>
-            <th></th>
-          </tr>
-        </thead>
+      <tbody>
+        <tr>
+          <td class="cell-label">Name</td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="0"
+              [focuslyColumn]="0"
+              [value]="customer.name"
+            />
+          </td>
+        </tr>
 
-        <tbody>
-          <tr>
-            <td class="cell-label">Name</td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="0"
-                [focuslyColumn]="0"
-                [value]="customer.name"
-              />
-            </td>
-          </tr>
+        <tr>
+          <td class="cell-label">Account Status</td>
+          <td>
+            <select focusly class="cell-input" [focuslyRow]="2" [focuslyColumn]="0">
+              <option [selected]="customer.status === 'Active'">Active</option>
+              <option [selected]="customer.status === 'On Hold'">On Hold</option>
+              <option [selected]="customer.status === 'Closed'">Closed</option>
+            </select>
+          </td>
+        </tr>
 
-          <tr>
-            <td class="cell-label">Account Status</td>
-            <td>
-              <select focusly class="cell-input" [focuslyRow]="2" [focuslyColumn]="0">
-                <option [selected]="customer.status === 'Active'">Active</option>
-                <option [selected]="customer.status === 'On Hold'">On Hold</option>
-                <option [selected]="customer.status === 'Closed'">Closed</option>
-              </select>
-            </td>
-          </tr>
+        <tr>
+          <td class="cell-label">Email</td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="email"
+              [focuslyRow]="3"
+              [focuslyColumn]="0"
+              [value]="customer.email"
+            />
+          </td>
+        </tr>
 
-          <tr>
-            <td class="cell-label">Email</td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="email"
-                [focuslyRow]="3"
-                [focuslyColumn]="0"
-                [value]="customer.email"
-              />
-            </td>
-          </tr>
+        <tr>
+          <td class="cell-label">Phone</td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="tel"
+              [focuslyRow]="4"
+              [focuslyColumn]="0"
+              [value]="customer.phone"
+            />
+          </td>
+        </tr>
 
-          <tr>
-            <td class="cell-label">Phone</td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="tel"
-                [focuslyRow]="4"
-                [focuslyColumn]="0"
-                [value]="customer.phone"
-              />
-            </td>
-          </tr>
+        <tr>
+          <td class="cell-label">Website</td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="url"
+              [focuslyRow]="5"
+              [focuslyColumn]="0"
+              [value]="customer.website"
+            />
+          </td>
+        </tr>
 
-          <tr>
-            <td class="cell-label">Website</td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="url"
-                [focuslyRow]="5"
-                [focuslyColumn]="0"
-                [value]="customer.website"
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <td class="cell-label">Address</td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="6"
-                [focuslyColumn]="0"
-                [value]="customer.address1"
-                placeholder="Line 1"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="7"
-                [focuslyColumn]="0"
-                [value]="customer.address2"
-                placeholder="Line 2"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="8"
-                [focuslyColumn]="0"
-                [value]="customer.address3"
-                placeholder="Line 3"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="9"
-                [focuslyColumn]="0"
-                [value]="customer.city"
-                placeholder="City"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="10"
-                [focuslyColumn]="0"
-                [value]="customer.postcode"
-                placeholder="Postcode"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input
-                focusly
-                class="cell-input wide"
-                type="text"
-                [focuslyRow]="11"
-                [focuslyColumn]="0"
-                [value]="customer.country"
-                placeholder="Country"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </focusly-listener>
+        <tr>
+          <td class="cell-label">Address</td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="6"
+              [focuslyColumn]="0"
+              [value]="customer.address1"
+              placeholder="Line 1"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="7"
+              [focuslyColumn]="0"
+              [value]="customer.address2"
+              placeholder="Line 2"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="8"
+              [focuslyColumn]="0"
+              [value]="customer.address3"
+              placeholder="Line 3"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="9"
+              [focuslyColumn]="0"
+              [value]="customer.city"
+              placeholder="City"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="10"
+              [focuslyColumn]="0"
+              [value]="customer.postcode"
+              placeholder="Postcode"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input
+              focusly
+              class="cell-input wide"
+              type="text"
+              [focuslyRow]="11"
+              [focuslyColumn]="0"
+              [value]="customer.country"
+              placeholder="Country"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 </div>
 

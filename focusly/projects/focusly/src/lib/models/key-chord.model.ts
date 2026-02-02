@@ -7,6 +7,7 @@ export interface KeyChordConfig {
   alt?: boolean;
   ctrl?: boolean;
   shift?: boolean;
+  meta?: boolean;
 }
 
 /**

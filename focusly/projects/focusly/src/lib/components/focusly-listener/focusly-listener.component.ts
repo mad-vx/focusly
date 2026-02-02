@@ -12,6 +12,20 @@ import {
 import { Subject, Subscription, filter, fromEvent } from 'rxjs';
 import { isElementVisible } from '../../helpers/is-element-visible';
 
+/**
+ * @deprecated
+ * This component is deprecated and will be removed in a future version.
+ *
+ * Use {@link FocuslyShortcutDirective} instead:
+ *
+ * ```html
+ * <button
+ *   focuslyShortcut
+ *   [focuslyKey]="'enter'"
+ *   (focuslyAction)="onEnterKey()"
+ * >
+ * ```
+ */
 @Component({
   selector: 'focusly-listener',
   templateUrl: './focusly-listener.component.html',
