@@ -89,10 +89,37 @@
 
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
-<app-base-full-component [buyOrSellTemplate]="buySell" 
-    [quantityTemplate]="quantity" 
-    [tradeDateTemplate]="tradeDate" 
-    [urgencyTemplate]="urgency" 
-    [ratingTemplate]="rating"
-    [actionTemplate]="action">
-</app-base-full-component>
+
+
+<nz-tabs [focuslyGroupHost]="3"
+        [nzSelectedIndex]="selectedIndex()"
+        (nzSelectedIndexChange)="selectedIndex.set($event)">
+  <nz-tab nzTitle="Customer Data"
+      focuslyShortcut
+      [focuslyKey]="'enter'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="selectIndex(1)"
+      >
+
+  </nz-tab>
+  <nz-tab nzTitle="Trading Data"
+      focuslyShortcut
+      [focuslyKey]="'2'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="selectedIndex.set(2)">
+    <app-base-full-component [buyOrSellTemplate]="buySell" 
+        [quantityTemplate]="quantity" 
+        [tradeDateTemplate]="tradeDate" 
+        [urgencyTemplate]="urgency" 
+        [ratingTemplate]="rating"
+        [actionTemplate]="action">
+    </app-base-full-component>
+  </nz-tab>
+  <nz-tab nzTitle="Audit History"
+        focuslyShortcut
+      [focuslyKey]="'3'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="selectedIndex.set(3)">
+
+  </nz-tab>
+</nz-tabs>

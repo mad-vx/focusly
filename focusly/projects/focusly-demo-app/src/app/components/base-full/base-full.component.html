@@ -27,7 +27,7 @@
               <ng-container
                 *ngTemplateOutlet="
                   quantityTemplate;
-                  context: { $implicit: row, row: row, group: 1 }
+                  context: { $implicit: row, row: row, group: 3 }
                 "
               ></ng-container>
             </td>
@@ -35,7 +35,7 @@
               <ng-container
                 *ngTemplateOutlet="
                   buyOrSellTemplate;
-                  context: { $implicit: row, row: row, group: 1 }
+                  context: { $implicit: row, row: row, group: 3 }
                 "
               ></ng-container>
             </td>
@@ -46,7 +46,6 @@
                 focusly
                 class="cell-checkbox"
                 type="checkbox"
-                [focuslyGroup]="1"
                 [focuslyRow]="row.rowIndex"
                 [focuslyColumn]="2"
                 [checked]="row.riskOk"
@@ -56,12 +55,11 @@
             <td>
               <input
                 [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
-                focusly
+                
                 class="cell-input wide"
                 type="text"
-                [focuslyGroup]="1"
-                [focuslyRow]="row.rowIndex"
-                [focuslyColumn]="3"
+              
+         
                 [value]="row.notes"
                 placeholder="Internal note…"
               />
@@ -71,7 +69,7 @@
               <ng-container
                 *ngTemplateOutlet="
                   tradeDateTemplate;
-                  context: { $implicit: row, row: row, group: 1 }
+                  context: { $implicit: row, row: row, group: 3 }
                 "
               ></ng-container>
             </td>
@@ -80,7 +78,7 @@
               <ng-container
                 *ngTemplateOutlet="
                   urgencyTemplate;
-                  context: { $implicit: row, row: row, group: 1 }
+                  context: { $implicit: row, row: row, group: 3 }
                 "
               ></ng-container>
             </td>
@@ -89,7 +87,7 @@
               <ng-container
                 *ngTemplateOutlet="
                   ratingTemplate;
-                  context: { $implicit: row, row: row, group: 1 }
+                  context: { $implicit: row, row: row, group: 3 }
                 "
               ></ng-container>
             </td>
@@ -98,7 +96,7 @@
               <ng-container
                 *ngTemplateOutlet="
                   actionTemplate;
-                  context: { $implicit: row, row: row, group: 1 }
+                  context: { $implicit: row, row: row, group: 3 }
                 "
               ></ng-container>
             </td>
