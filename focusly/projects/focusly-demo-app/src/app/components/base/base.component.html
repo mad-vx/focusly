@@ -17,9 +17,10 @@
 
     <table class="data-grid" 
       [focuslyGroupHost]="1"
+      focuslyShortcutHost
       focuslyShortcut
-      [focuslyKey]="'enter'"
-      [focuslyShortcutScope]="'group'"
+      [focuslyAllowInTextInput]="true"
+      [focuslyKey]="'alt+s'"
       (focuslyAction)="onEnterKey()"
     >
       <thead>
@@ -52,7 +53,7 @@
 
             <td>
               <ng-container
-                *ngTemplateOutlet="
+                *ngTemplateOutlet="   
                   buyOrSellTemplate;
                   context: { $implicit: row, row: row, group: 1 }
                 "
@@ -110,9 +111,10 @@
 
     <table class="data-grid" 
       [focuslyGroupHost]="2"
+      focuslyShortcutHost
       focuslyShortcut
-      [focuslyKey]="'enter'"
-      [focuslyShortcutScope]="'group'"
+      [focuslyAllowInTextInput]="true"
+      [focuslyKey]="'CTRL+S'"
       (focuslyAction)="onEnterKey2()">
       <thead>
         <tr>

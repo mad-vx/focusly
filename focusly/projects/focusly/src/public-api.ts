@@ -1,6 +1,7 @@
 export * from './lib/directives/focus.directive';
 export * from './lib/directives/focusly-group-host.directive';
 export * from './lib/directives/focusly-shortcut.directive';
+export * from './lib/directives/focusly-shortcut-host.directive';
 export * from './lib/components/focusly-listener/focusly-listener.component';
 export * from './lib/components/focusly-subscriber/focusly-subscriber.component';
 export * from './lib/models/focus-service-api.model';
