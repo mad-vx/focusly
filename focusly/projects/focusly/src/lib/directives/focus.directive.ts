@@ -158,6 +158,13 @@ export class FocuslyDirective implements OnInit, OnDestroy {
   private syncRegistration(): void {
     const next = this.focusItem;
 
+    if (this.lastRegistered &&
+        this.lastRegistered.groupId === next.groupId &&
+        this.lastRegistered.row === next.row &&
+        this.lastRegistered.column === next.column) {
+      return;
+    }
+
     // Only register when everything is present
     if (next.groupId == null || next.row == null || next.column == null) {
       // If we were previously registered, clean up

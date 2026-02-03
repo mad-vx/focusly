@@ -79,6 +79,54 @@ export class FocuslyService implements FocuslyServiceApi {
     return this.keyHandlers()[chord];
   }
 
+  tryHandleShortcutEvent(
+    e: KeyboardEvent,
+    context?: { groupId?: number; elementId?: string },
+  ): boolean {
+    const handler = this.getShortcutHandlerForKeyboardEvent(e, context);
+    if (!handler) return false;
+    handler(e);
+    return true;
+  }
+
+ getShortcutHandlerForKeyboardEvent(
+      e: KeyboardEvent,
+      context?: { groupId?: number; elementId?: string },
+    ): ((e: KeyboardEvent) => void) | undefined {
+    const chord = this.chordFromKeyboardEvent(e);
+
+    const inTextInput = this.isTextInputTarget(e.target);
+    const current = this.currentFocus();
+
+    const currentElementId = context?.elementId ?? current?.id;
+    const currentGroupId = context?.groupId ?? current?.groupId;
+
+    // 1) element scoped
+    if (currentElementId) {
+      const store = this.shortcutByElement.get(currentElementId);
+      const list = store?.byChord.get(chord);
+      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      if (hit) return (evt) => hit.invoke(evt);
+    }
+
+    // 2) group scoped
+    if (currentGroupId != null) {
+      const store = this.shortcutByGroup.get(currentGroupId);
+      const list = store?.byChord.get(chord);
+      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      if (hit) return (evt) => hit.invoke(evt);
+    }
+
+    // 3) global
+    {
+      const list = this.shortcutGlobal.byChord.get(chord);
+      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      if (hit) return (evt) => hit.invoke(evt);
+    }
+
+    return undefined;
+  }
+
   updateKeymap(partial: FocuslyKeyMap) {
     this._keymap.update((current) => ({ ...current, ...partial }));
   }
@@ -223,6 +271,8 @@ export class FocuslyService implements FocuslyServiceApi {
     // Basic validation
     if (!reg.keys?.length) return;
 
+    this.unregisterShortcut(reg.id);
+
     if (reg.scope === 'global') {
       this.addToStore(this.shortcutGlobal, reg);
       return;
@@ -244,7 +294,6 @@ export class FocuslyService implements FocuslyServiceApi {
   }
 
   unregisterShortcut(id: string): void {
-    // We don’t know where it lives, so remove from all stores fast via byId checks.
     // Global
     if (this.shortcutGlobal.byId.has(id)) this.removeFromStore(this.shortcutGlobal, id);
 
@@ -253,7 +302,6 @@ export class FocuslyService implements FocuslyServiceApi {
       if (store.byId.has(id)) {
         this.removeFromStore(store, id);
         if (store.byId.size === 0) this.shortcutByGroup.delete(groupId);
-        return;
       }
     }
 
@@ -262,7 +310,6 @@ export class FocuslyService implements FocuslyServiceApi {
       if (store.byId.has(id)) {
         this.removeFromStore(store, id);
         if (store.byId.size === 0) this.shortcutByElement.delete(elementId);
-        return;
       }
     }
   }
@@ -383,42 +430,6 @@ export class FocuslyService implements FocuslyServiceApi {
       if (idx >= 0) list.splice(idx, 1);
       if (list.length === 0) store.byChord.delete(chord);
     }
-  }
-
-  private getShortcutHandlerForKeyboardEvent(e: KeyboardEvent): ((e: KeyboardEvent) => void) | undefined {
-    const chord = this.chordFromKeyboardEvent(e);
-
-    // Optional: block when typing
-    const inTextInput = this.isTextInputTarget(e.target);
-    
-    const current = this.currentFocus();
-    const currentElementId = current?.id;
-    const currentGroupId = current?.groupId;
-
-    // 1) element scoped
-    if (currentElementId) {
-      const store = this.shortcutByElement.get(currentElementId);
-      const list = store?.byChord.get(chord);
-      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
-      if (hit) return (evt) => hit.invoke(evt);
-    }
-
-    // 2) group scoped
-    if (currentGroupId != null) {
-      const store = this.shortcutByGroup.get(currentGroupId);
-      const list = store?.byChord.get(chord);
-      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
-      if (hit) return (evt) => hit.invoke(evt);
-    }
-
-    // 3) global
-    {
-      const list = this.shortcutGlobal.byChord.get(chord);
-      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
-      if (hit) return (evt) => hit.invoke(evt);
-    }
-
-    return undefined;
   }
 
   private isTextInputTarget(target: EventTarget | null): boolean {
