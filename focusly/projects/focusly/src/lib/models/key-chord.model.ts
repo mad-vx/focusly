@@ -22,6 +22,7 @@ function canonicaliseKeyChord(config: KeyChordConfig): string {
   if (config.alt) parts.push('alt');
   if (config.shift) parts.push('shift');
   if (config.ctrl) parts.push('ctrl');
+  if (config.meta) parts.push('meta');
 
   parts.push(config.key.toLowerCase());
 
