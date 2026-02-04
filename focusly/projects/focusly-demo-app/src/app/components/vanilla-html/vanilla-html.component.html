@@ -25,5 +25,101 @@
   </select>
 </ng-template>
 
+<ng-template #tradeDate let-row let-group="group">
+  <input
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-4'"
+    focusly
+    class="cell-input"
+    type="date"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="4"
+    [value]="row.tradeDate"
+  />
+</ng-template>
+
+<ng-template #urgency let-row let-group="group">
+  <div class="cell-radio-group">
+    <label>
+      <input
+        type="radio"
+        focusly
+        [focuslyGroup]="group"
+        [focuslyRow]="row.rowIndex"
+        [focuslyColumn]="5"
+        name="urgency-{{ row.rowIndex }}"
+        value="Low"
+        [checked]="row.urgency === 'Low'"
+      />
+      Low
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        focusly
+        [focuslyGroup]="group"
+        [focuslyRow]="row.rowIndex"
+        [focuslyColumn]="5"
+        name="urgency-{{ row.rowIndex }}"
+        value="Medium"
+        [checked]="row.urgency === 'Medium'"
+      />
+      Med
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        focusly
+        [focuslyGroup]="group"
+        [focuslyRow]="row.rowIndex"
+        [focuslyColumn]="5"
+        name="urgency-{{ row.rowIndex }}"
+        value="High"
+        [checked]="row.urgency === 'High'"
+      />
+      High
+    </label>
+  </div>
+</ng-template>
+
+<ng-template #rating let-row let-group="group">
+  <input
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-6'"
+    focusly
+    class="cell-slider"
+    type="range"
+    min="0"
+    max="100"
+    step="5"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="6"
+    [value]="row.rating"
+  />
+</ng-template>
+
+<ng-template #action let-row let-group="group">
+  <button
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-7'"
+    focusly
+    type="button"
+    class="cell-action-btn"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="7"
+  >
+    Amend
+  </button>
+</ng-template>
+
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
+<app-base-full-component [buyOrSellTemplate]="buySell" 
+    [quantityTemplate]="quantity" 
+    [tradeDateTemplate]="tradeDate" 
+    [urgencyTemplate]="urgency" 
+    [ratingTemplate]="rating"
+    [actionTemplate]="action">
+</app-base-full-component>

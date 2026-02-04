@@ -25,5 +25,101 @@
   </nz-select>
 </ng-template>
 
+<ng-template #tradeDate let-row let-group="group">
+  <nz-date-picker
+    focusly
+    class="cell-input"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-4'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="4"
+    nzFormat="yyyy-MM-dd"
+    nzPlaceHolder="Trade date"
+  ></nz-date-picker>
+</ng-template>
+
+<ng-template #urgency let-row let-group="group">
+  <nz-radio-group
+    focusly
+    class="cell-input"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-5'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="5"
+    [(ngModel)]="row.urgency"
+    nzButtonStyle="solid"
+  >
+    <label nz-radio-button nzValue="Low">Low</label>
+    <label nz-radio-button nzValue="Medium">Med</label>
+    <label nz-radio-button nzValue="High">High</label>
+  </nz-radio-group>
+</ng-template>
+
+<ng-template #rating let-row let-group="group">
+  <nz-slider
+    focusly
+    class="cell-slider"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-6'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="6"
+    [(ngModel)]="row.rating"
+    [nzMin]="0"
+    [nzMax]="100"
+    [nzStep]="5"
+    [nzTooltipVisible]="'default'"
+  ></nz-slider>
+</ng-template>
+
+<ng-template #action let-row let-group="group">
+  <button
+    nz-button
+    nzType="default"
+    nzSize="small"
+    focusly
+    class="cell-action-btn"
+    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-7'"
+    [focuslyGroup]="group"
+    [focuslyRow]="row.rowIndex"
+    [focuslyColumn]="7"
+  >
+    Amend
+  </button>
+</ng-template>
+
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
+
+
+<nz-tabs [focuslyGroupHost]="3"
+        [nzSelectedIndex]="selectedIndex()"
+        (nzSelectedIndexChange)="selectedIndex.set($event)">
+  <nz-tab nzTitle="Customer Data"
+      focuslyShortcut
+      [focuslyKey]="'enter'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="selectIndex(1)"
+      >
+
+  </nz-tab>
+  <nz-tab nzTitle="Trading Data"
+      focuslyShortcut
+      [focuslyKey]="'2'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="selectedIndex.set(2)">
+    <app-base-full-component [buyOrSellTemplate]="buySell" 
+        [quantityTemplate]="quantity" 
+        [tradeDateTemplate]="tradeDate" 
+        [urgencyTemplate]="urgency" 
+        [ratingTemplate]="rating"
+        [actionTemplate]="action">
+    </app-base-full-component>
+  </nz-tab>
+  <nz-tab nzTitle="Audit History"
+        focuslyShortcut
+      [focuslyKey]="'3'"
+      [focuslyShortcutScope]="'group'"
+      (focuslyAction)="selectedIndex.set(3)">
+
+  </nz-tab>
+</nz-tabs>

@@ -1,0 +1,110 @@
+<div class="panel-grid">
+  <section class="panel">
+    <table class="data-grid">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Qty</th>
+          <th>Side</th>
+          <th>Risk OK?</th>
+          <th>Desk Notes</th>
+          <th>Trade Date</th>
+          <th>Urgency</th>
+          <th>Rating</th>
+          <th>Action</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (row of tradeRows; track row.symbol) {
+          <tr>
+            <td class="cell-label">
+              <span class="ticker">{{ row.symbol }}</span>
+              <span class="currency">{{ row.ccy }}</span>
+            </td>
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  quantityTemplate;
+                  context: { $implicit: row, row: row, group: 3 }
+                "
+              ></ng-container>
+            </td>
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  buyOrSellTemplate;
+                  context: { $implicit: row, row: row, group: 3 }
+                "
+              ></ng-container>
+            </td>
+
+            <td class="cell-center">
+              <input
+                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
+                focusly
+                class="cell-checkbox"
+                type="checkbox"
+                [focuslyRow]="row.rowIndex"
+                [focuslyColumn]="2"
+                [checked]="row.riskOk"
+              />
+            </td>
+
+            <td>
+              <input
+                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
+                
+                class="cell-input wide"
+                type="text"
+              
+         
+                [value]="row.notes"
+                placeholder="Internal note…"
+              />
+            </td>
+
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  tradeDateTemplate;
+                  context: { $implicit: row, row: row, group: 3 }
+                "
+              ></ng-container>
+            </td>
+
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  urgencyTemplate;
+                  context: { $implicit: row, row: row, group: 3 }
+                "
+              ></ng-container>
+            </td>
+
+            <td>
+              <ng-container
+                *ngTemplateOutlet="
+                  ratingTemplate;
+                  context: { $implicit: row, row: row, group: 3 }
+                "
+              ></ng-container>
+            </td>
+
+            <td class="cell-center">
+              <ng-container
+                *ngTemplateOutlet="
+                  actionTemplate;
+                  context: { $implicit: row, row: row, group: 3 }
+                "
+              ></ng-container>
+            </td>
+
+            <td class="cell-center"></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</div>

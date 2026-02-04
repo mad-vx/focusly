@@ -1,6 +1,41 @@
 {
   "name": "@zaybu/focusly-material",
   "version": "1.2.0",
+  "description": "Angular Material extension package for the Focusly keyboard navigation framework",
+  "keywords": [
+    "angular",
+    "angular library",
+    "angular directive",
+    "focus",
+    "focus management",
+    "keyboard",
+    "keyboard navigation",
+    "keyboard shortcuts",
+    "angular material",
+    "accessibility",
+    "a11y",
+    "forms",
+    "tables",
+    "grids",
+    "navigation",
+    "signals",
+    "angular signals",
+    "ux",
+    "ui",
+    "usability",
+    "frontend"
+  ],
+  "author": "Mark Evans",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mad-vx/focusly.git"
+  },
+  "homepage": "https://github.com/mad-vx/focusly#readme",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/core": ">=16 <22",
     "@angular/common": ">=16 <22",
