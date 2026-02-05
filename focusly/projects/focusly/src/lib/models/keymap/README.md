@@ -1,0 +1,2 @@
+This package entry point was created because the Playwright tests were failing with an error 'Error: Standard Angular field decorators are not supported in JIT mode.'
+The types in this folder are pure types and are exported separately so that the tests can pull in the types without pulling in angular decorators
