@@ -1,6 +1,9 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideFocuslyKeymap, createKeyChord } from '@zaybu/focusly';
+import { provideFocuslyKeymap } from '@zaybu/focusly';
+import { createKeyChord } from '@zaybu/focusly/src/keymap';
+//import { createKeyChord } from '../../../focusly/src/lib/models/keymap/public-api';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),

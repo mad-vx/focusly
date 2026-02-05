@@ -1,9 +1,8 @@
 import { Component, Input, signal, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent, FocuslyShortcutDirective } from '@zaybu/focusly';
+import { FocuslyGroupHostDirective, FocuslyDirective, FocuslyShortcutDirective } from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { KeyDisplayComponent } from '../key-display.component';
-import { FocuslyGroupHostDirective } from '@zaybu/focusly';
 
 @Component({
   selector: 'app-base-component',

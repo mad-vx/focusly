@@ -7,6 +7,10 @@
     "strict": true,
     "paths": {
       "@zaybu/focusly": ["./dist/focusly", "./projects/focusly/src/public-api.ts"],
+      "@zaybu/focusly/src/keymap": [
+        "./dist/focusly/src/keymap",
+        "./projects/focusly/src/lib/models/keymap/public-api.ts"
+      ],
       "@zaybu/focusly-nz": ["./dist/focusly-nz"],
       "@zaybu/focusly-config": ["./dist/focusly-config"],
       "@zaybu/focusly-material": ["./dist/focusly-material"]
