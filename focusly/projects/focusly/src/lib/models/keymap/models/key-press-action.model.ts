@@ -1,4 +1,4 @@
-import { createKeyChord } from './key-chord.model';
+import { createKeyChord } from "./key-chord.model";
 
 export type KeyPressAction =
   | 'up'

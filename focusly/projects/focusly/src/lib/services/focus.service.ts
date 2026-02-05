@@ -7,8 +7,8 @@ import {
   FocuslyKeyChord,
   FocuslyKeyMap,
   KeyPressAction,
-} from '../models/key-press-action.model';
-import { createKeyChord } from '../models/key-chord.model';
+} from '../models/keymap/models/key-press-action.model';
+import { createKeyChord } from '../models/keymap/models/key-chord.model';
 import { FocuslyServiceApi } from '../models/focus-service-api.model';
 import { FocuslyShortcutRegistration, ShortcutStore } from '../models/short-cut.model';
 

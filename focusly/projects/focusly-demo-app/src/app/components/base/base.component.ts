@@ -4,6 +4,7 @@ import { FocuslyGroupHostDirective, FocuslyShortcutHostDirective, FocuslyDirecti
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { tradeData } from '../../model/trade-data.model';
 import { KeyDisplayComponent } from '../key-display.component';
+
 @Component({
   selector: 'app-base-component',
   imports: [

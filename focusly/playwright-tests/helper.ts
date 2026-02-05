@@ -1,5 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { FocuslyKeyChord } from '@zaybu/focusly';
+import { FocuslyKeyChord } from '@zaybu/focusly/src/keymap';
 import { TestKeyMap } from './keymaps';
 
 export const TOOLKITS = ['Vanilla', 'NG-Zorro', 'Material'] as const;

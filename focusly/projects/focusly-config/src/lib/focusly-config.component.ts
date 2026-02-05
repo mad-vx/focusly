@@ -9,10 +9,13 @@ import {
   signal,
 } from '@angular/core';
 import {
-  FocuslyKeyMap,
-  FocuslyKeyChord,
-  KeyPressAction,
   FOCUSLY_SERVICE_API,
+} from '@zaybu/focusly';
+
+import {
+  KeyPressAction,
+  FocuslyKeyMap,
+  FocuslyKeyChord
 } from '@zaybu/focusly';
 
 type ModifierOption = 'none' | 'ctrl' | 'alt' | 'shift';

@@ -1,5 +1,5 @@
 import { InjectionToken, inject, Signal } from '@angular/core';
-import { FocuslyKeyMap } from '../models/key-press-action.model';
+import { FocuslyKeyMap } from './keymap/models/key-press-action.model';
 import { FocuslyService } from '../services/focus.service';
 
 export interface FocuslyServiceApi {

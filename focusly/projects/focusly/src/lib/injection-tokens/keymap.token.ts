@@ -1,5 +1,5 @@
 import { InjectionToken, ValueProvider } from '@angular/core';
-import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyMap } from '../models/key-press-action.model';
+import { DEFAULT_FOCUSLY_KEYMAP, FocuslyKeyMap } from '../models/keymap/models/key-press-action.model';
 
 export const FOCUSLY_KEYMAP = new InjectionToken<FocuslyKeyMap>('FOCUSLY_KEYMAP', {
   providedIn: 'root',
