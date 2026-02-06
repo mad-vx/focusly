@@ -1,6 +1,6 @@
 <ng-template #quantity let-row let-group="group">
   <input
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-0'"
     focusly
     class="cell-input num"
     type="number"
@@ -13,7 +13,7 @@
 
 <ng-template #buySell let-row let-group="group">
   <select
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-1'"
     focusly
     class="cell-input"
     [focuslyGroup]="group"
@@ -27,7 +27,7 @@
 
 <ng-template #tradeDate let-row let-group="group">
   <input
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-4'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-4'"
     focusly
     class="cell-input"
     type="date"
@@ -86,7 +86,7 @@
 
 <ng-template #rating let-row let-group="group">
   <input
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-6'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-6'"
     focusly
     class="cell-slider"
     type="range"
@@ -102,7 +102,7 @@
 
 <ng-template #action let-row let-group="group">
   <button
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-7'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-7'"
     focusly
     type="button"
     class="cell-action-btn"

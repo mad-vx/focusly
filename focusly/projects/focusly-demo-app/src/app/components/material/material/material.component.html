@@ -4,7 +4,7 @@
     <input
       matInput
       type="number"
-      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+      [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-0'"
       focusly
       placeholder="Qty"
       [focuslyGroup]="group"
@@ -20,7 +20,7 @@
     <mat-label>Side</mat-label>
     <mat-select
       mat-select-focusly
-      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
+      [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-1'"
       [focuslyGroup]="group"
       [focuslyRow]="row.rowIndex"
       [focuslyColumn]="1"

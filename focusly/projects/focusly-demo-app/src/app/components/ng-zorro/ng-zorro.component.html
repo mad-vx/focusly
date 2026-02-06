@@ -1,6 +1,6 @@
 <ng-template #quantity let-row let-group="group">
   <nz-input-number
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-0'"
     nz-input-number-focusly
     class="cell-input num"
     [focuslyGroup]="group"
@@ -12,7 +12,7 @@
 
 <ng-template #buySell let-row let-group="group">
   <nz-select
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-1'"
     nz-select-focusly
     class="cell-input"
     [focuslyGroup]="group"
@@ -29,7 +29,7 @@
   <nz-date-picker
     focusly
     class="cell-input"
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-4'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-4'"
     [focuslyGroup]="group"
     [focuslyRow]="row.rowIndex"
     [focuslyColumn]="4"
@@ -42,7 +42,7 @@
   <nz-radio-group
     focusly
     class="cell-input"
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-5'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-5'"
     [focuslyGroup]="group"
     [focuslyRow]="row.rowIndex"
     [focuslyColumn]="5"
@@ -59,7 +59,7 @@
   <nz-slider
     focusly
     class="cell-slider"
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-6'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-6'"
     [focuslyGroup]="group"
     [focuslyRow]="row.rowIndex"
     [focuslyColumn]="6"
@@ -78,7 +78,7 @@
     nzSize="small"
     focusly
     class="cell-action-btn"
-    [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-7'"
+    [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-7'"
     [focuslyGroup]="group"
     [focuslyRow]="row.rowIndex"
     [focuslyColumn]="7"
