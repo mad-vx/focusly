@@ -1,5 +1,13 @@
-import { Component, signal } from '@angular/core';
-import { FocuslyDirective, FocuslyGroupHostDirective } from '@zaybu/focusly';
+import { Component, inject, signal } from '@angular/core';
+import { 
+  FocuslyTargetDirective, 
+  FocuslyDirective, 
+  FocuslyGroupHostDirective, 
+  FocuslyShortcutHostDirective, 
+  FocuslyShortcutDirective, 
+  FocuslyShortcuts, 
+  FOCUSLY_SERVICE_API  }
+from '@zaybu/focusly';
 import { NzInputNumberFocusDirective, NzSelectFocusDirective } from '@zaybu/focusly-nz';
 import { BaseComponent } from '../base/base.component';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +20,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { BaseFullComponent } from '../base-full/base-full.component';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { FocuslyShortcutDirective } from '@zaybu/focusly';
+
 @Component({
   selector: 'app-ng-zorro',
   imports: [
@@ -30,15 +38,25 @@ import { FocuslyShortcutDirective } from '@zaybu/focusly';
     NzButtonModule,
     NzTabsModule,
     FocuslyDirective,
+    FocuslyTargetDirective,
     FocuslyGroupHostDirective,
-    FocuslyShortcutDirective
+    FocuslyShortcutDirective,
+    FocuslyShortcutHostDirective
   ],
   templateUrl: './ng-zorro.component.html',
   standalone: true,
 })
 export class NgZorroComponent extends BaseDemoGrid {
   override title: string = 'NgZorro - Focusly Demo';
+  private focuslyService = inject(FOCUSLY_SERVICE_API);
 
+  focuslyShortcuts: FocuslyShortcuts = {
+    '2': () => {
+       this.selectIndex(2);
+       this.focuslyService.setFocusByElementId('custInput1');
+    }
+  };
+  
   selectedIndex = signal(0);
   constructor() {
     super();

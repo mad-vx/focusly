@@ -92,21 +92,27 @@
 
 
 <nz-tabs [focuslyGroupHost]="3"
+        focuslyShortcutHost
+        [focuslyShortcuts]="focuslyShortcuts"
         [nzSelectedIndex]="selectedIndex()"
-        (nzSelectedIndexChange)="selectedIndex.set($event)">
-  <nz-tab nzTitle="Customer Data"
+        (nzSelectedIndexChange)="selectedIndex.set($event)"
+>
+  <nz-tab nzTitle="Customer Data"       
       focuslyShortcut
-      [focuslyKey]="'enter'"
-      [focuslyShortcutScope]="'group'"
-      (focuslyAction)="selectIndex(1)"
-      >
+      [focuslyKey]="'1'"
+      (focuslyAction)="selectIndex(1)" >
+      <div>
+        <div>CUSTOMER DATA</div>
+        <input        
+          focusly-target
+          [focuslyElementId]="'custInput1'"
 
+          type="text">
+      </div>
   </nz-tab>
-  <nz-tab nzTitle="Trading Data"
-      focuslyShortcut
-      [focuslyKey]="'2'"
-      [focuslyShortcutScope]="'group'"
-      (focuslyAction)="selectedIndex.set(2)">
+  <nz-tab nzTitle="Trading Data">
+          <div>TRADING DATA</div>
+    <input type="text">
     <app-base-full-component [buyOrSellTemplate]="buySell" 
         [quantityTemplate]="quantity" 
         [tradeDateTemplate]="tradeDate" 
@@ -115,11 +121,10 @@
         [actionTemplate]="action">
     </app-base-full-component>
   </nz-tab>
-  <nz-tab nzTitle="Audit History"
-        focuslyShortcut
-      [focuslyKey]="'3'"
-      [focuslyShortcutScope]="'group'"
-      (focuslyAction)="selectedIndex.set(3)">
-
+  <nz-tab nzTitle="Audit History">
+      <div>
+        <div>AUDIT DATA</div>
+        <input type="text">
+      </div>
   </nz-tab>
 </nz-tabs>

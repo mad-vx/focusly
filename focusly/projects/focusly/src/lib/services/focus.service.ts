@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FocusItem } from '../models/focus-item.model';
+import { FocuslyItem, FocuslyCellItem, isCellItem } from '../models/focus-item.model';
 import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
 import {
   DEFAULT_FOCUSLY_KEYMAP,
@@ -8,24 +8,24 @@ import {
   FocuslyKeyMap,
   KeyPressAction,
 } from '../models/keymap/models/key-press-action.model';
-import { createKeyChord } from '../models/keymap/models/key-chord.model';
+import { chordFromKeyboardEvent } from '../models/keymap/models/key-chord.model';
 import { FocuslyServiceApi } from '../models/focus-service-api.model';
 import { FocuslyShortcutRegistration, ShortcutStore } from '../models/short-cut.model';
 
 type GroupStore = {
-  byId: Map<string, FocusItem>;
-  byCell: Map<string, FocusItem>; // key = `${row}:${col}`
+  byId: Map<string, FocuslyItem>;
+  byCell: Map<string, FocuslyCellItem>;
   maxRow: number;
   maxCol: number;
 };
 
 @Injectable({ providedIn: 'root' })
 export class FocuslyService implements FocuslyServiceApi {
-  private endStopSubject = new Subject<FocusItem>();
+  private endStopSubject = new Subject<FocuslyItem>();
   readonly endStopHit$ = this.endStopSubject.asObservable();
 
   private focusRegistry = new Map<number, GroupStore>();
-  readonly currentFocus = signal<FocusItem | null>(null);
+  readonly currentFocus = signal<FocuslyItem | null>(null);
 
   private focusKeyMap = inject<FocuslyKeyMap>(FOCUSLY_KEYMAP);
   private readonly _keymap = signal<FocuslyKeyMap>({
@@ -70,12 +70,14 @@ export class FocuslyService implements FocuslyServiceApi {
   private shortcutGlobal: ShortcutStore = { byChord: new Map(), byId: new Map() };
   private shortcutByGroup = new Map<number, ShortcutStore>();
   private shortcutByElement = new Map<string, ShortcutStore>();
+  private pendingFocusElementId = signal<string | null>(null);
+  private pendingFocusAttempts = 0;
 
   getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
     const shortcut = this.getShortcutHandlerForKeyboardEvent(e);
     if (shortcut) return () => shortcut(e);
 
-    const chord = this.chordFromKeyboardEvent(e);
+    const chord = chordFromKeyboardEvent(e);
     return this.keyHandlers()[chord];
   }
 
@@ -93,7 +95,7 @@ export class FocuslyService implements FocuslyServiceApi {
       e: KeyboardEvent,
       context?: { groupId?: number; elementId?: string },
     ): ((e: KeyboardEvent) => void) | undefined {
-    const chord = this.chordFromKeyboardEvent(e);
+    const chord = chordFromKeyboardEvent(e);
 
     const inTextInput = this.isTextInputTarget(e.target);
     const current = this.currentFocus();
@@ -106,7 +108,7 @@ export class FocuslyService implements FocuslyServiceApi {
       const store = this.shortcutByElement.get(currentElementId);
       const list = store?.byChord.get(chord);
       const hit = list?.find(r => r.allowInTextInput || !inTextInput);
-      if (hit) return (evt) => hit.invoke(evt);
+      if (hit) return (evt) => hit.handler(evt);
     }
 
     // 2) group scoped
@@ -114,14 +116,14 @@ export class FocuslyService implements FocuslyServiceApi {
       const store = this.shortcutByGroup.get(currentGroupId);
       const list = store?.byChord.get(chord);
       const hit = list?.find(r => r.allowInTextInput || !inTextInput);
-      if (hit) return (evt) => hit.invoke(evt);
+      if (hit) return (evt) => hit.handler(evt);
     }
 
     // 3) global
     {
       const list = this.shortcutGlobal.byChord.get(chord);
       const hit = list?.find(r => r.allowInTextInput || !inTextInput);
-      if (hit) return (evt) => hit.invoke(evt);
+      if (hit) return (evt) => hit.handler(evt);
     }
 
     return undefined;
@@ -154,9 +156,9 @@ export class FocuslyService implements FocuslyServiceApi {
     let maxRow = 0;
     let maxCol = 0;
 
-    for (const item of store.byId.values()) {
-      if (item.row != null && item.row > maxRow) maxRow = item.row;
-      if (item.column != null && item.column > maxCol) maxCol = item.column;
+    for (const item of store.byCell.values()) {
+      if (item.row > maxRow) maxRow = item.row;
+      if (item.column > maxCol) maxCol = item.column;
     }
 
     store.maxRow = maxRow;
@@ -165,7 +167,7 @@ export class FocuslyService implements FocuslyServiceApi {
 
   // ---------------- Public API ----------------
 
-  onFocus(focus: FocusItem): void {
+  onFocus(focus: FocuslyItem): void {
     const store = this.getStore(focus.groupId);
     if (!store) {
       this.currentFocus.set(focus);
@@ -176,7 +178,7 @@ export class FocuslyService implements FocuslyServiceApi {
     this.currentFocus.set(found ?? focus);
   }
 
-  setFocus(focus: FocusItem): void {
+  setFocus(focus: FocuslyItem): void {
     this.onFocus(focus);
   }
 
@@ -198,50 +200,57 @@ export class FocuslyService implements FocuslyServiceApi {
 
   home(): void {
     const currentFocus = this.currentFocus();
-    if (!currentFocus) return;
+    if (!currentFocus || !isCellItem(currentFocus)) return;
     this.moveColumn(-currentFocus.column, (col) => col >= 0);
   }
 
   end(): void {
     const currentFocus = this.currentFocus();
-    if (!currentFocus) return;
+    if (!currentFocus || !isCellItem(currentFocus)) return;
     const max = this.currentFocusMaxColumn();
     this.moveColumn(max - currentFocus.column, (col) => col <= max);
   }
 
   pageUp(): void {
     const currentFocus = this.currentFocus();
-    if (!currentFocus) return;
+    if (!currentFocus || !isCellItem(currentFocus)) return;
     this.moveRow(-currentFocus.row, (row) => row >= 0);
   }
 
   pageDown(): void {
     const currentFocus = this.currentFocus();
-    if (!currentFocus) return;
+    if (!currentFocus || !isCellItem(currentFocus)) return;
     const max = this.currentFocusMaxRow();
     this.moveRow(max - currentFocus.row, (row) => row <= max);
   }
 
-  registerItemFocus(focus: FocusItem): void {
-    if (focus.groupId === undefined || focus.column === undefined || focus.row === undefined)
-      return;
+  registerItemFocus(focus: FocuslyItem): void {
+    if (focus.groupId === null || !focus.id) return;
 
     const store = this.getOrCreateStore(focus.groupId);
 
     // If this id already exists, remove its old cell mapping (row/col might have changed)
     const existing = store.byId.get(focus.id);
-    if (existing) {
-      store.byCell.delete(this.cellKey(existing.row!, existing.column!));
+    if (existing && isCellItem(existing)) {
+      store.byCell.delete(this.cellKey(existing.row, existing.column));
     }
 
     store.byId.set(focus.id, focus);
-    store.byCell.set(this.cellKey(focus.row, focus.column), focus);
 
-    if (focus.row > store.maxRow) store.maxRow = focus.row;
-    if (focus.column > store.maxCol) store.maxCol = focus.column;
+    if (isCellItem(focus)) {
+      store.byCell.set(this.cellKey(focus.row, focus.column), focus);
+      if (focus.row > store.maxRow) store.maxRow = focus.row;
+      if (focus.column > store.maxCol) store.maxCol = focus.column;
+    }
+
+    const pending = this.pendingFocusElementId();
+    if (pending && focus.id === pending) {
+      this.setFocus(focus);
+      this.pendingFocusElementId.set(null);
+    }
   }
 
-  unRegisterItemFocus(focus: FocusItem): void {
+  unRegisterItemFocus(focus: FocuslyItem): void {
     const store = this.getStore(focus.groupId);
     if (!store) return;
 
@@ -249,16 +258,17 @@ export class FocuslyService implements FocuslyServiceApi {
     if (!existing) return;
 
     store.byId.delete(focus.id);
-    store.byCell.delete(this.cellKey(existing.row!, existing.column!));
 
-    if (store.byId.size === 0) {
-      this.focusRegistry.delete(focus.groupId!);
-      return;
+    if (isCellItem(existing)) {
+      store.byCell.delete(this.cellKey(existing.row, existing.column));
+
+      if (existing.row === store.maxRow || existing.column === store.maxCol) {
+        this.recomputeMaxima(store);
+      }
     }
 
-    // If we removed a max boundary recompute
-    if (existing.row === store.maxRow || existing.column === store.maxCol) {
-      this.recomputeMaxima(store);
+    if (store.byId.size === 0) {
+      this.focusRegistry.delete(focus.groupId);
     }
   }
 
@@ -314,13 +324,74 @@ export class FocuslyService implements FocuslyServiceApi {
     }
   }
 
+  setFocusById(id: string, groupId?: number ): boolean {
+    const targetId = (id ?? '').trim();
+    if (!targetId) return false;
+
+    // if caller knows the group, search that group first
+    if (groupId != null) {
+      const store = this.focusRegistry.get(groupId);
+      const item = store?.byId.get(targetId);
+      if (item) {
+        this.setFocus(item);
+        return true;
+      }
+    }
+
+    // otherwise search all groups (cheap unless you have huge registries)
+    for (const store of this.focusRegistry.values()) {
+      const item = store.byId.get(targetId);
+      if (item) {
+        this.setFocus(item);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  setFocusByElementId(id: string, groupId?: number): boolean {
+    const targetId = (id ?? '').trim();
+    if (!targetId) return false;
+
+    // Try immediately
+    if (this.setFocusById(targetId, groupId)) {
+      return true;
+    }
+
+    const maxRetries = 10;
+
+    this.pendingFocusElementId.set(targetId);
+    this.pendingFocusAttempts = 0;
+
+    const tick = () => {
+      const currentTarget = this.pendingFocusElementId();
+      if (!currentTarget || currentTarget !== targetId) return; 
+
+      if (this.setFocusById(currentTarget, groupId)) {
+        this.pendingFocusElementId.set(null);
+        return;
+      }
+
+      this.pendingFocusAttempts++;
+      if (this.pendingFocusAttempts >= maxRetries) {
+        this.pendingFocusElementId.set(null);
+        return;
+      }
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+    return false;
+  }
+
   // ---------------- Private ----------------
 
   private findRegisteredFocus(
     column: number,
     row: number,
     groupId?: number,
-  ): FocusItem | undefined {
+  ): FocuslyItem | undefined {
     const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
     if (effectiveGroup == null) return undefined;
 
@@ -332,7 +403,7 @@ export class FocuslyService implements FocuslyServiceApi {
 
   private moveRow(offset: number, endCondition: (row: number) => boolean): void {
     const currentFocus = this.currentFocus();
-    if (!currentFocus) return;
+    if (!currentFocus || !isCellItem(currentFocus)) return;
 
     this.moveFocus(currentFocus.row, offset, endCondition, (row) =>
       this.findRegisteredFocus(currentFocus.column, row, currentFocus.groupId),
@@ -341,7 +412,7 @@ export class FocuslyService implements FocuslyServiceApi {
 
   private moveColumn(offset: number, endCondition: (column: number) => boolean): void {
     const currentFocus = this.currentFocus();
-    if (!currentFocus) return;
+    if (!currentFocus || !isCellItem(currentFocus)) return;
 
     this.moveFocus(currentFocus.column, offset, endCondition, (col) =>
       this.findRegisteredFocus(col, currentFocus.row, currentFocus.groupId),
@@ -352,13 +423,13 @@ export class FocuslyService implements FocuslyServiceApi {
     condition: number,
     offset: number,
     endCondition: (x: number) => boolean,
-    findNextFocus: (condition: number) => FocusItem | undefined,
+    findNextFocus: (condition: number) => FocuslyItem | undefined,
   ): void {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return;
 
     condition += offset;
-    let nextFocus: FocusItem | undefined;
+    let nextFocus: FocuslyItem | undefined;
 
     while (endCondition(condition) && !nextFocus) {
       nextFocus = findNextFocus(condition);
@@ -382,16 +453,6 @@ export class FocuslyService implements FocuslyServiceApi {
     const currentFocus = this.currentFocus();
     if (!currentFocus) return 0;
     return this.focusRegistry.get(currentFocus.groupId)?.maxCol ?? 0;
-  }
-
-  private chordFromKeyboardEvent(e: KeyboardEvent): string {
-    return createKeyChord({
-      key: e.key,
-      alt: e.altKey,
-      ctrl: e.ctrlKey,
-      shift: e.shiftKey,
-      meta: e.metaKey
-    });
   }
 
   private getOrCreateShortcutStore(map: Map<any, ShortcutStore>, key: any): ShortcutStore {
