@@ -10,7 +10,7 @@ export class FocuslyShortcutDirective {
   @Input({ required: true }) focuslyKey!: string | string[];
   @Input() focuslyShortcutScope: FocuslyShortcutScope = 'group';
   @Input() focuslyGroup?: number;
-  @Input() focuslyAllowInTextInput = true;
+  @Input() focuslyPreventInTextActions = false;
   @Input() focuslyPriority = 0;
   @Input() focuslyElementId?: string;
   @Input() focuslyDescription?: string;
@@ -37,7 +37,7 @@ export class FocuslyShortcutDirective {
       scope,
       groupId,
       elementId,
-      allowInTextInput: !!this.focuslyAllowInTextInput,
+      preventInTextActions: !!this.focuslyPreventInTextActions,
       priority: this.focuslyPriority ?? 0,
       handler: (e) => this.focuslyAction.emit(e),
     };

@@ -107,7 +107,7 @@ export class FocuslyService implements FocuslyServiceApi {
     if (currentElementId) {
       const store = this.shortcutByElement.get(currentElementId);
       const list = store?.byChord.get(chord);
-      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      const hit = list?.find(r => !r.preventInTextActions || !inTextInput);
       if (hit) return (evt) => hit.handler(evt);
     }
 
@@ -115,14 +115,14 @@ export class FocuslyService implements FocuslyServiceApi {
     if (currentGroupId != null) {
       const store = this.shortcutByGroup.get(currentGroupId);
       const list = store?.byChord.get(chord);
-      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      const hit = list?.find(r => !r.preventInTextActions || !inTextInput);
       if (hit) return (evt) => hit.handler(evt);
     }
 
     // 3) global
     {
       const list = this.shortcutGlobal.byChord.get(chord);
-      const hit = list?.find(r => r.allowInTextInput || !inTextInput);
+      const hit = list?.find(r => !r.preventInTextActions || !inTextInput);
       if (hit) return (evt) => hit.handler(evt);
     }
 

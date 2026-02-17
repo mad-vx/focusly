@@ -51,9 +51,17 @@ export class NgZorroComponent extends BaseDemoGrid {
   private focuslyService = inject(FOCUSLY_SERVICE_API);
 
   focuslyShortcuts: FocuslyShortcuts = {
-    '2': () => {
-       this.selectIndex(2);
+        '1': () => {
+       this.selectIndex(0);
        this.focuslyService.setFocusByElementId('custInput1');
+    },
+        '2': () => {
+       this.selectIndex(1);
+       this.focuslyService.setFocusByElementId('tradingInput1');
+    },
+    '3': () => {
+       this.selectIndex(2);
+       this.focuslyService.setFocusByElementId('auditInput1');
     }
   };
   

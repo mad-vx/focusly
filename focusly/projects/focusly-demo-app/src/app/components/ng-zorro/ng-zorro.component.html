@@ -97,10 +97,7 @@
         [nzSelectedIndex]="selectedIndex()"
         (nzSelectedIndexChange)="selectedIndex.set($event)"
 >
-  <nz-tab nzTitle="Customer Data"       
-      focuslyShortcut
-      [focuslyKey]="'1'"
-      (focuslyAction)="selectIndex(1)" >
+  <nz-tab nzTitle="Customer Data">
       <div>
         <div>CUSTOMER DATA</div>
         <input        
@@ -112,7 +109,7 @@
   </nz-tab>
   <nz-tab nzTitle="Trading Data">
           <div>TRADING DATA</div>
-    <input type="text">
+    <input focusly-target [focuslyElementId]="'tradingInput1'" type="text">
     <app-base-full-component [buyOrSellTemplate]="buySell" 
         [quantityTemplate]="quantity" 
         [tradeDateTemplate]="tradeDate" 
@@ -124,7 +121,7 @@
   <nz-tab nzTitle="Audit History">
       <div>
         <div>AUDIT DATA</div>
-        <input type="text">
+        <input focusly-target [focuslyElementId]="'auditInput1'" type="text">
       </div>
   </nz-tab>
 </nz-tabs>

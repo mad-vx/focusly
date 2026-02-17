@@ -15,7 +15,7 @@ export interface FocuslyShortcutDef {
   scope?: FocuslyShortcutScope;
   groupId?: number;
   elementId?: string;
-  allowInTextInput?: boolean;
+  preventInTextActions?: boolean;
   priority?: number;
 
   description?: string;
@@ -31,7 +31,7 @@ export interface FocuslyShortcutRegistration {
   scope: FocuslyShortcutScope;
   groupId?: number;
   elementId?: string;
-  allowInTextInput: boolean;
+  preventInTextActions: boolean;
   priority: number;
   handler: FocuslyShortcutHandler;
   description?: string;

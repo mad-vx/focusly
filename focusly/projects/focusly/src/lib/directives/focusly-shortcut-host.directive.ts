@@ -137,7 +137,7 @@ export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterCon
         scope,
         groupId,
         elementId,
-        allowInTextInput: !!def.allowInTextInput,
+        preventInTextActions: !!def.preventInTextActions,
         priority: def.priority ?? 0,
         description: def.description,
         source: 'host',
