@@ -1,52 +1,116 @@
-# 🎯 Focusly – Intuitive, Elegant Keyboard Navigation for Angular (v16+)
+# 🎯 Focusly – Intuitive, Elegant Keyboard Navigation & Shortcuts for Angular (v16+)
 
-**Focusly** is a lightweight Angular library that brings **intuitive, keyboard-driven navigation** to web applications.
+**Focusly** is a lightweight Angular library that brings **powerful, unified keyboard interaction** to web applications.
 
-It lets users move effortlessly between interactive elements—inputs, dropdowns, buttons, or any focusable control—using familiar keys like **↑ ↓ ← →**, **Home**, **End**, and **Page Up / Page Down**.
+It provides:
 
-Each *Focusly Group* acts as an independent navigation zone, so multiple grids or forms on the same page can be navigated separately and respond logically to user intent.
+- 🧭 **Predictable, structured keyboard navigation**
+- ⌨️ **Scoped keyboard shortcuts**
+- ⚙️ A single, consistent, optimised keyboard management paradigm
 
-It provides an elegant way to define how users move between interactive controls — such as text boxes, dropdowns, or buttons — using keyboard shortcuts.  
-Focusly was designed to make keyboard navigation **predictable, accessible, and fast**, even in complex data entry UIs.
+Move between interactive elements or custom components, using familiar keys like **↑ ↓ ← →**, **Home**, **End**, and **Page Up / Page Down**.
+
+Trigger contextual actions using keyboard shortcuts - scoped globally, per group, or per element — all managed by the same engine.
+
+Each *Focusly Group* acts as an independent interaction zone, so multiple tables, forms, or panels on the same page behave logically and predictably.
+
+Focusly was designed for keyboard-driven, performance sensitive Angular applications where **predictability, accessibility, and speed** matter.
 
 ---
 
 ## ✨ Features
 
-- 🚀 Navigate grids, tables, or forms entirely via keyboard 
-- 🎯 **Scoped focus groups** so each panel or table behaves independently on a single page
-- 🪄 Elegant and simple declarative API using Angular directives  
-- 🧩 Works with any focusable element (`<input>`, `<select>`, `<button>`, etc.)  
-- 🧠 Easily extendable to custom components 
-- ♿ Built for accessibility and developer simplicity
-- ⚡ Built with Angular **signals** for instant reactivity — no manual change detection
-- ⚡ Works with provideZonelessChangeDetection() - ensures optimal performance in zone-less Angular apps
-- 🔄 Fully reactive and framework-native (no DOM listeners or external deps)
+- 🚀 Navigate grids, tables, or forms entirely via keyboard
+- ⌨️ Define **keyboard shortcuts** (global, group-scoped, or element-scoped)
+- 🎯 **Scoped focus groups** so each panel or table behaves independently
+- 🧠 Unified navigation + shortcut engine — one system, one paradigm
+- 🔎 Built-in conflict detection for key assignments
+- 🪄 Elegant and simple declarative API using Angular directives
+- 🧩 Works with any focusable element (`<input>`, `<select>`, `<button>`, etc.)
+- 🧠 Easily extendable to custom components (Angular Material, NGZorro)
+- ♿ Built with accessibility and deterministic focus handling in mind
+- ⚡ Built with Angular **signals** for instant reactivity
+- ⚡ Works with `provideZonelessChangeDetection()` for optimal performance
+- 🔄 Fully reactive and framework-native
 - 🪶 Small, simple, and zero-dependency
-- ⌨️ Multiple key assignments per action — support alternative keyboard shortcuts for the same navigation intent
+- ⌨️ Multiple key assignments per action — support alternative shortcuts
 
 ---
 
 ## 🧠 Concept
 
-Each focusable element declares:
-- A **group** – to separate independent navigation contexts (e.g., two tables)
+Focusly introduces a **unified keyboard interaction model**.
+
+Instead of managing navigation logic in one place and shortcuts in another, Focusly handles both using a single, optimised system.
+
+### Navigation
+
+Each navigable element declares:
+
+- A **group** – to separate independent navigation contexts
 - A **row** and **column** – to describe its position within that group
 
-Focusly tracks the user’s current focus position and responds to keyboard events to move to the appropriate neighbour.
+Focusly tracks the current focus position and responds to keyboard events to move to the appropriate neighbour.
 
-### Multiple Key Assignments
+### Focus Targets (Programmatic Focus)
 
-Focusly allows multiple keyboard shortcuts to trigger the same navigation action.
+Not every focusable element needs to participate in grid navigation.
 
-This makes it easy to:
+You can register a **focus target** without specifying row/column coordinates.
+
+This allows:
+
+- Programmatic focus on page load
+- Focusing the first control in a tab
+- Managing modal/dialog initial focus
+
+All focus targets are managed by the same Focusly service.
+
+### Keyboard Shortcuts
+
+Focusly also provides a fully scoped shortcut system:
+
+- 🌍 Global shortcuts
+- 🧭 Group-scoped shortcuts
+- 🎯 Element-scoped shortcuts
+
+Shortcuts and navigation are processed through the same keyboard pipeline, ensuring:
+
+- Consistent behaviour
+- Deterministic resolution
+- Conflict awareness
+- Optimal performance
+
+---
+
+## 🔐 Smart Handling Inside Text Inputs
+
+Focusly can operate inside text inputs and editable controls.
+
+By default, shortcuts are allowed inside text inputs — making Focusly suitable for highly keyboard-driven applications such as trading systems or spreadsheet-style UIs.
+
+To help prevent accidental conflicts:
+
+- ⚠️ Focusly warns when plain character keys (e.g. `A`, `S`, `1`) are used as shortcuts inside text inputs
+- ⚠️ Warnings are emitted for navigation/editing keys without modifier keys
+- 🔧 You can disable shortcuts inside text inputs per shortcut registration
+
+This gives teams full flexibility while protecting against common keyboard UX pitfalls.
+
+---
+
+## 🔄 Multiple Key Assignments
+
+Each navigation action (up, down, left, right, etc.) may be bound to one or more key chords.
+
+This allows you to:
 
 - Support alternative shortcuts (e.g. Alt + Arrow or Ctrl + WASD)
-- Preserve muscle memory when migrating from existing systems
-- Offer platform-specific or user-preferred keybindings
-- Improve accessibility by providing redundant input paths
+- Preserve muscle memory from legacy systems
+- Offer platform-specific keybindings
+- Improve accessibility with redundant input paths
 
-Each navigation action (up, down, left, right, etc.) may be bound to one or more key chords, all of which behave identically at runtime.
+All bindings resolve through the same unified key handler.
 
 ---
 
