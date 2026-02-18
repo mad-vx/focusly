@@ -1,0 +1,115 @@
+<section class="panel">
+  <h3>Market Analysis</h3>
+
+  <div class="grid">
+    <div class="field">
+      <label for="ma-watchSymbol">Watch Symbol</label>
+      <input id="ma-watchSymbol" type="text" [(ngModel)]="model.watchSymbol"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="0"
+            [focuslyElementId]="'marketFirstField'" />
+    </div>
+
+    <div class="field">
+      <label for="ma-timeframe">Timeframe</label>
+      <select id="ma-timeframe" [(ngModel)]="model.timeframe"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="0">
+        <option>1D</option>
+        <option>1W</option>
+        <option>1M</option>
+        <option>3M</option>
+        <option>1Y</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="ma-signal">Signal</label>
+      <select id="ma-signal" [(ngModel)]="model.signal"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="1">
+        <option>Neutral</option>
+        <option>Bullish</option>
+        <option>Bearish</option>
+        <option>Breakout</option>
+        <option>Mean Reversion</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="ma-confidence">Confidence</label>
+      <input id="ma-confidence" type="range" min="0" max="100" [(ngModel)]="model.confidence" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="1"/>
+      <small>{{ model.confidence }}%</small>
+    </div>
+
+    <div class="field">
+      <label for="ma-support">Support</label>
+      <input id="ma-support" type="number" step="0.01" [(ngModel)]="model.support" 
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="2"/>
+    </div>
+
+    <div class="field">
+      <label for="ma-resistance">Resistance</label>
+      <input id="ma-resistance" type="number" step="0.01" [(ngModel)]="model.resistance" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="2"/>
+    </div>
+
+    <div class="field span-2">
+      <label for="ma-thesis">Thesis / Notes</label>
+      <textarea id="ma-thesis" rows="4" [(ngModel)]="model.thesis"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="3"></textarea>
+    </div>
+
+    <div class="checks span-2">
+      <label class="check">
+        <input id="ma-alertPrice" type="checkbox" [(ngModel)]="model.alertOnPriceTouch"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="4" />
+        Alert on price touch
+      </label>
+      <label class="check">
+        <input id="ma-alertNews" type="checkbox" [(ngModel)]="model.alertOnNews" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="4"/>
+        Alert on news
+      </label>
+      <label class="check">
+        <input id="ma-pin" type="checkbox" [(ngModel)]="model.pinToDashboard"
+            focusly
+            [focuslyColumn]="2"
+            [focuslyRow]="4" />
+        Pin to dashboard
+      </label>
+    </div>
+
+    <div class="actions span-2">
+      <button id="ma-addWatchBtn" type="button"
+            focusly
+            [focuslyColumn]="3"
+            [focuslyRow]="4">Add to Watchlist</button>
+      <button id="ma-saveBtn" type="button"
+            focusly
+            [focuslyColumn]="4"
+            [focuslyRow]="4">Save Note</button>
+      <button id="ma-clearBtn" type="button"
+            focusly
+            [focuslyColumn]="5"
+            [focuslyRow]="4">Clear</button>
+    </div>
+  </div>
+</section>
+

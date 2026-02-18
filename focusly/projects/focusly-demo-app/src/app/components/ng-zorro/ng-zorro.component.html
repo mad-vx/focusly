@@ -97,18 +97,20 @@
         [nzSelectedIndex]="selectedIndex()"
         (nzSelectedIndexChange)="selectedIndex.set($event)"
 >
-  <nz-tab nzTitle="Customer Data">
-      <div>
+  <nz-tab nzTitle="Trading Data" [focuslyGroupHost]="4">
+    <app-trading-ticket></app-trading-ticket>
+      <!-- <div>
         <div>CUSTOMER DATA</div>
         <input        
           focusly-target
           [focuslyElementId]="'custInput1'"
 
           type="text">
-      </div>
+      </div> -->
   </nz-tab>
-  <nz-tab nzTitle="Trading Data">
-          <div>TRADING DATA</div>
+  <nz-tab nzTitle="Customer Data" [focuslyGroupHost]="5">
+    <app-customer></app-customer>
+          <!-- <div>TRADING DATA</div>
     <input focusly-target [focuslyElementId]="'tradingInput1'" type="text">
     <app-base-full-component [buyOrSellTemplate]="buySell" 
         [quantityTemplate]="quantity" 
@@ -116,12 +118,15 @@
         [urgencyTemplate]="urgency" 
         [ratingTemplate]="rating"
         [actionTemplate]="action">
-    </app-base-full-component>
+    </app-base-full-component> -->
   </nz-tab>
-  <nz-tab nzTitle="Audit History">
-      <div>
-        <div>AUDIT DATA</div>
-        <input focusly-target [focuslyElementId]="'auditInput1'" type="text">
-      </div>
+  <nz-tab nzTitle="Analysis" [focuslyGroupHost]="6">
+      <app-market-analysis></app-market-analysis>
+  </nz-tab>
+  <nz-tab nzTitle="Risk" [focuslyGroupHost]="7">
+    <app-risk-limits></app-risk-limits>
+  </nz-tab>
+  <nz-tab nzTitle="Audit" [focuslyGroupHost]="8">
+    <app-audit-compliance></app-audit-compliance>
   </nz-tab>
 </nz-tabs>

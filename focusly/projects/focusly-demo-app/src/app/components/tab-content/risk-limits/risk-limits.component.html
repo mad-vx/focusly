@@ -1,0 +1,110 @@
+<section class="panel">
+  <h3>Risk & Limits</h3>
+
+  <div class="grid">
+    <div class="field">
+      <label for="rl-portfolio">Portfolio</label>
+      <select id="rl-portfolio" [(ngModel)]="model.portfolio"
+        focusly
+        [focuslyColumn]="0"
+        [focuslyRow]="0"
+        [focuslyElementId]="'riskFirstField'">
+        <option>UK-Equities</option>
+        <option>US-Tech</option>
+        <option>Rates-Hedge</option>
+        <option>Multi-Asset</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="rl-limitProfile">Limit Profile</label>
+      <select id="rl-limitProfile" [(ngModel)]="model.limitProfile"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="0">
+        <option>Standard</option>
+        <option>Conservative</option>
+        <option>Aggressive</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="rl-maxOrderValue">Max Order Value (£)</label>
+      <input id="rl-maxOrderValue" type="number" step="1000" [(ngModel)]="model.maxOrderValueGbp"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="1" />
+    </div>
+
+    <div class="field">
+      <label for="rl-maxPositionValue">Max Position Value (£)</label>
+      <input id="rl-maxPositionValue" type="number" step="1000" [(ngModel)]="model.maxPositionValueGbp" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="1"/>
+    </div>
+
+    <div class="field">
+      <label for="rl-maxLeverage">Max Leverage</label>
+      <input id="rl-maxLeverage" type="number" step="0.1" [(ngModel)]="model.maxLeverage" 
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="2"/>
+    </div>
+
+    <div class="field">
+      <label for="rl-varLimit">VaR Limit (%)</label>
+      <input id="rl-varLimit" type="number" step="0.1" [(ngModel)]="model.varLimitPercent" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="2"/>
+    </div>
+
+    <div class="checks span-2">
+      <label class="check">
+        <input id="rl-preTrade" type="checkbox" [(ngModel)]="model.preTradeChecksEnabled" 
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="3"/>
+        Pre-trade checks enabled
+      </label>
+      <label class="check">
+        <input id="rl-hardBlocks" type="checkbox" [(ngModel)]="model.hardBlocksEnabled"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="3" />
+        Hard blocks on breach
+      </label>
+      <label class="check">
+        <input id="rl-requireApproval" type="checkbox" [(ngModel)]="model.requireApprovalForOverrides"
+            focusly
+            [focuslyColumn]="2"
+            [focuslyRow]="3" />
+        Require approval for overrides
+      </label>
+    </div>
+
+    <div class="field span-2">
+      <label for="rl-overrideReason">Override Reason (if applicable)</label>
+      <textarea id="rl-overrideReason" rows="3" [(ngModel)]="model.overrideReason"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="4"></textarea>
+    </div>
+
+    <div class="actions span-2">
+      <button id="rl-runChecksBtn" type="button"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="5">Run Pre-trade Checks</button>
+      <button id="rl-requestOverrideBtn" type="button"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="5">Request Override</button>
+      <button id="rl-saveBtn" type="button"
+            focusly
+            [focuslyColumn]="2"
+            [focuslyRow]="5">Save Profile</button>
+    </div>
+  </div>
+</section>

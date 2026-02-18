@@ -1,0 +1,134 @@
+<section class="panel">
+  <h3>Customer</h3>
+
+  <div class="grid">
+    <div class="field">
+      <label for="cu-customerId">Customer ID</label>
+      <input id="cu-customerId" type="text" [(ngModel)]="model.customerId" 
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="0"
+            [focuslyElementId]="'customerFirstField'"/>
+    </div>
+
+    <div class="field">
+      <label for="cu-status">Status</label>
+      <select id="cu-status" [(ngModel)]="model.status"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="0">
+        <option>Active</option>
+        <option>Restricted</option>
+        <option>Closed</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="cu-name">Full Name</label>
+      <input id="cu-name" type="text" [(ngModel)]="model.fullName" 
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="1"/>
+    </div>
+
+    <div class="field">
+      <label for="cu-email">Email</label>
+      <input id="cu-email" type="email" [(ngModel)]="model.email" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="1"/>
+    </div>
+
+    <div class="field">
+      <label for="cu-phone">Phone</label>
+      <input id="cu-phone" type="tel" [(ngModel)]="model.phone"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="2" />
+    </div>
+
+    <div class="field">
+      <label for="cu-country">Country</label>
+      <select id="cu-country" [(ngModel)]="model.country"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="2">
+        <option>United Kingdom</option>
+        <option>Ireland</option>
+        <option>Germany</option>
+        <option>United States</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="cu-kyc">KYC Level</label>
+      <select id="cu-kyc" [(ngModel)]="model.kycLevel"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="3">
+        <option>Basic</option>
+        <option>Standard</option>
+        <option>Enhanced</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="cu-riskRating">Risk Rating</label>
+      <select id="cu-riskRating" [(ngModel)]="model.riskRating"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="3">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+    </div>
+
+    <div class="field span-2">
+      <label for="cu-address">Address</label>
+      <textarea id="cu-address" rows="3" [(ngModel)]="model.address"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="4"></textarea>
+    </div>
+
+    <div class="checks span-2">
+      <label class="check">
+        <input id="cu-professional" type="checkbox" [(ngModel)]="model.professionalClient" 
+        focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="5"/>
+        Professional client
+      </label>
+      <label class="check">
+        <input id="cu-marketing" type="checkbox" [(ngModel)]="model.marketingOptIn" 
+        focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="5"/>
+        Marketing opt-in
+      </label>
+      <label class="check">
+        <input id="cu-tradingEnabled" type="checkbox" [(ngModel)]="model.tradingEnabled" 
+        focusly
+            [focuslyColumn]="2"
+            [focuslyRow]="5"/>
+        Trading enabled
+      </label>
+    </div>
+
+    <div class="actions span-2">
+      <button id="cu-saveBtn" type="button"
+            focusly
+            [focuslyColumn]="3"
+            [focuslyRow]="5">Save</button>
+      <button id="cu-freezeBtn" type="button"
+            focusly
+            [focuslyColumn]="4"
+            [focuslyRow]="5">Freeze Account</button>
+      <button id="cu-messageBtn" type="button"
+            focusly
+            [focuslyColumn]="5"
+            [focuslyRow]="5">Send Message</button>
+    </div>
+  </div>
+</section>

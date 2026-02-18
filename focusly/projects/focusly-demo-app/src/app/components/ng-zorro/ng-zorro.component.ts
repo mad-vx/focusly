@@ -20,6 +20,11 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { BaseFullComponent } from '../base-full/base-full.component';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { TradingTicketComponent } from '../tab-content/trading-ticket/trading-ticket.component';
+import { CustomerComponent } from '../tab-content/customer/customer.component';
+import { MarketAnalysisComponent } from '../tab-content/market-analysis/market-analysis.component';
+import { RiskLimitsComponent } from '../tab-content/risk-limits/risk-limits.component';
+import { AuditComplianceComponent } from '../tab-content/audit-compliance/audit-compliance.component';
 
 @Component({
   selector: 'app-ng-zorro',
@@ -41,7 +46,12 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
     FocuslyTargetDirective,
     FocuslyGroupHostDirective,
     FocuslyShortcutDirective,
-    FocuslyShortcutHostDirective
+    FocuslyShortcutHostDirective,
+    TradingTicketComponent,
+    CustomerComponent,
+    MarketAnalysisComponent,
+    RiskLimitsComponent,
+    AuditComplianceComponent
   ],
   templateUrl: './ng-zorro.component.html',
   standalone: true,
@@ -51,17 +61,25 @@ export class NgZorroComponent extends BaseDemoGrid {
   private focuslyService = inject(FOCUSLY_SERVICE_API);
 
   focuslyShortcuts: FocuslyShortcuts = {
-        '1': () => {
+        'alt+1': () => {
        this.selectIndex(0);
-       this.focuslyService.setFocusByElementId('custInput1');
+       this.focuslyService.setFocusByElementId('tradingFirstField');
     },
-        '2': () => {
+        'alt+2': () => {
        this.selectIndex(1);
-       this.focuslyService.setFocusByElementId('tradingInput1');
+       this.focuslyService.setFocusByElementId('customerFirstField');
     },
-    '3': () => {
+      'alt+3': () => {
        this.selectIndex(2);
-       this.focuslyService.setFocusByElementId('auditInput1');
+       this.focuslyService.setFocusByElementId('marketFirstField');
+    },
+      'alt+4': () => {
+       this.selectIndex(3);
+       this.focuslyService.setFocusByElementId('riskFirstField');
+    },
+      'alt+5': () => {
+       this.selectIndex(4);
+       this.focuslyService.setFocusByElementId('auditFirstField');
     }
   };
   

@@ -1,0 +1,136 @@
+<section class="panel">
+  <h3>Trading Ticket</h3>
+
+  <div class="grid">
+    <div class="field">
+      <label for="tt-symbol">Symbol</label>
+      <input id="tt-symbol" type="text" [(ngModel)]="model.symbol" 
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="0"
+            [focuslyElementId]="'tradingFirstField'"/>
+    </div>
+
+    <div class="field">
+      <label for="tt-venue">Venue</label>
+      <select id="tt-venue" [(ngModel)]="model.venue"
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="0">
+        <option>NASDAQ</option>
+        <option>NYSE</option>
+        <option>LSE</option>
+        <option>XETRA</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="tt-side">Side</label>
+      <select id="tt-side" [(ngModel)]="model.side"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="1">
+        <option>Buy</option>
+        <option>Sell</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="tt-qty">Quantity</label>
+      <input id="tt-qty" type="number" min="1" step="1" [(ngModel)]="model.quantity" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="1"/>
+    </div>
+
+    <div class="field">
+      <label for="tt-orderType">Order Type</label>
+      <select id="tt-orderType" [(ngModel)]="model.orderType"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="2">
+        <option>Market</option>
+        <option>Limit</option>
+        <option>Stop</option>
+        <option>Stop Limit</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="tt-limitPrice">Limit Price</label>
+      <input id="tt-limitPrice" type="number" step="0.01" [(ngModel)]="model.limitPrice" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="2"/>
+      <small>Used for Limit / Stop Limit</small>
+    </div>
+
+    <div class="field">
+      <label for="tt-tif">Time in Force</label>
+      <select id="tt-tif" [(ngModel)]="model.timeInForce"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="3">
+        <option>DAY</option>
+        <option>GTC</option>
+        <option>IOC</option>
+        <option>FOK</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="tt-account">Account</label>
+      <input id="tt-account" type="text" [(ngModel)]="model.account" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="3"/>
+    </div>
+
+    <div class="field span-2">
+      <label for="tt-notes">Trader Notes</label>
+      <textarea id="tt-notes" rows="3" [(ngModel)]="model.notes"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="4"></textarea>
+    </div>
+
+    <div class="checks span-2">
+      <label class="check">
+        <input id="tt-iceberg" type="checkbox" [(ngModel)]="model.iceberg"
+            focusly
+            [focuslyColumn]="0"
+            [focuslyRow]="5" />
+        Iceberg
+      </label>
+      <label class="check">
+        <input id="tt-postOnly" type="checkbox" [(ngModel)]="model.postOnly" 
+            focusly
+            [focuslyColumn]="1"
+            [focuslyRow]="5" />
+        Post-only
+      </label>
+      <label class="check">
+        <input id="tt-requireRisk" type="checkbox" [(ngModel)]="model.requireRiskCheck" 
+            focusly
+            [focuslyColumn]="2"
+            [focuslyRow]="5" />
+        Require pre-trade risk check
+      </label>
+    </div>
+
+    <div class="actions span-2">
+      <button id="tt-previewBtn" type="button"
+            focusly
+            [focuslyColumn]="3"
+            [focuslyRow]="5" >Preview</button>
+      <button id="tt-submitBtn" type="button"
+            focusly
+            [focuslyColumn]="4"
+            [focuslyRow]="5" >Submit Order</button>
+      <button id="tt-cancelBtn" type="button"
+            focusly
+            [focuslyColumn]="5"
+            [focuslyRow]="5" >Clear</button>
+    </div>
+  </div>
+</section>
