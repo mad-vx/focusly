@@ -23,4 +23,8 @@ export class TradingTicketComponent {
     postOnly: true,
     requireRiskCheck: true,
   };
+
+  alert(message: string) {
+    window.alert(message);
+  }
 }

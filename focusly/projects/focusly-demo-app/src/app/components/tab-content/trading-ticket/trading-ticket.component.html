@@ -66,16 +66,11 @@
     </div>
 
     <div class="field">
-      <label for="tt-tif">Time in Force</label>
-      <select id="tt-tif" [(ngModel)]="model.timeInForce"
+      <label for="tt-notes">Trader Notes</label>
+      <textarea id="tt-notes" rows="3" [(ngModel)]="model.notes"
             focusly
             [focuslyColumn]="0"
-            [focuslyRow]="3">
-        <option>DAY</option>
-        <option>GTC</option>
-        <option>IOC</option>
-        <option>FOK</option>
-      </select>
+            [focuslyRow]="3"></textarea>
     </div>
 
     <div class="field">
@@ -86,34 +81,27 @@
             [focuslyRow]="3"/>
     </div>
 
-    <div class="field span-2">
-      <label for="tt-notes">Trader Notes</label>
-      <textarea id="tt-notes" rows="3" [(ngModel)]="model.notes"
-            focusly
-            [focuslyColumn]="0"
-            [focuslyRow]="4"></textarea>
-    </div>
 
     <div class="checks span-2">
       <label class="check">
         <input id="tt-iceberg" type="checkbox" [(ngModel)]="model.iceberg"
             focusly
             [focuslyColumn]="0"
-            [focuslyRow]="5" />
+            [focuslyRow]="4" />
         Iceberg
       </label>
       <label class="check">
         <input id="tt-postOnly" type="checkbox" [(ngModel)]="model.postOnly" 
             focusly
             [focuslyColumn]="1"
-            [focuslyRow]="5" />
+            [focuslyRow]="4" />
         Post-only
       </label>
       <label class="check">
         <input id="tt-requireRisk" type="checkbox" [(ngModel)]="model.requireRiskCheck" 
             focusly
             [focuslyColumn]="2"
-            [focuslyRow]="5" />
+            [focuslyRow]="4" />
         Require pre-trade risk check
       </label>
     </div>
@@ -122,15 +110,16 @@
       <button id="tt-previewBtn" type="button"
             focusly
             [focuslyColumn]="3"
-            [focuslyRow]="5" >Preview</button>
+            [focuslyRow]="4"
+            (click)="alert('Preview')" >Preview</button>
       <button id="tt-submitBtn" type="button"
             focusly
             [focuslyColumn]="4"
-            [focuslyRow]="5" >Submit Order</button>
+            [focuslyRow]="4" >Submit Order</button>
       <button id="tt-cancelBtn" type="button"
             focusly
             [focuslyColumn]="5"
-            [focuslyRow]="5" >Clear</button>
+            [focuslyRow]="4" >Clear</button>
     </div>
   </div>
 </section>

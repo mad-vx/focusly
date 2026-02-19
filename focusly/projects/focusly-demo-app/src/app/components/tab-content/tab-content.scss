@@ -17,4 +17,12 @@
   .checks { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-top: 6px; }
   .check { display: inline-flex; gap: 8px; align-items: center; }
   .actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 6px; }
-  button { padding: 8px 12px; }
+  button { 
+    padding: 8px 12px; 
+
+    }
+
+    button.focusly-active {
+        color: blue;
+        border-color: blue;
+    }

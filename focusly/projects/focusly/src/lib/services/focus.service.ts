@@ -396,10 +396,20 @@ export class FocuslyService implements FocuslyServiceApi {
     const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
     if (effectiveGroup == null) return undefined;
 
-    const store = this.focusRegistry.get(effectiveGroup);
+    const store = this.focusRegistry.get(effectiveGroup);    
     if (!store) return undefined;
 
-    return store.byCell.get(this.cellKey(row, column));
+    const maxCol = store.maxCol ?? 0;
+    let col = Math.min(Math.max(column, 0), maxCol);
+
+    // Try same column, then move left until we find something
+    while (col >= 0) {
+      const hit = store.byCell.get(this.cellKey(row, col));
+      if (hit) return hit;
+      col--;
+    }
+
+    return undefined;
   }
 
   private moveRow(offset: number, endCondition: (row: number) => boolean): void {
