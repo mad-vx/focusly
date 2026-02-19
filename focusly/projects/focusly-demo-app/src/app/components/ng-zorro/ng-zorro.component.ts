@@ -1,10 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { 
-  FocuslyTargetDirective, 
   FocuslyDirective, 
   FocuslyGroupHostDirective, 
   FocuslyShortcutHostDirective, 
-  FocuslyShortcutDirective, 
   FocuslyShortcuts, 
   FOCUSLY_SERVICE_API  }
 from '@zaybu/focusly';
@@ -18,13 +16,13 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { BaseFullComponent } from '../base-full/base-full.component';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { TradingTicketComponent } from '../tab-content/trading-ticket/trading-ticket.component';
 import { CustomerComponent } from '../tab-content/customer/customer.component';
 import { MarketAnalysisComponent } from '../tab-content/market-analysis/market-analysis.component';
 import { RiskLimitsComponent } from '../tab-content/risk-limits/risk-limits.component';
 import { AuditComplianceComponent } from '../tab-content/audit-compliance/audit-compliance.component';
+import { TabInstructionsComponent } from '../tab-content/tab-instructions/tab-instructions.component';
 
 @Component({
   selector: 'app-ng-zorro',
@@ -34,7 +32,6 @@ import { AuditComplianceComponent } from '../tab-content/audit-compliance/audit-
     NzInputNumberFocusDirective,
     FormsModule,
     BaseComponent,
-    BaseFullComponent,
     NzInputNumberModule,
     NzInputNumberFocusDirective,
     NzSliderModule,
@@ -43,15 +40,14 @@ import { AuditComplianceComponent } from '../tab-content/audit-compliance/audit-
     NzButtonModule,
     NzTabsModule,
     FocuslyDirective,
-    FocuslyTargetDirective,
     FocuslyGroupHostDirective,
-    FocuslyShortcutDirective,
     FocuslyShortcutHostDirective,
     TradingTicketComponent,
     CustomerComponent,
     MarketAnalysisComponent,
     RiskLimitsComponent,
-    AuditComplianceComponent
+    AuditComplianceComponent,
+    TabInstructionsComponent
   ],
   templateUrl: './ng-zorro.component.html',
   standalone: true,
@@ -61,11 +57,11 @@ export class NgZorroComponent extends BaseDemoGrid {
   private focuslyService = inject(FOCUSLY_SERVICE_API);
 
   focuslyShortcuts: FocuslyShortcuts = {
-        'alt+1': () => {
+      'alt+1': () => {
        this.selectIndex(0);
        this.focuslyService.setFocusByElementId('tradingFirstField');
     },
-        'alt+2': () => {
+      'alt+2': () => {
        this.selectIndex(1);
        this.focuslyService.setFocusByElementId('customerFirstField');
     },
@@ -89,7 +85,11 @@ export class NgZorroComponent extends BaseDemoGrid {
   }
 
   selectIndex(index: number) {
-    console.log(index);
     this.selectedIndex.set(index);
+  }
+
+  selectFirstField() {
+    this.selectIndex(0); 
+    this.focuslyService.setFocusByElementId('tradingFirstField');
   }
 }

@@ -1,3 +1,16 @@
+.panel-grid-50 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+  justify-items: center;
+  margin-block: 2rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .instructions {
   background: #f9fafb;
   border: 1px solid #e0e0e0;
@@ -81,6 +94,7 @@
   cursor: pointer;
   padding: 2px 6px;
   border-radius: 8px;
+  font-size: x-large;
 }
 
 .toolkit-title {
@@ -88,6 +102,7 @@
   color: #1a237e;
   font-size: 1rem;
   margin-bottom: 0.75rem;
+  padding-right: 10px;
 }
 
 .toolkit-options {

@@ -39,6 +39,14 @@ export class BaseComponent {
     country: 'UK',
   };
 
+  focuslyShortcuts = {
+    'enter': () => this.onEnterKey()
+  };
+
+  focuslyShortcuts2 = {
+    'enter': () => this.onEnterKey2()
+  };
+
   activeSaveButton = signal<1 | 2 | null>(null);
   lastActionMessage: string | null = null;
   showToast = false;

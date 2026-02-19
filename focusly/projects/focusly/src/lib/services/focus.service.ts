@@ -70,8 +70,7 @@ export class FocuslyService implements FocuslyServiceApi {
   private shortcutGlobal: ShortcutStore = { byChord: new Map(), byId: new Map() };
   private shortcutByGroup = new Map<number, ShortcutStore>();
   private shortcutByElement = new Map<string, ShortcutStore>();
-  private pendingFocusElementId = signal<string | null>(null);
-  private pendingFocusAttempts = 0;
+  private pendingFocus = signal<{id: string; groupId?: number} | null>(null);
 
   getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
     const shortcut = this.getShortcutHandlerForKeyboardEvent(e);
@@ -225,7 +224,7 @@ export class FocuslyService implements FocuslyServiceApi {
   }
 
   registerItemFocus(focus: FocuslyItem): void {
-    if (focus.groupId === null || !focus.id) return;
+    if (focus.groupId == null || !focus.id) return;
 
     const store = this.getOrCreateStore(focus.groupId);
 
@@ -243,10 +242,12 @@ export class FocuslyService implements FocuslyServiceApi {
       if (focus.column > store.maxCol) store.maxCol = focus.column;
     }
 
-    const pending = this.pendingFocusElementId();
-    if (pending && focus.id === pending) {
-      this.setFocus(focus);
-      this.pendingFocusElementId.set(null);
+    const pending = this.pendingFocus();
+    if (pending && focus.id === pending.id) {
+        if (pending.groupId == null || pending.groupId === focus.groupId) {
+          this.setFocus(focus);
+          this.pendingFocus.set(null);
+        }
     }
   }
 
@@ -324,7 +325,44 @@ export class FocuslyService implements FocuslyServiceApi {
     }
   }
 
-  setFocusById(id: string, groupId?: number ): boolean {
+  setFocusByElementId(id: string, groupId?: number): boolean {
+    const targetId = (id ?? '').trim();
+    if (!targetId) return false;
+
+    // Try immediately
+    if (this.setFocusById(targetId, groupId)) {
+      return true;
+    }
+
+    this.pendingFocus.set({ id: targetId, groupId });
+
+    const startedAt = performance.now();
+    const retryTimeout = 3000;
+
+    const tick = () => {
+      const pending = this.pendingFocus();
+      if (!pending || pending.id !== targetId) return;
+
+      if (this.setFocusById(pending.id, pending.groupId)) {
+        this.pendingFocus.set(null);
+        return;
+      }
+
+      if (performance.now() - startedAt > retryTimeout) {
+        this.pendingFocus.set(null);
+        return;
+      }
+
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+    return false;
+  }
+
+  // ---------------- Private ----------------
+
+  private setFocusById(id: string, groupId?: number ): boolean {
     const targetId = (id ?? '').trim();
     if (!targetId) return false;
 
@@ -349,43 +387,6 @@ export class FocuslyService implements FocuslyServiceApi {
 
     return false;
   }
-
-  setFocusByElementId(id: string, groupId?: number): boolean {
-    const targetId = (id ?? '').trim();
-    if (!targetId) return false;
-
-    // Try immediately
-    if (this.setFocusById(targetId, groupId)) {
-      return true;
-    }
-
-    const maxRetries = 10;
-
-    this.pendingFocusElementId.set(targetId);
-    this.pendingFocusAttempts = 0;
-
-    const tick = () => {
-      const currentTarget = this.pendingFocusElementId();
-      if (!currentTarget || currentTarget !== targetId) return; 
-
-      if (this.setFocusById(currentTarget, groupId)) {
-        this.pendingFocusElementId.set(null);
-        return;
-      }
-
-      this.pendingFocusAttempts++;
-      if (this.pendingFocusAttempts >= maxRetries) {
-        this.pendingFocusElementId.set(null);
-        return;
-      }
-      requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-    return false;
-  }
-
-  // ---------------- Private ----------------
 
   private findRegisteredFocus(
     column: number,

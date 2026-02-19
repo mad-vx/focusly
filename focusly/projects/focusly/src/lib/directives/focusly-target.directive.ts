@@ -52,6 +52,10 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
   private readonly limitHitSubscription: Subscription;
   protected lastRegistered: FocuslyItem | null = null;
 
+    private focusRafId: number | null = null;
+    private focusAttempt = 0;
+    private readonly maxFocusAttempts = 120; // ~2s at 60fps
+
   get resolvedGroup(): number | undefined {
     return this.focuslyGroup ?? this.groupHost?.resolveGroup();
   }
@@ -99,34 +103,17 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
       }
     });
 
-    // Effect to handle focus side-effect when this item becomes active
     effect(
-      () => {
-        if (!this.isActive()) {
-          return;
-        }
-
-        // Run after current change detection to avoid ExpressionChanged errors
-        queueMicrotask(() => {
-          // Re-check in case focus changed again before this microtask ran
-          if (!this.isActive()) {
+        () => {
+            if (!this.isActive()) {
+            // if we lose active state, stop retrying
+            this.cancelFocusRetry();
             return;
-          }
-
-          const host = this.elementRef.nativeElement as any;
-
-          if (this.selectCustomElement) {
-            this.selectCustomElement();
-          } else {
-            host.focus?.();
-            if (host.select) {
-              host.select();
             }
-          }
-          this.onElementFocus();
-        });
-      },
-      { injector: this.injector },
+
+            this.ensureDomFocus();
+        },
+        { injector: this.injector },
     );
   }
 
@@ -179,6 +166,106 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
     this.focusService.registerItemFocus(next);
     this.lastRegistered = next;
   }
+
+private cancelFocusRetry(): void {
+    if (this.focusRafId != null) {
+        cancelAnimationFrame(this.focusRafId);
+        this.focusRafId = null;
+    }
+    this.focusAttempt = 0;
+}
+
+private isActuallyFocusableNow(el: HTMLElement): boolean {
+  if (!el.isConnected) return false;
+
+  const anyEl = el as any;
+  if (anyEl.disabled) return false;
+
+  const style = getComputedStyle(el);
+  if (style.display === 'none' || style.visibility === 'hidden') return false;
+
+  // Many tab systems keep elements in DOM but with 0 rects while hidden/animating.
+  const rects = el.getClientRects();
+  if (!rects || rects.length === 0) return false;
+
+  // Optional: respect aria-hidden up the tree (Material may set this)
+  let p: HTMLElement | null = el;
+  while (p) {
+    if (p.getAttribute?.('aria-hidden') === 'true') return false;
+    p = p.parentElement;
+  }
+
+  return true;
+}
+
+private didDomFocusLand(host: HTMLElement): boolean {
+  const active = document.activeElement as HTMLElement | null;
+  if (!active) return false;
+  return active === host || host.contains(active);
+}
+
+private applyDomFocusOnce(host: HTMLElement): void {
+  const anyHost = host as any;
+
+  if (this.selectCustomElement) {
+    this.selectCustomElement();
+  } else {
+    anyHost.focus?.();
+    if (anyHost.select) anyHost.select();
+  }
+
+  // keep your hook
+  this.onElementFocus();
+}
+
+private ensureDomFocus(): void {
+  // Cancel any previous loop and start fresh
+  this.cancelFocusRetry();
+
+  const host = this.elementRef.nativeElement;
+
+  const attempt = () => {
+    // Stop if we’re no longer the active Focusly item
+    if (!this.isActive()) {
+      this.cancelFocusRetry();
+      return;
+    }
+
+    this.focusAttempt++;
+
+    // Wait until the host is actually focusable/visible
+    if (!this.isActuallyFocusableNow(host)) {
+      if (this.focusAttempt >= this.maxFocusAttempts) {
+        this.cancelFocusRetry();
+        return;
+      }
+      this.focusRafId = requestAnimationFrame(attempt);
+      return;
+    }
+
+    // Try to focus
+    this.applyDomFocusOnce(host);
+
+    // Confirm it stuck; if not, retry
+    if (!this.didDomFocusLand(host)) {
+      if (this.focusAttempt >= this.maxFocusAttempts) {
+        this.cancelFocusRetry();
+        return;
+      }
+      this.focusRafId = requestAnimationFrame(attempt);
+      return;
+    }
+
+    // Success
+    this.cancelFocusRetry();
+  };
+
+  // Start after current CD cycle
+  queueMicrotask(() => {
+    if (!this.isActive()) return;
+    attempt();
+  });
+}
 
   // These are the ONLY @HostListener decorators; derived directives just
   // override the protected hooks below.

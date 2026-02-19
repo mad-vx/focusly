@@ -18,9 +18,7 @@
     <table class="data-grid" 
       [focuslyGroupHost]="1"
       focuslyShortcutHost
-      focuslyShortcut
-      [focuslyKey]="'enter'"
-      (focuslyAction)="onEnterKey()"
+      [focuslyShortcuts]="focuslyShortcuts"
     >
       <thead>
         <tr>
@@ -111,9 +109,7 @@
     <table class="data-grid" 
       [focuslyGroupHost]="2"
       focuslyShortcutHost
-      focuslyShortcut
-      [focuslyKey]="'enter'"
-      (focuslyAction)="onEnterKey2()">
+      [focuslyShortcuts]="focuslyShortcuts2">
       <thead>
         <tr>
           <th>Field</th>
@@ -148,7 +144,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr focuslyShortcutHost>
           <td class="cell-label">Email</td>
           <td>
             <input

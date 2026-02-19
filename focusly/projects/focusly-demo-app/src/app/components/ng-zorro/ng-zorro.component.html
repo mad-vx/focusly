@@ -90,6 +90,7 @@
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
 
+<app-tab-instructions (selectFirst)="selectFirstField()"></app-tab-instructions>
 
 <nz-tabs [focuslyGroupHost]="3"
         focuslyShortcutHost
@@ -99,26 +100,9 @@
 >
   <nz-tab nzTitle="Trading Data" [focuslyGroupHost]="4">
     <app-trading-ticket></app-trading-ticket>
-      <!-- <div>
-        <div>CUSTOMER DATA</div>
-        <input        
-          focusly-target
-          [focuslyElementId]="'custInput1'"
-
-          type="text">
-      </div> -->
   </nz-tab>
   <nz-tab nzTitle="Customer Data" [focuslyGroupHost]="5">
     <app-customer></app-customer>
-          <!-- <div>TRADING DATA</div>
-    <input focusly-target [focuslyElementId]="'tradingInput1'" type="text">
-    <app-base-full-component [buyOrSellTemplate]="buySell" 
-        [quantityTemplate]="quantity" 
-        [tradeDateTemplate]="tradeDate" 
-        [urgencyTemplate]="urgency" 
-        [ratingTemplate]="rating"
-        [actionTemplate]="action">
-    </app-base-full-component> -->
   </nz-tab>
   <nz-tab nzTitle="Analysis" [focuslyGroupHost]="6">
       <app-market-analysis></app-market-analysis>
