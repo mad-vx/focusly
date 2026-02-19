@@ -173,25 +173,75 @@ input[type='button'],
   }
 }
 
+// .instructions {
+//   background: #ffffff;
+//   border: 1px solid #dcdcdc;
+//   border-radius: 0.5rem;
+//   padding: 1rem 1.25rem;
+//   margin-bottom: 1rem;
+
+//   h2 {
+//     margin: 0 0 0.5rem 0;
+//     font-size: 1rem;
+//     font-weight: 600;
+//   }
+
+//   .note {
+//     font-size: 0.85rem;
+//     color: #555;
+//     margin-top: 0.75rem;
+//     font-style: italic;
+//   }
+// }
+
+
 .instructions {
+  background: #f9fafb;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  max-width: 700px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.instructions.wide {  
+  max-width: 1000px;
+}
+
+.instructions h2 {
+  color: #1a237e;
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.instructions p {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.instructions ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.instructions li {
   background: #ffffff;
-  border: 1px solid #dcdcdc;
-  border-radius: 0.5rem;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
 
-  h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1rem;
-    font-weight: 600;
-  }
+.instructions strong {
+  color: #1976d2;
+}
 
-  .note {
-    font-size: 0.85rem;
-    color: #555;
-    margin-top: 0.75rem;
-    font-style: italic;
-  }
+.instructions .note {
+  font-size: 0.95rem;
+  color: #555;
+  font-style: italic;
 }
 
 .data-grid {
@@ -465,4 +515,9 @@ input[type='button'],
   padding: 12px 14px 16px;
   max-height: 80vh;
   overflow: auto;
+}
+
+.example {
+    font-size: larger;
+    font-weight: 500;
 }

@@ -116,7 +116,15 @@
 
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
-<app-base-full-component [buyOrSellTemplate]="buySell" 
+
+  <section class="instructions wide">
+    <p class="note">
+      <span class="example">Example: All types of Input</span>
+      Text boxes, sliders, buttons, check boxes, drop downs etc.
+    </p>
+  </section>
+
+<app-base-full-component [buyOrSellTemplate]="buySell" [focuslyGroupHost]="33"
     [quantityTemplate]="quantity" 
     [tradeDateTemplate]="tradeDate" 
     [urgencyTemplate]="urgency" 

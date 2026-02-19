@@ -1,6 +1,6 @@
 <div class="panel-grid">
   <section class="panel">
-    <table class="data-grid">
+    <table class="data-grid" [focuslyGroupHost]="3">
       <thead>
         <tr>
           <th>Symbol</th>
@@ -41,11 +41,10 @@
             </td>
 
             <td class="cell-center">
-              <input
-                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
-                focusly
+              <input                
                 class="cell-checkbox"
                 type="checkbox"
+                focusly
                 [focuslyRow]="row.rowIndex"
                 [focuslyColumn]="2"
                 [checked]="row.riskOk"
@@ -54,12 +53,11 @@
 
             <td>
               <input
-                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
-                
                 class="cell-input wide"
                 type="text"
-              
-         
+                focusly
+                [focuslyRow]="row.rowIndex"
+                [focuslyColumn]="3"
                 [value]="row.notes"
                 placeholder="Internal note…"
               />

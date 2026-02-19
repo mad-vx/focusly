@@ -104,16 +104,19 @@
                 <span class="toolkit-text">Material</span>
               </label>
             </div>
-                  <button type="button" class="config-button" (click)="openConfig()">
-          Configure Key Mappings
-        </button>
+          </div>
+          <div>
+            <button type="button" class="config-button" (click)="openConfig()">
+              Configure Key Mappings
+            </button>
           </div>
         </section>
       </div>
     </div>
 
-  <section class="instructions">
+  <section class="instructions wide">
     <p class="note">
+      <span class="example">Example: Basic Navigation, Shortcuts & Scope</span>
       Below are two independent panels. Notice how <strong>Enter</strong> in the first panel
       triggers “Confirm Trades”, and in the second panel it triggers “Save Customer”. Focusly keeps
       those behaviours scoped.
