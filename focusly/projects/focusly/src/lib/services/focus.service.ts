@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FocuslyItem, FocuslyCellItem, isCellItem } from '../models/focus-item.model';
+import { FocuslyItem, FocuslyCellItem, isCellItem, FocusRequest, FocusAck } from '../models/focus-item.model';
 import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
 import {
   DEFAULT_FOCUSLY_KEYMAP,
@@ -70,7 +70,21 @@ export class FocuslyService implements FocuslyServiceApi {
   private shortcutGlobal: ShortcutStore = { byChord: new Map(), byId: new Map() };
   private shortcutByGroup = new Map<number, ShortcutStore>();
   private shortcutByElement = new Map<string, ShortcutStore>();
-  private pendingFocus = signal<{id: string; groupId?: number} | null>(null);
+
+  private readonly focusRequestSubject = new Subject<FocusRequest>();
+  readonly focusRequests$ = this.focusRequestSubject.asObservable();
+
+  private readonly focusAckSubject = new Subject<FocusAck>();
+  readonly focusAcks$ = this.focusAckSubject.asObservable();
+
+  private pendingRequests = new Map<string, (ack: FocusAck) => void>();
+
+  constructor() {
+    this.focusAcks$.subscribe((ack) => {
+      const resolver = this.pendingRequests.get(ack.requestId);
+      if (resolver) resolver(ack);
+    });
+  }
 
   getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
     const shortcut = this.getShortcutHandlerForKeyboardEvent(e);
@@ -90,7 +104,7 @@ export class FocuslyService implements FocuslyServiceApi {
     return true;
   }
 
- getShortcutHandlerForKeyboardEvent(
+  getShortcutHandlerForKeyboardEvent(
       e: KeyboardEvent,
       context?: { groupId?: number; elementId?: string },
     ): ((e: KeyboardEvent) => void) | undefined {
@@ -177,10 +191,6 @@ export class FocuslyService implements FocuslyServiceApi {
     this.currentFocus.set(found ?? focus);
   }
 
-  setFocus(focus: FocuslyItem): void {
-    this.onFocus(focus);
-  }
-
   up(): void {
     this.moveRow(-1, (row) => row >= 0);
   }
@@ -240,14 +250,6 @@ export class FocuslyService implements FocuslyServiceApi {
       store.byCell.set(this.cellKey(focus.row, focus.column), focus);
       if (focus.row > store.maxRow) store.maxRow = focus.row;
       if (focus.column > store.maxCol) store.maxCol = focus.column;
-    }
-
-    const pending = this.pendingFocus();
-    if (pending && focus.id === pending.id) {
-        if (pending.groupId == null || pending.groupId === focus.groupId) {
-          this.setFocus(focus);
-          this.pendingFocus.set(null);
-        }
     }
   }
 
@@ -325,68 +327,45 @@ export class FocuslyService implements FocuslyServiceApi {
     }
   }
 
-  setFocusByElementId(id: string, groupId?: number): boolean {
+  setFocusByElementId(
+    id: string,
+    groupId?: number,
+    opts?: { timeoutMs?: number; waitForVisible?: boolean; preventScroll?: boolean },
+  ): Promise<boolean> {
     const targetId = (id ?? '').trim();
-    if (!targetId) return false;
+    if (!targetId) return Promise.resolve(false);
 
-    // Try immediately
-    if (this.setFocusById(targetId, groupId)) {
-      return true;
-    }
+    const requestId = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
+    const timeoutMs = opts?.timeoutMs ?? 2000;
 
-    this.pendingFocus.set({ id: targetId, groupId });
+    return new Promise<boolean>((resolve) => {
+      const timer = window.setTimeout(() => {
+        this.pendingRequests.delete(requestId);
+        resolve(false);
+      }, timeoutMs);
 
-    const startedAt = performance.now();
-    const retryTimeout = 3000;
+      this.pendingRequests.set(requestId, (ack) => {
+        window.clearTimeout(timer);
+        this.pendingRequests.delete(requestId);
+        resolve(ack.success);
+      });
 
-    const tick = () => {
-      const pending = this.pendingFocus();
-      if (!pending || pending.id !== targetId) return;
+      this.focusRequestSubject.next({
+        requestId,
+        id: targetId,
+        groupId,
+        preventScroll: opts?.preventScroll ?? true,
+        waitForVisible: opts?.waitForVisible ?? true,
+        timeoutMs,
+      });
+    });
+  }
 
-      if (this.setFocusById(pending.id, pending.groupId)) {
-        this.pendingFocus.set(null);
-        return;
-      }
-
-      if (performance.now() - startedAt > retryTimeout) {
-        this.pendingFocus.set(null);
-        return;
-      }
-
-      requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-    return false;
+  ackFocus(ack: FocusAck): void {
+    this.focusAckSubject.next(ack);
   }
 
   // ---------------- Private ----------------
-
-  private setFocusById(id: string, groupId?: number ): boolean {
-    const targetId = (id ?? '').trim();
-    if (!targetId) return false;
-
-    // if caller knows the group, search that group first
-    if (groupId != null) {
-      const store = this.focusRegistry.get(groupId);
-      const item = store?.byId.get(targetId);
-      if (item) {
-        this.setFocus(item);
-        return true;
-      }
-    }
-
-    // otherwise search all groups (cheap unless you have huge registries)
-    for (const store of this.focusRegistry.values()) {
-      const item = store.byId.get(targetId);
-      if (item) {
-        this.setFocus(item);
-        return true;
-      }
-    }
-
-    return false;
-  }
 
   private findRegisteredFocus(
     column: number,
@@ -448,7 +427,7 @@ export class FocuslyService implements FocuslyServiceApi {
     }
 
     if (nextFocus) {
-      this.setFocus(nextFocus);
+      void this.setFocusByElementId(nextFocus.id, nextFocus.groupId);
     } else if (!endCondition(condition)) {
       this.endStopSubject.next(currentFocus);
     }

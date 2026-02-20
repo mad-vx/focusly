@@ -6,14 +6,12 @@ import {
   HostListener,
   inject,
   Input,
-  Injector,
   OnDestroy,
   OnInit,
-  effect,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FocuslyService } from '../services/focus.service';
-import { FocuslyItem, FocuslyTargetItem } from '../models/focus-item.model';
+import { FocuslyItem, FocuslyTargetItem, FocusRequest } from '../models/focus-item.model';
 import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
 
 @Directive({
@@ -47,41 +45,34 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
 
   protected readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly focusService = inject(FocuslyService);
-  private readonly injector = inject(Injector);
 
   private readonly limitHitSubscription: Subscription;
+  private focusRequestSub?: Subscription;
+
   protected lastRegistered: FocuslyItem | null = null;
 
-    private focusRafId: number | null = null;
-    private focusAttempt = 0;
-    private readonly maxFocusAttempts = 120; // ~2s at 60fps
+  private focusRafId: number | null = null;
+  private focusAttempt = 0;
+  private readonly maxFocusAttempts = 120; // ~2s at 60fps
+
+  private activeRequestId: string | null = null;
 
   get resolvedGroup(): number | undefined {
     return this.focuslyGroup ?? this.groupHost?.resolveGroup();
   }
 
   protected get focusItem(): FocuslyTargetItem {
-    return <FocuslyTargetItem> {
+    return {
       groupId: this.resolvedGroup,
       id: this.focuslyElementId,
-    };
+    } as FocuslyTargetItem;
   }
 
-  /**
-   * Hook for when this element receives focus *programmatically* via effect.
-   * Override in derived directives if needed.
-   */
   protected onElementFocus: () => void = () => {
     const host = this.elementRef.nativeElement as any;
-    if (host.select) {
-      host.select();
-    }
+    if (host.select) host.select();
   };
 
-  /**
-   * Hook for programmatic focus of non-native controls (e.g. NzSelect).
-   * If set, this will be used instead of native focus/select.
-   */
   protected selectCustomElement: (() => void) | undefined;
 
   readonly isActive = computed(() => this.focusService.isCurrentFocus(this.focuslyElementId));
@@ -92,42 +83,44 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    this.limitHitSubscription = this.focusService.endStopHit$.subscribe((focus: FocuslyItem) => {
+    this.limitHitSubscription = this.focusService.endStopHit$.subscribe(() => {
+      // unchanged behaviour; optional to keep
       if (this.focusService.isCurrentFocus(this.focuslyElementId)) {
         const host = this.elementRef.nativeElement;
-        // Defer blur/focus to after the current CD cycle
         queueMicrotask(() => {
           (host as any).blur?.();
           (host as any).focus?.();
         });
       }
     });
-
-    effect(
-        () => {
-            if (!this.isActive()) {
-            // if we lose active state, stop retrying
-            this.cancelFocusRetry();
-            return;
-            }
-
-            this.ensureDomFocus();
-        },
-        { injector: this.injector },
-    );
   }
 
   ngOnInit(): void {
     this.syncRegistration();
+
+    this.focusRequestSub = this.focusService.focusRequests$.subscribe((req) => {
+      // match by id + group
+      if (req.id !== this.focuslyElementId) return;
+
+      const group = this.resolvedGroup;
+      if (req.groupId != null && group != null && req.groupId !== group) return;
+      if (req.groupId != null && group == null) return;
+
+      this.ensureDomFocusForRequest(req);
+    });
   }
 
   ngOnDestroy(): void {
+    this.cancelFocusRetry();
+    this.activeRequestId = null;
+
     if (this.lastRegistered) {
       this.focusService.unRegisterItemFocus(this.lastRegistered);
       this.lastRegistered = null;
     }
 
     this.limitHitSubscription.unsubscribe();
+    this.focusRequestSub?.unsubscribe();
   }
 
   protected buildItem(): FocuslyTargetItem | null {
@@ -140,135 +133,139 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
   protected syncRegistration(): void {
     const next = this.buildItem();
 
-    // Not ready yet
     if (!next) {
-        if (this.lastRegistered) {
+      if (this.lastRegistered) {
         this.focusService.unRegisterItemFocus(this.lastRegistered);
         this.lastRegistered = null;
-        }
-        return;
+      }
+      return;
     }
 
-    // If unchanged, no-op
     if (
-        this.lastRegistered &&
-        this.lastRegistered.groupId === next.groupId &&
-        this.lastRegistered.id === next.id
+      this.lastRegistered &&
+      this.lastRegistered.groupId === next.groupId &&
+      this.lastRegistered.id === next.id
     ) {
-        return;
+      return;
     }
 
-    // If group changed, unregister old one first
     if (this.lastRegistered && this.lastRegistered.groupId !== next.groupId) {
-        this.focusService.unRegisterItemFocus(this.lastRegistered);
+      this.focusService.unRegisterItemFocus(this.lastRegistered);
     }
 
     this.focusService.registerItemFocus(next);
     this.lastRegistered = next;
   }
 
-private cancelFocusRetry(): void {
+  private cancelFocusRetry(): void {
     if (this.focusRafId != null) {
-        cancelAnimationFrame(this.focusRafId);
-        this.focusRafId = null;
+      cancelAnimationFrame(this.focusRafId);
+      this.focusRafId = null;
     }
     this.focusAttempt = 0;
-}
-
-private isActuallyFocusableNow(el: HTMLElement): boolean {
-  if (!el.isConnected) return false;
-
-  const anyEl = el as any;
-  if (anyEl.disabled) return false;
-
-  const style = getComputedStyle(el);
-  if (style.display === 'none' || style.visibility === 'hidden') return false;
-
-  // Many tab systems keep elements in DOM but with 0 rects while hidden/animating.
-  const rects = el.getClientRects();
-  if (!rects || rects.length === 0) return false;
-
-  // Optional: respect aria-hidden up the tree (Material may set this)
-  let p: HTMLElement | null = el;
-  while (p) {
-    if (p.getAttribute?.('aria-hidden') === 'true') return false;
-    p = p.parentElement;
   }
 
-  return true;
-}
+  private isActuallyFocusableNow(el: HTMLElement): boolean {
+    if (!el.isConnected) return false;
+    const anyEl = el as any;
+    if (anyEl.disabled) return false;
 
-private didDomFocusLand(host: HTMLElement): boolean {
-  const active = document.activeElement as HTMLElement | null;
-  if (!active) return false;
-  return active === host || host.contains(active);
-}
+    const style = getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') return false;
 
-private applyDomFocusOnce(host: HTMLElement): void {
-  const anyHost = host as any;
+    const rects = el.getClientRects();
+    if (!rects || rects.length === 0) return false;
 
-  if (this.selectCustomElement) {
-    this.selectCustomElement();
-  } else {
-    anyHost.focus?.();
-    if (anyHost.select) anyHost.select();
+    let p: HTMLElement | null = el;
+    while (p) {
+      if (p.getAttribute?.('aria-hidden') === 'true') return false;
+      p = p.parentElement;
+    }
+
+    return true;
   }
 
-  // keep your hook
-  this.onElementFocus();
-}
+  private didDomFocusLand(host: HTMLElement): boolean {
+    const active = document.activeElement as HTMLElement | null;
+    return !!active && (active === host || host.contains(active));
+  }
 
-private ensureDomFocus(): void {
-  // Cancel any previous loop and start fresh
-  this.cancelFocusRetry();
+  private applyDomFocusOnce(host: HTMLElement, req: FocusRequest): void {
+    const anyHost = host as any;
 
-  const host = this.elementRef.nativeElement;
-
-  const attempt = () => {
-    // Stop if we’re no longer the active Focusly item
-    if (!this.isActive()) {
-      this.cancelFocusRetry();
-      return;
+    if (this.selectCustomElement) {
+      this.selectCustomElement();
+    } else {
+      anyHost.focus?.({ preventScroll: req.preventScroll ?? true });
+      if (anyHost.select) anyHost.select();
     }
 
-    this.focusAttempt++;
+    this.onElementFocus();
+  }
 
-    // Wait until the host is actually focusable/visible
-    if (!this.isActuallyFocusableNow(host)) {
-      if (this.focusAttempt >= this.maxFocusAttempts) {
-        this.cancelFocusRetry();
-        return;
-      }
-      this.focusRafId = requestAnimationFrame(attempt);
-      return;
-    }
-
-    // Try to focus
-    this.applyDomFocusOnce(host);
-
-    // Confirm it stuck; if not, retry
-    if (!this.didDomFocusLand(host)) {
-      if (this.focusAttempt >= this.maxFocusAttempts) {
-        this.cancelFocusRetry();
-        return;
-      }
-      this.focusRafId = requestAnimationFrame(attempt);
-      return;
-    }
-
-    // Success
+  private ensureDomFocusForRequest(req: FocusRequest): void {
+    this.activeRequestId = req.requestId;
     this.cancelFocusRetry();
-  };
 
-  // Start after current CD cycle
-  queueMicrotask(() => {
-    if (!this.isActive()) return;
-    attempt();
-  });
-}
+    const host = this.elementRef.nativeElement;
+    const maxAttempts =
+      req.timeoutMs != null ? Math.max(1, Math.ceil(req.timeoutMs / 16)) : this.maxFocusAttempts;
 
-  // These are the ONLY @HostListener decorators; derived directives just
-  // override the protected hooks below.
+    const attempt = () => {
+      // superseded by a newer request
+      if (this.activeRequestId !== req.requestId) return;
+
+      this.focusAttempt++;
+
+      if (!this.isActuallyFocusableNow(host)) {
+        if (this.focusAttempt >= maxAttempts) {
+          this.focusService.ackFocus({
+            requestId: req.requestId,
+            id: req.id,
+            groupId: req.groupId,
+            success: false,
+            reason: 'not-visible',
+          });
+          this.activeRequestId = null;
+          this.cancelFocusRetry();
+          return;
+        }
+        this.focusRafId = requestAnimationFrame(attempt);
+        return;
+      }
+
+      this.applyDomFocusOnce(host, req);
+
+      if (!this.didDomFocusLand(host)) {
+        if (this.focusAttempt >= maxAttempts) {
+          this.focusService.ackFocus({
+            requestId: req.requestId,
+            id: req.id,
+            groupId: req.groupId,
+            success: false,
+            reason: 'not-focusable',
+          });
+          this.activeRequestId = null;
+          this.cancelFocusRetry();
+          return;
+        }
+        this.focusRafId = requestAnimationFrame(attempt);
+        return;
+      }
+
+      // success
+      this.focusService.ackFocus({
+        requestId: req.requestId,
+        id: req.id,
+        groupId: req.groupId,
+        success: true,
+      });
+      this.activeRequestId = null;
+      this.cancelFocusRetry();
+    };
+
+    queueMicrotask(() => attempt());
+  }
 
   @HostListener('focus', ['$event'])
   @HostListener('focusin', ['$event'])
@@ -303,28 +300,9 @@ private ensureDomFocus(): void {
     this.onEnterKey(e as KeyboardEvent);
   }
 
-  // ----- Overridable hooks for derived directives ---------------------------
-  // Default implementations do nothing. NzSelectFocusDirective (etc.) can
-  // override any of these to implement control-specific behaviour without
-  // needing its own @HostListener decorators.
-
-  protected onFocusIn(event: FocusEvent): void {
-    // Default: no-op
-  }
-
-  protected onFocusOut(event: FocusEvent): void {
-    // Default: no-op
-  }
-
-  protected onMouseDown(event: MouseEvent): void {
-    // Default: no-op
-  }
-
-  protected onKeydown(event: KeyboardEvent): void {
-    // Default: no-op
-  }
-
-  protected onEnterKey(event: KeyboardEvent): void {
-    // Default: no-op
-  }
+  protected onFocusIn(event: FocusEvent): void {}
+  protected onFocusOut(event: FocusEvent): void {}
+  protected onMouseDown(event: MouseEvent): void {}
+  protected onKeydown(event: KeyboardEvent): void {}
+  protected onEnterKey(event: KeyboardEvent): void {}
 }
