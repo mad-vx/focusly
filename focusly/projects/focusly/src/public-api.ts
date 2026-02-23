@@ -1,4 +1,4 @@
-export * from './lib/directives/focus.directive';
+export * from './lib/directives/focusly.directive';
 export * from './lib/directives/focusly-target.directive';
 export * from './lib/directives/focusly-group-host.directive';
 export * from './lib/directives/focusly-shortcut.directive';
