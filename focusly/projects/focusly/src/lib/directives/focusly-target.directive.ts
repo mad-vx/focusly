@@ -10,7 +10,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FocuslyService } from '../services/focus.service';
+import { FocuslyService } from '../services/focusly.service';
 import { FocuslyItem, FocuslyTargetItem, FocusRequest } from '../models/focus-item.model';
 import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
 

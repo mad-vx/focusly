@@ -1,5 +1,5 @@
 import { AfterContentInit, ContentChildren, Directive, ElementRef, inject, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList } from "@angular/core";
-import { FocuslyService } from "../services/focus.service";
+import { FocuslyService } from "../services/focusly.service";
 import { FocuslyGroupHostDirective } from "./focusly-group-host.directive";
 import { FocuslyShortcutDef, FocuslyShortcutRegistration, FocuslyShortcuts } from "../models/short-cut.model";
 import { FocuslyShortcutDirective } from "./focusly-shortcut.directive";
@@ -72,7 +72,6 @@ export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterCon
   }
 
   private rebuildRegistrations(): void {
-    // tear down old
     this.unregisterAll();
 
     const groupId = this.resolveGroupId();
