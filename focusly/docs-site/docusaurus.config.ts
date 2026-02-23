@@ -25,8 +25,9 @@ const config: Config = {
   organizationName: 'mad-vx', // Usually your GitHub org/user name.
   projectName: 'focusly', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  trailingSlash: false,
 
+  onBrokenLinks: 'throw',
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
