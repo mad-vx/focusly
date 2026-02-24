@@ -41,7 +41,7 @@
             </td>
 
             <td class="cell-center">
-              <input                
+              <input
                 class="cell-checkbox"
                 type="checkbox"
                 focusly
@@ -74,28 +74,19 @@
 
             <td>
               <ng-container
-                *ngTemplateOutlet="
-                  urgencyTemplate;
-                  context: { $implicit: row, row: row, group: 3 }
-                "
+                *ngTemplateOutlet="urgencyTemplate; context: { $implicit: row, row: row, group: 3 }"
               ></ng-container>
             </td>
 
             <td>
               <ng-container
-                *ngTemplateOutlet="
-                  ratingTemplate;
-                  context: { $implicit: row, row: row, group: 3 }
-                "
+                *ngTemplateOutlet="ratingTemplate; context: { $implicit: row, row: row, group: 3 }"
               ></ng-container>
             </td>
 
             <td class="cell-center">
               <ng-container
-                *ngTemplateOutlet="
-                  actionTemplate;
-                  context: { $implicit: row, row: row, group: 3 }
-                "
+                *ngTemplateOutlet="actionTemplate; context: { $implicit: row, row: row, group: 3 }"
               ></ng-container>
             </td>
 

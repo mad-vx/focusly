@@ -1,9 +1,4 @@
-import {
-  Directive,
-  Input,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FocuslyTargetDirective } from './focusly-target.directive';
 import { FocuslyCellItem } from '../models/focus-item.model';
 

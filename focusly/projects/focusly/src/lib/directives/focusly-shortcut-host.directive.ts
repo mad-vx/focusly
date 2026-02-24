@@ -1,16 +1,34 @@
-import { AfterContentInit, ContentChildren, Directive, ElementRef, inject, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList } from "@angular/core";
-import { FocuslyService } from "../services/focusly.service";
-import { FocuslyGroupHostDirective } from "./focusly-group-host.directive";
-import { FocuslyShortcutDef, FocuslyShortcutRegistration, FocuslyShortcuts } from "../models/short-cut.model";
-import { FocuslyShortcutDirective } from "./focusly-shortcut.directive";
-import { fromEvent, Subscription } from "rxjs";
-import { normaliseKeyChordString } from "../models/keymap/models/key-chord.model";
+import {
+  AfterContentInit,
+  ContentChildren,
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+} from '@angular/core';
+import { FocuslyService } from '../services/focusly.service';
+import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
+import {
+  FocuslyShortcutDef,
+  FocuslyShortcutRegistration,
+  FocuslyShortcuts,
+} from '../models/short-cut.model';
+import { FocuslyShortcutDirective } from './focusly-shortcut.directive';
+import { fromEvent, Subscription } from 'rxjs';
+import { normaliseKeyChordString } from '../models/keymap/models/key-chord.model';
 
 @Directive({
   selector: '[focuslyShortcutHost]',
   standalone: true,
 })
-export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterContentInit, OnChanges {
+export class FocuslyShortcutHostDirective
+  implements OnInit, OnDestroy, AfterContentInit, OnChanges
+{
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly zone = inject(NgZone);
   private readonly focuslyService = inject(FocuslyService);
@@ -32,18 +50,19 @@ export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterCon
 
   ngOnInit(): void {
     this.zone.runOutsideAngular(() => {
-      this.keySub = fromEvent<KeyboardEvent>(this.el.nativeElement, 'keydown', { capture: true })
-        .subscribe((e) => {
-          const handled = this.focuslyService.tryHandleShortcutEvent(e, {
-            groupId: this.resolveGroupId(),
-            elementId: this.focuslyElementId,
-          });
-
-          if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
+      this.keySub = fromEvent<KeyboardEvent>(this.el.nativeElement, 'keydown', {
+        capture: true,
+      }).subscribe((e) => {
+        const handled = this.focuslyService.tryHandleShortcutEvent(e, {
+          groupId: this.resolveGroupId(),
+          elementId: this.focuslyElementId,
         });
+
+        if (handled) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
     });
   }
 
@@ -112,12 +131,14 @@ export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterCon
 
   private toRegistrationsFromHostInput(
     input: FocuslyShortcuts | null,
-    defaults: { groupId?: number; elementId?: string }
+    defaults: { groupId?: number; elementId?: string },
   ): FocuslyShortcutRegistration[] {
     if (!input) return [];
 
     const toKeys = (k: string | string[]) =>
-      Array.from(new Set((Array.isArray(k) ? k : [k]).map(normaliseKeyChordString).filter(Boolean)));
+      Array.from(
+        new Set((Array.isArray(k) ? k : [k]).map(normaliseKeyChordString).filter(Boolean)),
+      );
 
     const make = (def: FocuslyShortcutDef): FocuslyShortcutRegistration[] => {
       const keys = toKeys(def.key);
@@ -130,18 +151,20 @@ export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterCon
       if (scope === 'group' && groupId == null) return [];
       if (scope === 'element' && !elementId) return [];
 
-      return [{
-        id: `${this.hostId}:host:${crypto.randomUUID()}`,
-        keys,
-        scope,
-        groupId,
-        elementId,
-        preventInTextActions: !!def.preventInTextActions,
-        priority: def.priority ?? 0,
-        description: def.description,
-        source: 'host',
-        handler: def.handler,
-      }];
+      return [
+        {
+          id: `${this.hostId}:host:${crypto.randomUUID()}`,
+          keys,
+          scope,
+          groupId,
+          elementId,
+          preventInTextActions: !!def.preventInTextActions,
+          priority: def.priority ?? 0,
+          description: def.description,
+          source: 'host',
+          handler: def.handler,
+        },
+      ];
     };
 
     if (Array.isArray(input)) {
@@ -149,8 +172,6 @@ export class FocuslyShortcutHostDirective implements OnInit, OnDestroy, AfterCon
     }
 
     // map form
-    return Object.entries(input).flatMap(([key, handler]) =>
-      make({ key, handler })
-    );
+    return Object.entries(input).flatMap(([key, handler]) => make({ key, handler }));
   }
 }

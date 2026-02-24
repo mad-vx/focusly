@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { 
-  FocuslyDirective, 
-  FocuslyGroupHostDirective, 
-  FocuslyShortcutHostDirective, 
-  FocuslyShortcuts, 
-  FOCUSLY_SERVICE_API  }
-from '@zaybu/focusly';
+import {
+  FocuslyDirective,
+  FocuslyGroupHostDirective,
+  FocuslyShortcutHostDirective,
+  FocuslyShortcuts,
+  FOCUSLY_SERVICE_API,
+} from '@zaybu/focusly';
 import { NzInputNumberFocusDirective, NzSelectFocusDirective } from '@zaybu/focusly-nz';
 import { BaseComponent } from '../base/base.component';
 import { FormsModule } from '@angular/forms';
@@ -47,7 +47,7 @@ import { TabInstructionsComponent } from '../tab-content/tab-instructions/tab-in
     MarketAnalysisComponent,
     RiskLimitsComponent,
     AuditComplianceComponent,
-    TabInstructionsComponent
+    TabInstructionsComponent,
   ],
   templateUrl: './ng-zorro.component.html',
   standalone: true,
@@ -57,28 +57,28 @@ export class NgZorroComponent extends BaseDemoGrid {
   private focuslyService = inject(FOCUSLY_SERVICE_API);
 
   focuslyShortcuts: FocuslyShortcuts = {
-      'alt+1': () => {
-       this.selectIndex(0);
-       this.focuslyService.setFocusByElementId('tradingFirstField');
+    'alt+1': () => {
+      this.selectIndex(0);
+      this.focuslyService.setFocusByElementId('tradingFirstField');
     },
-      'alt+2': () => {
-       this.selectIndex(1);
-       this.focuslyService.setFocusByElementId('customerFirstField');
+    'alt+2': () => {
+      this.selectIndex(1);
+      this.focuslyService.setFocusByElementId('customerFirstField');
     },
-      'alt+3': () => {
-       this.selectIndex(2);
-       this.focuslyService.setFocusByElementId('marketFirstField');
+    'alt+3': () => {
+      this.selectIndex(2);
+      this.focuslyService.setFocusByElementId('marketFirstField');
     },
-      'alt+4': () => {
-       this.selectIndex(3);
-       this.focuslyService.setFocusByElementId('riskFirstField');
+    'alt+4': () => {
+      this.selectIndex(3);
+      this.focuslyService.setFocusByElementId('riskFirstField');
     },
-      'alt+5': () => {
-       this.selectIndex(4);
-       this.focuslyService.setFocusByElementId('auditFirstField');
-    }
+    'alt+5': () => {
+      this.selectIndex(4);
+      this.focuslyService.setFocusByElementId('auditFirstField');
+    },
   };
-  
+
   selectedIndex = signal(0);
   constructor() {
     super();
@@ -89,7 +89,7 @@ export class NgZorroComponent extends BaseDemoGrid {
   }
 
   selectFirstField() {
-    this.selectIndex(0); 
+    this.selectIndex(0);
     this.focuslyService.setFocusByElementId('tradingFirstField');
   }
 }

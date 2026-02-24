@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FocuslyDirective } from "@zaybu/focusly";
+import { FocuslyDirective } from '@zaybu/focusly';
 
 @Component({
   selector: 'app-audit-compliance',

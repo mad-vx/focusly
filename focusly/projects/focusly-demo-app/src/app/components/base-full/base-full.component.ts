@@ -1,16 +1,17 @@
 import { Component, Input, signal, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { FocuslyDirective, FocuslyEnterKeySubscriberComponent, FocuslyListenerComponent, FocuslyGroupHostDirective } from '@zaybu/focusly';
+import {
+  FocuslyDirective,
+  FocuslyEnterKeySubscriberComponent,
+  FocuslyListenerComponent,
+  FocuslyGroupHostDirective,
+} from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { tradeData } from '../../model/trade-data.model';
 
 @Component({
   selector: 'app-base-full-component',
-  imports: [
-    NgTemplateOutlet,
-    FocuslyDirective,
-    FocuslyGroupHostDirective
-],
+  imports: [NgTemplateOutlet, FocuslyDirective, FocuslyGroupHostDirective],
   templateUrl: './base-full.component.html',
   styleUrl: './base-full.component.scss',
   standalone: true,

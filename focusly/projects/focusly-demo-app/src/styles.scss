@@ -194,7 +194,6 @@ input[type='button'],
 //   }
 // }
 
-
 .instructions {
   background: #f9fafb;
   border: 1px solid #e0e0e0;
@@ -204,7 +203,7 @@ input[type='button'],
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.instructions.wide {  
+.instructions.wide {
   max-width: 1000px;
 }
 
@@ -518,6 +517,6 @@ input[type='button'],
 }
 
 .example {
-    font-size: larger;
-    font-weight: 500;
+  font-size: larger;
+  font-weight: 500;
 }

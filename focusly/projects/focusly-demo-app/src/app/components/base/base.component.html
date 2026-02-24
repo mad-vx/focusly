@@ -15,7 +15,8 @@
       />
     </header>
 
-    <table class="data-grid" 
+    <table
+      class="data-grid"
       [focuslyGroupHost]="1"
       focuslyShortcutHost
       [focuslyShortcuts]="focuslyShortcuts"
@@ -50,7 +51,7 @@
 
             <td>
               <ng-container
-                *ngTemplateOutlet="   
+                *ngTemplateOutlet="
                   buyOrSellTemplate;
                   context: { $implicit: row, row: row, group: 1 }
                 "
@@ -106,10 +107,12 @@
       />
     </header>
 
-    <table class="data-grid" 
+    <table
+      class="data-grid"
       [focuslyGroupHost]="2"
       focuslyShortcutHost
-      [focuslyShortcuts]="focuslyShortcuts2">
+      [focuslyShortcuts]="focuslyShortcuts2"
+    >
       <thead>
         <tr>
           <th>Field</th>

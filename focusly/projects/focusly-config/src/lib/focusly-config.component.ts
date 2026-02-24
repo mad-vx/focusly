@@ -8,15 +8,9 @@ import {
   output,
   signal,
 } from '@angular/core';
-import {
-  FOCUSLY_SERVICE_API,
-} from '@zaybu/focusly';
+import { FOCUSLY_SERVICE_API } from '@zaybu/focusly';
 
-import {
-  KeyPressAction,
-  FocuslyKeyMap,
-  FocuslyKeyChord
-} from '@zaybu/focusly';
+import { KeyPressAction, FocuslyKeyMap, FocuslyKeyChord } from '@zaybu/focusly';
 
 type ModifierOption = 'none' | 'ctrl' | 'alt' | 'shift';
 interface ModifierOptionItem {
@@ -178,7 +172,7 @@ export class FocuslyConfigComponent {
       return { ...m, [action]: next };
     });
   }
-  
+
   private pushActionUpdate(action: KeyPressAction): void {
     const [c1, c2] = this.getSlots(action);
 
@@ -196,9 +190,7 @@ export class FocuslyConfigComponent {
   }
 
   private toFocuslyChord(slots: ChordSlots): FocuslyKeyChord | undefined {
-    const cleaned = slots
-      .map((c) => c.trim())
-      .filter(Boolean);
+    const cleaned = slots.map((c) => c.trim()).filter(Boolean);
 
     if (cleaned.length === 0) return undefined;
     if (cleaned.length === 1) return cleaned[0];

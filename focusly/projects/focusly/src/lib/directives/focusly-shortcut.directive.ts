@@ -1,6 +1,6 @@
-import { Directive, EventEmitter, Input, Output } from "@angular/core";
-import { FocuslyShortcutRegistration, FocuslyShortcutScope } from "../models/short-cut.model";
-import { normaliseKeyChordString } from "../models/keymap/models/key-chord.model";
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { FocuslyShortcutRegistration, FocuslyShortcutScope } from '../models/short-cut.model';
+import { normaliseKeyChordString } from '../models/keymap/models/key-chord.model';
 
 @Directive({
   selector: '[focuslyShortcut]',
@@ -18,7 +18,10 @@ export class FocuslyShortcutDirective {
   @Output() focuslyAction = new EventEmitter<KeyboardEvent>();
 
   /** Host calls this when it needs current declaration */
-  getRegistration(defaults: { groupId?: number; elementId?: string }): Omit<FocuslyShortcutRegistration, 'id'> | null {
+  getRegistration(defaults: {
+    groupId?: number;
+    elementId?: string;
+  }): Omit<FocuslyShortcutRegistration, 'id'> | null {
     const raw = this.focuslyKey;
     const keysRaw = Array.isArray(raw) ? raw : [raw];
 
@@ -27,7 +30,8 @@ export class FocuslyShortcutDirective {
 
     const scope = this.focuslyShortcutScope ?? 'group';
     const groupId = scope === 'group' ? (this.focuslyGroup ?? defaults.groupId) : undefined;
-    const elementId = scope === 'element' ? (this.focuslyElementId ?? defaults.elementId) : undefined;
+    const elementId =
+      scope === 'element' ? (this.focuslyElementId ?? defaults.elementId) : undefined;
 
     if (scope === 'group' && groupId == null) return null;
     if (scope === 'element' && !elementId) return null;

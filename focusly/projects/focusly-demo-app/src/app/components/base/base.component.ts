@@ -1,6 +1,11 @@
 import { Component, Input, signal, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { FocuslyGroupHostDirective, FocuslyShortcutHostDirective, FocuslyDirective, FocuslyShortcutDirective } from '@zaybu/focusly';
+import {
+  FocuslyGroupHostDirective,
+  FocuslyShortcutHostDirective,
+  FocuslyDirective,
+  FocuslyShortcutDirective,
+} from '@zaybu/focusly';
 import { TradeCellContext, TradeRow } from '../../model/trade-row.model';
 import { tradeData } from '../../model/trade-data.model';
 import { KeyDisplayComponent } from '../key-display.component';
@@ -12,8 +17,8 @@ import { KeyDisplayComponent } from '../key-display.component';
     FocuslyDirective,
     FocuslyGroupHostDirective,
     FocuslyShortcutHostDirective,
-    FocuslyShortcutDirective
-],
+    FocuslyShortcutDirective,
+  ],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss',
   standalone: true,
@@ -40,11 +45,11 @@ export class BaseComponent {
   };
 
   focuslyShortcuts = {
-    'enter': () => this.onEnterKey()
+    enter: () => this.onEnterKey(),
   };
 
   focuslyShortcuts2 = {
-    'enter': () => this.onEnterKey2()
+    enter: () => this.onEnterKey2(),
   };
 
   activeSaveButton = signal<1 | 2 | null>(null);

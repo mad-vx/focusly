@@ -45,5 +45,4 @@ export class FocuslyGroupHostDirective {
   resolveGroup(): number | undefined {
     return this._groupId;
   }
-
 }

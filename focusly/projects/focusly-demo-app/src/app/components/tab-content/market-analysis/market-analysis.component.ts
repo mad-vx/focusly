@@ -14,9 +14,10 @@ export class MarketAnalysisComponent {
     timeframe: '1M',
     signal: 'Breakout',
     confidence: 72,
-    support: 392.50,
-    resistance: 418.00,
-    thesis: 'Consolidation for ~3 weeks. Watching for volume confirmation above resistance.\nPotential add on pullback to prior high.',
+    support: 392.5,
+    resistance: 418.0,
+    thesis:
+      'Consolidation for ~3 weeks. Watching for volume confirmation above resistance.\nPotential add on pullback to prior high.',
     alertOnPriceTouch: true,
     alertOnNews: false,
     pinToDashboard: true,

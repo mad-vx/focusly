@@ -1,6 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FocuslyItem, FocuslyCellItem, isCellItem, FocusRequest, FocusAck } from '../models/focus-item.model';
+import {
+  FocuslyItem,
+  FocuslyCellItem,
+  isCellItem,
+  FocusRequest,
+  FocusAck,
+} from '../models/focus-item.model';
 import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
 import {
   DEFAULT_FOCUSLY_KEYMAP,
@@ -105,9 +111,9 @@ export class FocuslyService implements FocuslyServiceApi {
   }
 
   getShortcutHandlerForKeyboardEvent(
-      e: KeyboardEvent,
-      context?: { groupId?: number; elementId?: string },
-    ): ((e: KeyboardEvent) => void) | undefined {
+    e: KeyboardEvent,
+    context?: { groupId?: number; elementId?: string },
+  ): ((e: KeyboardEvent) => void) | undefined {
     const chord = chordFromKeyboardEvent(e);
 
     const inTextInput = this.isTextInputTarget(e.target);
@@ -120,7 +126,7 @@ export class FocuslyService implements FocuslyServiceApi {
     if (currentElementId) {
       const store = this.shortcutByElement.get(currentElementId);
       const list = store?.byChord.get(chord);
-      const hit = list?.find(r => !r.preventInTextActions || !inTextInput);
+      const hit = list?.find((r) => !r.preventInTextActions || !inTextInput);
       if (hit) return (evt) => hit.handler(evt);
     }
 
@@ -128,14 +134,14 @@ export class FocuslyService implements FocuslyServiceApi {
     if (currentGroupId != null) {
       const store = this.shortcutByGroup.get(currentGroupId);
       const list = store?.byChord.get(chord);
-      const hit = list?.find(r => !r.preventInTextActions || !inTextInput);
+      const hit = list?.find((r) => !r.preventInTextActions || !inTextInput);
       if (hit) return (evt) => hit.handler(evt);
     }
 
     // 3) global
     {
       const list = this.shortcutGlobal.byChord.get(chord);
-      const hit = list?.find(r => !r.preventInTextActions || !inTextInput);
+      const hit = list?.find((r) => !r.preventInTextActions || !inTextInput);
       if (hit) return (evt) => hit.handler(evt);
     }
 
@@ -375,7 +381,7 @@ export class FocuslyService implements FocuslyServiceApi {
     const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
     if (effectiveGroup == null) return undefined;
 
-    const store = this.focusRegistry.get(effectiveGroup);    
+    const store = this.focusRegistry.get(effectiveGroup);
     if (!store) return undefined;
 
     const maxCol = store.maxCol ?? 0;
@@ -460,7 +466,7 @@ export class FocuslyService implements FocuslyServiceApi {
     for (const chord of reg.keys) {
       const list = store.byChord.get(chord) ?? [];
       // upsert by id in case directive updates
-      const existingIndex = list.findIndex(x => x.id === reg.id);
+      const existingIndex = list.findIndex((x) => x.id === reg.id);
       if (existingIndex >= 0) list.splice(existingIndex, 1);
       list.push(reg);
       // keep highest priority first
@@ -477,7 +483,7 @@ export class FocuslyService implements FocuslyServiceApi {
     for (const chord of reg.keys) {
       const list = store.byChord.get(chord);
       if (!list) continue;
-      const idx = list.findIndex(x => x.id === id);
+      const idx = list.findIndex((x) => x.id === id);
       if (idx >= 0) list.splice(idx, 1);
       if (list.length === 0) store.byChord.delete(chord);
     }
@@ -491,9 +497,10 @@ export class FocuslyService implements FocuslyServiceApi {
     if (tag === 'input') {
       const type = (el as HTMLInputElement).type?.toLowerCase();
       // treat most input types as typing contexts
-      return !['checkbox','radio','button','submit','reset','range','color','file'].includes(type);
+      return !['checkbox', 'radio', 'button', 'submit', 'reset', 'range', 'color', 'file'].includes(
+        type,
+      );
     }
     return el.isContentEditable === true;
   }
-
 }

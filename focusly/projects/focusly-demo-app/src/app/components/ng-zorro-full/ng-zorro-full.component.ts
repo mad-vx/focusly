@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './ng-zorro-full.component.html',
   styleUrl: './ng-zorro-full.component.scss',
 })
-export class NgZorroFullComponent {
-
-}
+export class NgZorroFullComponent {}

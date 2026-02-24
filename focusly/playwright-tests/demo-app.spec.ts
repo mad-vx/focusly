@@ -40,38 +40,83 @@ function defineGridNavigationTests(toolkitType: ToolkitType, keyMap: TestKeyMap)
     });
 
     test(`${toKeyPressString(keyMap.map.down)} moves from (0,0) to (1,0)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 0, col: 0 }, { group: 1, row: 1, col: 0 }, keyMap.map.down);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 0 },
+        { group: 1, row: 1, col: 0 },
+        keyMap.map.down,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.up)} moves from (1,0) to (0,0)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 1, col: 0 }, { group: 1, row: 0, col: 0 }, keyMap.map.up);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 1, col: 0 },
+        { group: 1, row: 0, col: 0 },
+        keyMap.map.up,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.right)} moves from (0,0) to (0,1)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 0, col: 0 }, { group: 1, row: 0, col: 1 }, keyMap.map.right);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 0 },
+        { group: 1, row: 0, col: 1 },
+        keyMap.map.right,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.left)} moves from (0,1) to (0,0)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 0, col: 0 }, { group: 1, row: 0, col: 1 }, keyMap.map.right);
-      await testCellFocusChange(page, { group: 1, row: 0, col: 1 }, { group: 1, row: 0, col: 0 }, keyMap.map.left);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 0 },
+        { group: 1, row: 0, col: 1 },
+        keyMap.map.right,
+      );
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 1 },
+        { group: 1, row: 0, col: 0 },
+        keyMap.map.left,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.end)} moves from (0,0) to (0,3)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 0, col: 0 }, { group: 1, row: 0, col: 3 }, keyMap.map.end);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 0 },
+        { group: 1, row: 0, col: 3 },
+        keyMap.map.end,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.home)} moves from (0,3) to (0,0)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 0, col: 3 }, { group: 1, row: 0, col: 0 }, keyMap.map.home);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 3 },
+        { group: 1, row: 0, col: 0 },
+        keyMap.map.home,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.pageDown)} moves from (0,3) to (9, 3)`, async ({
       page,
     }) => {
-      await testCellFocusChange(page, { group: 1, row: 0, col: 3 }, { group: 1, row: 9, col: 3 }, keyMap.map.pageDown);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 0, col: 3 },
+        { group: 1, row: 9, col: 3 },
+        keyMap.map.pageDown,
+      );
     });
 
     test(`${toKeyPressString(keyMap.map.pageUp)} moves from (9,0) to (0,0)`, async ({ page }) => {
-      await testCellFocusChange(page, { group: 1, row: 9, col: 0 }, { group: 1, row: 0, col: 0 }, keyMap.map.pageUp);
+      await testCellFocusChange(
+        page,
+        { group: 1, row: 9, col: 0 },
+        { group: 1, row: 0, col: 0 },
+        keyMap.map.pageUp,
+      );
     });
 
     test(`${toolkitType} - ${keyMap.name} - multiple keypress`, async ({ page }) => {

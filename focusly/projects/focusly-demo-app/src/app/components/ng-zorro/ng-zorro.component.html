@@ -92,11 +92,12 @@
 
 <app-tab-instructions (selectFirst)="selectFirstField()"></app-tab-instructions>
 
-<nz-tabs [focuslyGroupHost]="3"
-        focuslyShortcutHost
-        [focuslyShortcuts]="focuslyShortcuts"
-        [nzSelectedIndex]="selectedIndex()"
-        (nzSelectedIndexChange)="selectedIndex.set($event)"
+<nz-tabs
+  [focuslyGroupHost]="3"
+  focuslyShortcutHost
+  [focuslyShortcuts]="focuslyShortcuts"
+  [nzSelectedIndex]="selectedIndex()"
+  (nzSelectedIndexChange)="selectedIndex.set($event)"
 >
   <nz-tab nzTitle="Trading Data" [focuslyGroupHost]="4">
     <app-trading-ticket></app-trading-ticket>
@@ -105,7 +106,7 @@
     <app-customer></app-customer>
   </nz-tab>
   <nz-tab nzTitle="Analysis" [focuslyGroupHost]="6">
-      <app-market-analysis></app-market-analysis>
+    <app-market-analysis></app-market-analysis>
   </nz-tab>
   <nz-tab nzTitle="Risk" [focuslyGroupHost]="7">
     <app-risk-limits></app-risk-limits>

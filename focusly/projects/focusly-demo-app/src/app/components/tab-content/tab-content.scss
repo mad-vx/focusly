@@ -1,28 +1,59 @@
-  .panel { padding: 12px; }
-  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .field { display: grid; gap: 6px; }
-  .field > label { font-weight: 600; }
-  .field > input, .field > select, .field > textarea { padding: 8px; }
-  .field > input {
-     width: 200px;
-    }
+.panel {
+  padding: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.field {
+  display: grid;
+  gap: 6px;
+}
+.field > label {
+  font-weight: 600;
+}
+.field > input,
+.field > select,
+.field > textarea {
+  padding: 8px;
+}
+.field > input {
+  width: 200px;
+}
 
-    .field > select {
-     width: 200px;
-    }
-    .field > textarea {
-     width: 50%;
-    }
-  .span-2 { grid-column: span 2; }
-  .checks { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-top: 6px; }
-  .check { display: inline-flex; gap: 8px; align-items: center; }
-  .actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 6px; }
-  button { 
-    padding: 8px 12px; 
+.field > select {
+  width: 200px;
+}
+.field > textarea {
+  width: 50%;
+}
+.span-2 {
+  grid-column: span 2;
+}
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 6px;
+}
+.check {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 6px;
+}
+button {
+  padding: 8px 12px;
+}
 
-    }
-
-    button.focusly-active {
-        color: blue;
-        border-color: blue;
-    }
+button.focusly-active {
+  color: blue;
+  border-color: blue;
+}

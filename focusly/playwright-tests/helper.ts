@@ -6,10 +6,10 @@ export const TOOLKITS = ['Vanilla', 'NG-Zorro', 'Material'] as const;
 export type ToolkitType = (typeof TOOLKITS)[number];
 
 type CellLocation = {
-  group: number,
-  row: number,
-  col: number
-}
+  group: number;
+  row: number;
+  col: number;
+};
 
 function toTestId(cell: CellLocation) {
   return `grid-cell-${cell.group}-${cell.row}-${cell.col}`;
@@ -30,10 +30,7 @@ export async function testCellFocusChange(
   }
 }
 
-export async function setCellFocus(
-  page: Page,
-  from: CellLocation,
-): Promise<Locator> {
+export async function setCellFocus(page: Page, from: CellLocation): Promise<Locator> {
   const cell = page.getByTestId(toTestId(from));
   await cell.waitFor();
 

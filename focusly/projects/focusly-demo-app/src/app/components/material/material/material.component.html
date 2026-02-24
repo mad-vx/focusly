@@ -36,13 +36,14 @@
 <!-- <app-base-full-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-full-component> -->
 
-<app-tab-instructions (selectFirst)="selectFirstField()" ></app-tab-instructions>
+<app-tab-instructions (selectFirst)="selectFirstField()"></app-tab-instructions>
 
-<mat-tab-group [focuslyGroupHost]="10"
-        focuslyShortcutHost
-        [focuslyShortcuts]="focuslyShortcuts"
-        [selectedIndex]="selectedIndex()"
-        (selectedIndexChange)="selectedIndex.set($event)"
+<mat-tab-group
+  [focuslyGroupHost]="10"
+  focuslyShortcutHost
+  [focuslyShortcuts]="focuslyShortcuts"
+  [selectedIndex]="selectedIndex()"
+  (selectedIndexChange)="selectedIndex.set($event)"
 >
   <mat-tab label="Trading Data" [focuslyGroupHost]="11">
     <app-trading-ticket></app-trading-ticket>
