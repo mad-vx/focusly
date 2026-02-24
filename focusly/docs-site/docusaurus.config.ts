@@ -82,7 +82,7 @@ const config: Config = {
         src: 'img/logo.png',
       },
       items: [
-        {to: 'https://mad-vx.github.io/focusly/', label: 'Demo', position: 'left'},
+        {to: 'https://mad-vx.github.io/focusly/focusly-demo/browser/', label: 'Demo', position: 'left'},
       ],
     },
     // footer: {

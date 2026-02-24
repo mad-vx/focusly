@@ -172,6 +172,9 @@ https://www.npmjs.com/package/@zaybu/focusly-material
 
 Try Focusly, explore the code, or join the discussion:
 
+🌐 GitHub Pages
+https://mad-vx.github.io/focusly/
+
 🚀 Live Demo (StackBlitz)
 https://stackblitz.com/edit/focusly-demo
 
@@ -181,8 +184,8 @@ https://www.npmjs.com/package/@zaybu/focusly
 💻 GitHub Repository
 https://github.com/mad-vx/focusly
 
-🌐 GitHub Pages
-https://mad-vx.github.io/focusly/
+📖 Docs
+https://mad-vx.github.io/focusly/focusly-docs/
 
 💡 Comments, Suggestions & Questions (GitHub Discussions)
 https://github.com/mad-vx/focusly/discussions
