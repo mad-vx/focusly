@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Focusly',
   tagline: 'Intuitive, Elegant Keyboard Navigation for Angular',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -78,8 +78,8 @@ const config: Config = {
     navbar: {
       title: 'Focusly',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Focusly Logo',
+        src: 'img/logo.png',
       },
       items: [
         {to: 'https://mad-vx.github.io/focusly/', label: 'Demo', position: 'left'},
