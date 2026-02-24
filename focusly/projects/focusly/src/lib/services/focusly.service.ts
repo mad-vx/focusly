@@ -170,8 +170,8 @@ export class FocuslyService implements FocuslyServiceApi {
     return this.focusRegistry.get(groupId);
   }
 
-  private recomputeMaxima(store: GroupStore): void {
-    // Only called when we *might* have removed the current max row/col
+  private recomputeMaximum(store: GroupStore): void {
+    // Only called when we may have removed the current max row/col
     let maxRow = 0;
     let maxCol = 0;
 
@@ -183,8 +183,6 @@ export class FocuslyService implements FocuslyServiceApi {
     store.maxRow = maxRow;
     store.maxCol = maxCol;
   }
-
-  // ---------------- Public API ----------------
 
   onFocus(focus: FocuslyItem): void {
     const store = this.getStore(focus.groupId);
@@ -272,7 +270,7 @@ export class FocuslyService implements FocuslyServiceApi {
       store.byCell.delete(this.cellKey(existing.row, existing.column));
 
       if (existing.row === store.maxRow || existing.column === store.maxCol) {
-        this.recomputeMaxima(store);
+        this.recomputeMaximum(store);
       }
     }
 

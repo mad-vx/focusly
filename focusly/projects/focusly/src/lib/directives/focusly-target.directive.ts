@@ -253,7 +253,6 @@ export class FocuslyTargetDirective implements OnInit, OnDestroy {
         return;
       }
 
-      // success
       this.focusService.ackFocus({
         requestId: req.requestId,
         id: req.id,
