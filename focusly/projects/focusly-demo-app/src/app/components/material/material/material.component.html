@@ -4,7 +4,7 @@
     <input
       matInput
       type="number"
-      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-0'"
+      [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-0'"
       focusly
       placeholder="Qty"
       [focuslyGroup]="group"
@@ -20,7 +20,7 @@
     <mat-label>Side</mat-label>
     <mat-select
       mat-select-focusly
-      [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-1'"
+      [attr.data-test-id]="'grid-cell-' + group + '-' + row.rowIndex + '-1'"
       [focuslyGroup]="group"
       [focuslyRow]="row.rowIndex"
       [focuslyColumn]="1"
@@ -33,3 +33,31 @@
 
 <app-base-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
 </app-base-component>
+<!-- <app-base-full-component [buyOrSellTemplate]="buySell" [quantityTemplate]="quantity">
+</app-base-full-component> -->
+
+<app-tab-instructions (selectFirst)="selectFirstField()"></app-tab-instructions>
+
+<mat-tab-group
+  [focuslyGroupHost]="10"
+  focuslyShortcutHost
+  [focuslyShortcuts]="focuslyShortcuts"
+  [selectedIndex]="selectedIndex()"
+  (selectedIndexChange)="selectedIndex.set($event)"
+>
+  <mat-tab label="Trading Data" [focuslyGroupHost]="11">
+    <app-trading-ticket></app-trading-ticket>
+  </mat-tab>
+  <mat-tab label="Customer Data" [focuslyGroupHost]="12">
+    <app-customer></app-customer>
+  </mat-tab>
+  <mat-tab label="Analysis" [focuslyGroupHost]="13">
+    <app-market-analysis></app-market-analysis>
+  </mat-tab>
+  <mat-tab label="Risk" [focuslyGroupHost]="14">
+    <app-risk-limits></app-risk-limits>
+  </mat-tab>
+  <mat-tab label="Audit" [focuslyGroupHost]="15">
+    <app-audit-compliance></app-audit-compliance>
+  </mat-tab>
+</mat-tab-group>

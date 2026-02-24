@@ -1,19 +1,44 @@
 export type FocuslyShortcutScope = 'element' | 'group' | 'global';
 
+export type FocuslyShortcutHandler = (e: KeyboardEvent) => void;
+export type FocuslyShortcutsMap = Record<string, FocuslyShortcutHandler>;
+export type FocuslyShortcuts = FocuslyShortcutsMap | FocuslyShortcutDef[];
+
+/**
+ * Host-friendly "definition" type (no id, key can be string or string[]).
+ * This is what users pass via [focuslyShortcuts]="..."
+ */
+export interface FocuslyShortcutDef {
+  key: string | string[];
+  handler: FocuslyShortcutHandler;
+
+  scope?: FocuslyShortcutScope;
+  groupId?: number;
+  elementId?: string;
+  preventInTextActions?: boolean;
+  priority?: number;
+
+  description?: string;
+  source?: 'host' | 'child';
+}
+
+/**
+ * Internal store type (requires id, and keys are already normalised string[]).
+ */
 export interface FocuslyShortcutRegistration {
-  id: string;               
-  keys: string[];           
+  id: string;
+  keys: string[];
   scope: FocuslyShortcutScope;
-  groupId?: number;         // used for group scope
-  elementId?: string;       // used for element scope
-  allowInTextInput: boolean;
-  priority: number;         // higher wins
-  invoke: (e: KeyboardEvent) => void;
+  groupId?: number;
+  elementId?: string;
+  preventInTextActions: boolean;
+  priority: number;
+  handler: FocuslyShortcutHandler;
+  description?: string;
+  source?: 'host' | 'child';
 }
 
 export type ShortcutStore = {
-    // chord -> list (kept sorted by priority desc)
-    byChord: Map<string, FocuslyShortcutRegistration[]>;
-    // id -> registration (for fast delete)
-    byId: Map<string, FocuslyShortcutRegistration>;
+  byChord: Map<string, FocuslyShortcutRegistration[]>;
+  byId: Map<string, FocuslyShortcutRegistration>;
 };

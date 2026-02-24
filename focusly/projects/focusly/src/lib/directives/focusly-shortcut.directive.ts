@@ -1,64 +1,49 @@
-import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FocuslyService } from '../services/focus.service';
-import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { FocuslyShortcutRegistration, FocuslyShortcutScope } from '../models/short-cut.model';
+import { normaliseKeyChordString } from '../models/keymap/models/key-chord.model';
 
 @Directive({
   selector: '[focuslyShortcut]',
   standalone: true,
 })
-export class FocuslyShortcutDirective implements OnInit, OnDestroy {
-  private readonly focusService = inject(FocuslyService);
-  private readonly groupHost = inject(FocuslyGroupHostDirective, { optional: true });
-
-  private readonly id = crypto.randomUUID();
-
+export class FocuslyShortcutDirective {
   @Input({ required: true }) focuslyKey!: string | string[];
   @Input() focuslyShortcutScope: FocuslyShortcutScope = 'group';
-
-  // Optional overrides
   @Input() focuslyGroup?: number;
-  @Input() focuslyAllowInTextInput = true;
+  @Input() focuslyPreventInTextActions = false;
   @Input() focuslyPriority = 0;
-
-  /**
-   * If you later want element-scope, you can take a focusly element id here.
-   * For now you can leave it out or keep it optional.
-   */
   @Input() focuslyElementId?: string;
+  @Input() focuslyDescription?: string;
 
   @Output() focuslyAction = new EventEmitter<KeyboardEvent>();
 
-  ngOnInit(): void {
-    this.register();
-  }
+  /** Host calls this when it needs current declaration */
+  getRegistration(defaults: {
+    groupId?: number;
+    elementId?: string;
+  }): Omit<FocuslyShortcutRegistration, 'id'> | null {
+    const raw = this.focuslyKey;
+    const keysRaw = Array.isArray(raw) ? raw : [raw];
 
-  ngOnDestroy(): void {
-    this.focusService.unregisterShortcut(this.id);
-  }
+    const keys = Array.from(new Set(keysRaw.map(normaliseKeyChordString).filter(Boolean)));
+    if (!keys.length) return null;
 
-  private register(): void {
-    const keys = (Array.isArray(this.focuslyKey) ? this.focuslyKey : [this.focuslyKey])
-      .map(k => (k ?? '').trim())
-      .filter(Boolean);
+    const scope = this.focuslyShortcutScope ?? 'group';
+    const groupId = scope === 'group' ? (this.focuslyGroup ?? defaults.groupId) : undefined;
+    const elementId =
+      scope === 'element' ? (this.focuslyElementId ?? defaults.elementId) : undefined;
 
-    if (keys.length === 0) return;
+    if (scope === 'group' && groupId == null) return null;
+    if (scope === 'element' && !elementId) return null;
 
-    const scope = this.focuslyShortcutScope;
-    const groupId =
-      scope === 'group' ? (this.focuslyGroup ?? this.groupHost?.resolveGroup()) : undefined;
-
-    const reg: FocuslyShortcutRegistration = {
-      id: this.id,
+    return {
       keys,
       scope,
       groupId,
-      elementId: scope === 'element' ? this.focuslyElementId : undefined,
-      allowInTextInput: this.focuslyAllowInTextInput,
-      priority: this.focuslyPriority,
-      invoke: (e) => this.focuslyAction.emit(e),
+      elementId,
+      preventInTextActions: !!this.focuslyPreventInTextActions,
+      priority: this.focuslyPriority ?? 0,
+      handler: (e) => this.focuslyAction.emit(e),
     };
-
-    this.focusService.registerShortcut(reg);
   }
 }

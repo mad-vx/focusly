@@ -1,0 +1,149 @@
+<section class="panel">
+  <h3>Audit & Compliance</h3>
+
+  <div class="grid">
+    <div class="field">
+      <label for="ac-from">From</label>
+      <input
+        id="ac-from"
+        type="date"
+        [(ngModel)]="model.dateFrom"
+        focusly
+        [focuslyColumn]="0"
+        [focuslyRow]="0"
+        [focuslyElementId]="'auditFirstField'"
+      />
+    </div>
+
+    <div class="field">
+      <label for="ac-to">To</label>
+      <input
+        id="ac-to"
+        type="date"
+        [(ngModel)]="model.dateTo"
+        focusly
+        [focuslyColumn]="1"
+        [focuslyRow]="0"
+      />
+    </div>
+
+    <div class="field">
+      <label for="ac-user">User</label>
+      <input
+        id="ac-user"
+        type="text"
+        [(ngModel)]="model.user"
+        focusly
+        [focuslyColumn]="0"
+        [focuslyRow]="1"
+      />
+    </div>
+
+    <div class="field">
+      <label for="ac-action">Action</label>
+      <select
+        id="ac-action"
+        [(ngModel)]="model.action"
+        focusly
+        [focuslyColumn]="1"
+        [focuslyRow]="1"
+      >
+        <option>Any</option>
+        <option>OrderSubmitted</option>
+        <option>OrderAmended</option>
+        <option>OrderCancelled</option>
+        <option>LimitOverrideRequested</option>
+        <option>LimitOverrideApproved</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="ac-correlationId">Correlation ID</label>
+      <input
+        id="ac-correlationId"
+        type="text"
+        [(ngModel)]="model.correlationId"
+        focusly
+        [focuslyColumn]="0"
+        [focuslyRow]="2"
+      />
+    </div>
+
+    <div class="field">
+      <label for="ac-result">Result</label>
+      <select
+        id="ac-result"
+        [(ngModel)]="model.result"
+        focusly
+        [focuslyColumn]="1"
+        [focuslyRow]="2"
+      >
+        <option>Any</option>
+        <option>Success</option>
+        <option>Rejected</option>
+        <option>Error</option>
+      </select>
+    </div>
+
+    <div class="field span-2">
+      <label for="ac-attestation">Attestation / Notes</label>
+      <textarea
+        id="ac-attestation"
+        rows="4"
+        [(ngModel)]="model.attestation"
+        focusly
+        [focuslyColumn]="0"
+        [focuslyRow]="3"
+      >
+      </textarea>
+    </div>
+
+    <div class="checks span-2">
+      <label class="check">
+        <input
+          id="ac-includePii"
+          type="checkbox"
+          [(ngModel)]="model.includePii"
+          focusly
+          [focuslyColumn]="0"
+          [focuslyRow]="4"
+        />
+        Include PII fields (restricted)
+      </label>
+      <label class="check">
+        <input
+          id="ac-includeSystem"
+          type="checkbox"
+          [(ngModel)]="model.includeSystemEvents"
+          focusly
+          [focuslyColumn]="1"
+          [focuslyRow]="4"
+        />
+        Include system events
+      </label>
+      <label class="check">
+        <input
+          id="ac-redact"
+          type="checkbox"
+          [(ngModel)]="model.redactExport"
+          focusly
+          [focuslyColumn]="2"
+          [focuslyRow]="4"
+        />
+        Redact export
+      </label>
+    </div>
+
+    <div class="actions span-2">
+      <button id="ac-searchBtn" type="button" focusly [focuslyColumn]="3" [focuslyRow]="4">
+        Search
+      </button>
+      <button id="ac-exportBtn" type="button" focusly [focuslyColumn]="4" [focuslyRow]="4">
+        Export CSV
+      </button>
+      <button id="ac-signoffBtn" type="button" focusly [focuslyColumn]="5" [focuslyRow]="4">
+        Sign Off
+      </button>
+    </div>
+  </div>
+</section>

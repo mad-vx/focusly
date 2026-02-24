@@ -1,0 +1,504 @@
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Subject } from 'rxjs';
+import {
+  FocuslyItem,
+  FocuslyCellItem,
+  isCellItem,
+  FocusRequest,
+  FocusAck,
+} from '../models/focus-item.model';
+import { FOCUSLY_KEYMAP } from '../injection-tokens/keymap.token';
+import {
+  DEFAULT_FOCUSLY_KEYMAP,
+  FocuslyKeyChord,
+  FocuslyKeyMap,
+  KeyPressAction,
+} from '../models/keymap/models/key-press-action.model';
+import { chordFromKeyboardEvent } from '../models/keymap/models/key-chord.model';
+import { FocuslyServiceApi } from '../models/focus-service-api.model';
+import { FocuslyShortcutRegistration, ShortcutStore } from '../models/short-cut.model';
+
+type GroupStore = {
+  byId: Map<string, FocuslyItem>;
+  byCell: Map<string, FocuslyCellItem>;
+  maxRow: number;
+  maxCol: number;
+};
+
+@Injectable({ providedIn: 'root' })
+export class FocuslyService implements FocuslyServiceApi {
+  private endStopSubject = new Subject<FocuslyItem>();
+  readonly endStopHit$ = this.endStopSubject.asObservable();
+
+  private focusRegistry = new Map<number, GroupStore>();
+  readonly currentFocus = signal<FocuslyItem | null>(null);
+
+  private focusKeyMap = inject<FocuslyKeyMap>(FOCUSLY_KEYMAP);
+  private readonly _keymap = signal<FocuslyKeyMap>({
+    ...DEFAULT_FOCUSLY_KEYMAP,
+    ...this.focusKeyMap,
+  });
+  readonly keyMap = this._keymap.asReadonly();
+
+  private readonly keyPressActionHandlers: Record<KeyPressAction, () => void> = {
+    up: () => this.up(),
+    down: () => this.down(),
+    left: () => this.left(),
+    right: () => this.right(),
+    home: () => this.home(),
+    end: () => this.end(),
+    pageUp: () => this.pageUp(),
+    pageDown: () => this.pageDown(),
+  };
+
+  readonly keyHandlers = computed<Record<string, () => void>>(() => {
+    const effective = this.keyMap();
+    const handlers: Record<string, () => void> = {};
+
+    for (const [action, keyPressConfig] of Object.entries(effective) as [
+      KeyPressAction,
+      FocuslyKeyChord,
+    ][]) {
+      if (!keyPressConfig) continue;
+      const fn = this.keyPressActionHandlers[action];
+      if (!fn) continue;
+
+      const keyPresses = Array.isArray(keyPressConfig) ? keyPressConfig : [keyPressConfig];
+      for (const keyPress of keyPresses) {
+        if (!keyPress) continue;
+        handlers[keyPress] = fn;
+      }
+    }
+
+    return handlers;
+  });
+
+  private shortcutGlobal: ShortcutStore = { byChord: new Map(), byId: new Map() };
+  private shortcutByGroup = new Map<number, ShortcutStore>();
+  private shortcutByElement = new Map<string, ShortcutStore>();
+
+  private readonly focusRequestSubject = new Subject<FocusRequest>();
+  readonly focusRequests$ = this.focusRequestSubject.asObservable();
+
+  private readonly focusAckSubject = new Subject<FocusAck>();
+  readonly focusAcks$ = this.focusAckSubject.asObservable();
+
+  private pendingRequests = new Map<string, (ack: FocusAck) => void>();
+
+  constructor() {
+    this.focusAcks$.subscribe((ack) => {
+      const resolver = this.pendingRequests.get(ack.requestId);
+      if (resolver) resolver(ack);
+    });
+  }
+
+  getHandlerForKeyboardEvent(e: KeyboardEvent): (() => void) | undefined {
+    const shortcut = this.getShortcutHandlerForKeyboardEvent(e);
+    if (shortcut) return () => shortcut(e);
+
+    const chord = chordFromKeyboardEvent(e);
+    return this.keyHandlers()[chord];
+  }
+
+  tryHandleShortcutEvent(
+    e: KeyboardEvent,
+    context?: { groupId?: number; elementId?: string },
+  ): boolean {
+    const handler = this.getShortcutHandlerForKeyboardEvent(e, context);
+    if (!handler) return false;
+    handler(e);
+    return true;
+  }
+
+  getShortcutHandlerForKeyboardEvent(
+    e: KeyboardEvent,
+    context?: { groupId?: number; elementId?: string },
+  ): ((e: KeyboardEvent) => void) | undefined {
+    const chord = chordFromKeyboardEvent(e);
+
+    const inTextInput = this.isTextInputTarget(e.target);
+    const current = this.currentFocus();
+
+    const currentElementId = context?.elementId ?? current?.id;
+    const currentGroupId = context?.groupId ?? current?.groupId;
+
+    // 1) element scoped
+    if (currentElementId) {
+      const store = this.shortcutByElement.get(currentElementId);
+      const list = store?.byChord.get(chord);
+      const hit = list?.find((r) => !r.preventInTextActions || !inTextInput);
+      if (hit) return (evt) => hit.handler(evt);
+    }
+
+    // 2) group scoped
+    if (currentGroupId != null) {
+      const store = this.shortcutByGroup.get(currentGroupId);
+      const list = store?.byChord.get(chord);
+      const hit = list?.find((r) => !r.preventInTextActions || !inTextInput);
+      if (hit) return (evt) => hit.handler(evt);
+    }
+
+    // 3) global
+    {
+      const list = this.shortcutGlobal.byChord.get(chord);
+      const hit = list?.find((r) => !r.preventInTextActions || !inTextInput);
+      if (hit) return (evt) => hit.handler(evt);
+    }
+
+    return undefined;
+  }
+
+  updateKeymap(partial: FocuslyKeyMap) {
+    this._keymap.update((current) => ({ ...current, ...partial }));
+  }
+
+  private cellKey(row: number, col: number): string {
+    return `${row}:${col}`;
+  }
+
+  private getOrCreateStore(groupId: number): GroupStore {
+    let store = this.focusRegistry.get(groupId);
+    if (!store) {
+      store = { byId: new Map(), byCell: new Map(), maxRow: 0, maxCol: 0 };
+      this.focusRegistry.set(groupId, store);
+    }
+    return store;
+  }
+
+  private getStore(groupId: number | undefined): GroupStore | undefined {
+    if (groupId == null) return undefined;
+    return this.focusRegistry.get(groupId);
+  }
+
+  private recomputeMaximum(store: GroupStore): void {
+    // Only called when we may have removed the current max row/col
+    let maxRow = 0;
+    let maxCol = 0;
+
+    for (const item of store.byCell.values()) {
+      if (item.row > maxRow) maxRow = item.row;
+      if (item.column > maxCol) maxCol = item.column;
+    }
+
+    store.maxRow = maxRow;
+    store.maxCol = maxCol;
+  }
+
+  onFocus(focus: FocuslyItem): void {
+    const store = this.getStore(focus.groupId);
+    if (!store) {
+      this.currentFocus.set(focus);
+      return;
+    }
+
+    const found = store.byId.get(focus.id);
+    this.currentFocus.set(found ?? focus);
+  }
+
+  up(): void {
+    this.moveRow(-1, (row) => row >= 0);
+  }
+
+  down(): void {
+    this.moveRow(1, (row) => row <= this.currentFocusMaxRow());
+  }
+
+  left(): void {
+    this.moveColumn(-1, (col) => col >= 0);
+  }
+
+  right(): void {
+    this.moveColumn(1, (col) => col <= this.currentFocusMaxColumn());
+  }
+
+  home(): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus || !isCellItem(currentFocus)) return;
+    this.moveColumn(-currentFocus.column, (col) => col >= 0);
+  }
+
+  end(): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus || !isCellItem(currentFocus)) return;
+    const max = this.currentFocusMaxColumn();
+    this.moveColumn(max - currentFocus.column, (col) => col <= max);
+  }
+
+  pageUp(): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus || !isCellItem(currentFocus)) return;
+    this.moveRow(-currentFocus.row, (row) => row >= 0);
+  }
+
+  pageDown(): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus || !isCellItem(currentFocus)) return;
+    const max = this.currentFocusMaxRow();
+    this.moveRow(max - currentFocus.row, (row) => row <= max);
+  }
+
+  registerItemFocus(focus: FocuslyItem): void {
+    if (focus.groupId == null || !focus.id) return;
+
+    const store = this.getOrCreateStore(focus.groupId);
+
+    // If this id already exists, remove its old cell mapping (row/col might have changed)
+    const existing = store.byId.get(focus.id);
+    if (existing && isCellItem(existing)) {
+      store.byCell.delete(this.cellKey(existing.row, existing.column));
+    }
+
+    store.byId.set(focus.id, focus);
+
+    if (isCellItem(focus)) {
+      store.byCell.set(this.cellKey(focus.row, focus.column), focus);
+      if (focus.row > store.maxRow) store.maxRow = focus.row;
+      if (focus.column > store.maxCol) store.maxCol = focus.column;
+    }
+  }
+
+  unRegisterItemFocus(focus: FocuslyItem): void {
+    const store = this.getStore(focus.groupId);
+    if (!store) return;
+
+    const existing = store.byId.get(focus.id);
+    if (!existing) return;
+
+    store.byId.delete(focus.id);
+
+    if (isCellItem(existing)) {
+      store.byCell.delete(this.cellKey(existing.row, existing.column));
+
+      if (existing.row === store.maxRow || existing.column === store.maxCol) {
+        this.recomputeMaximum(store);
+      }
+    }
+
+    if (store.byId.size === 0) {
+      this.focusRegistry.delete(focus.groupId);
+    }
+  }
+
+  isCurrentFocus(id: string): boolean {
+    const currentFocus = this.currentFocus();
+    return !!currentFocus && currentFocus.id === id;
+  }
+
+  registerShortcut(reg: FocuslyShortcutRegistration): void {
+    // Basic validation
+    if (!reg.keys?.length) return;
+
+    this.unregisterShortcut(reg.id);
+
+    if (reg.scope === 'global') {
+      this.addToStore(this.shortcutGlobal, reg);
+      return;
+    }
+
+    if (reg.scope === 'group') {
+      if (reg.groupId == null) return;
+      const store = this.getOrCreateShortcutStore(this.shortcutByGroup, reg.groupId);
+      this.addToStore(store, reg);
+      return;
+    }
+
+    // element scope
+    if (reg.scope === 'element') {
+      if (!reg.elementId) return;
+      const store = this.getOrCreateShortcutStore(this.shortcutByElement, reg.elementId);
+      this.addToStore(store, reg);
+    }
+  }
+
+  unregisterShortcut(id: string): void {
+    // Global
+    if (this.shortcutGlobal.byId.has(id)) this.removeFromStore(this.shortcutGlobal, id);
+
+    // Groups
+    for (const [groupId, store] of this.shortcutByGroup) {
+      if (store.byId.has(id)) {
+        this.removeFromStore(store, id);
+        if (store.byId.size === 0) this.shortcutByGroup.delete(groupId);
+      }
+    }
+
+    // Elements
+    for (const [elementId, store] of this.shortcutByElement) {
+      if (store.byId.has(id)) {
+        this.removeFromStore(store, id);
+        if (store.byId.size === 0) this.shortcutByElement.delete(elementId);
+      }
+    }
+  }
+
+  setFocusByElementId(
+    id: string,
+    groupId?: number,
+    opts?: { timeoutMs?: number; waitForVisible?: boolean; preventScroll?: boolean },
+  ): Promise<boolean> {
+    const targetId = (id ?? '').trim();
+    if (!targetId) return Promise.resolve(false);
+
+    const requestId = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
+    const timeoutMs = opts?.timeoutMs ?? 2000;
+
+    return new Promise<boolean>((resolve) => {
+      const timer = window.setTimeout(() => {
+        this.pendingRequests.delete(requestId);
+        resolve(false);
+      }, timeoutMs);
+
+      this.pendingRequests.set(requestId, (ack) => {
+        window.clearTimeout(timer);
+        this.pendingRequests.delete(requestId);
+        resolve(ack.success);
+      });
+
+      this.focusRequestSubject.next({
+        requestId,
+        id: targetId,
+        groupId,
+        preventScroll: opts?.preventScroll ?? true,
+        waitForVisible: opts?.waitForVisible ?? true,
+        timeoutMs,
+      });
+    });
+  }
+
+  ackFocus(ack: FocusAck): void {
+    this.focusAckSubject.next(ack);
+  }
+
+  // ---------------- Private ----------------
+
+  private findRegisteredFocus(
+    column: number,
+    row: number,
+    groupId?: number,
+  ): FocuslyItem | undefined {
+    const effectiveGroup = groupId ?? this.currentFocus()?.groupId;
+    if (effectiveGroup == null) return undefined;
+
+    const store = this.focusRegistry.get(effectiveGroup);
+    if (!store) return undefined;
+
+    const maxCol = store.maxCol ?? 0;
+    let col = Math.min(Math.max(column, 0), maxCol);
+
+    // Try same column, then move left until we find something
+    while (col >= 0) {
+      const hit = store.byCell.get(this.cellKey(row, col));
+      if (hit) return hit;
+      col--;
+    }
+
+    return undefined;
+  }
+
+  private moveRow(offset: number, endCondition: (row: number) => boolean): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus || !isCellItem(currentFocus)) return;
+
+    this.moveFocus(currentFocus.row, offset, endCondition, (row) =>
+      this.findRegisteredFocus(currentFocus.column, row, currentFocus.groupId),
+    );
+  }
+
+  private moveColumn(offset: number, endCondition: (column: number) => boolean): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus || !isCellItem(currentFocus)) return;
+
+    this.moveFocus(currentFocus.column, offset, endCondition, (col) =>
+      this.findRegisteredFocus(col, currentFocus.row, currentFocus.groupId),
+    );
+  }
+
+  private moveFocus(
+    condition: number,
+    offset: number,
+    endCondition: (x: number) => boolean,
+    findNextFocus: (condition: number) => FocuslyItem | undefined,
+  ): void {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return;
+
+    condition += offset;
+    let nextFocus: FocuslyItem | undefined;
+
+    while (endCondition(condition) && !nextFocus) {
+      nextFocus = findNextFocus(condition);
+      if (!nextFocus) condition += offset;
+    }
+
+    if (nextFocus) {
+      void this.setFocusByElementId(nextFocus.id, nextFocus.groupId);
+    } else if (!endCondition(condition)) {
+      this.endStopSubject.next(currentFocus);
+    }
+  }
+
+  private currentFocusMaxRow(): number {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return 0;
+    return this.focusRegistry.get(currentFocus.groupId)?.maxRow ?? 0;
+  }
+
+  private currentFocusMaxColumn(): number {
+    const currentFocus = this.currentFocus();
+    if (!currentFocus) return 0;
+    return this.focusRegistry.get(currentFocus.groupId)?.maxCol ?? 0;
+  }
+
+  private getOrCreateShortcutStore(map: Map<any, ShortcutStore>, key: any): ShortcutStore {
+    let store = map.get(key);
+    if (!store) {
+      store = { byChord: new Map(), byId: new Map() };
+      map.set(key, store);
+    }
+    return store;
+  }
+
+  private addToStore(store: ShortcutStore, reg: FocuslyShortcutRegistration): void {
+    store.byId.set(reg.id, reg);
+
+    for (const chord of reg.keys) {
+      const list = store.byChord.get(chord) ?? [];
+      // upsert by id in case directive updates
+      const existingIndex = list.findIndex((x) => x.id === reg.id);
+      if (existingIndex >= 0) list.splice(existingIndex, 1);
+      list.push(reg);
+      // keep highest priority first
+      list.sort((a, b) => b.priority - a.priority);
+      store.byChord.set(chord, list);
+    }
+  }
+
+  private removeFromStore(store: ShortcutStore, id: string): void {
+    const reg = store.byId.get(id);
+    if (!reg) return;
+    store.byId.delete(id);
+
+    for (const chord of reg.keys) {
+      const list = store.byChord.get(chord);
+      if (!list) continue;
+      const idx = list.findIndex((x) => x.id === id);
+      if (idx >= 0) list.splice(idx, 1);
+      if (list.length === 0) store.byChord.delete(chord);
+    }
+  }
+
+  private isTextInputTarget(target: EventTarget | null): boolean {
+    const el = target as HTMLElement | null;
+    if (!el) return false;
+    const tag = el.tagName?.toLowerCase();
+    if (tag === 'textarea') return true;
+    if (tag === 'input') {
+      const type = (el as HTMLInputElement).type?.toLowerCase();
+      // treat most input types as typing contexts
+      return !['checkbox', 'radio', 'button', 'submit', 'reset', 'range', 'color', 'file'].includes(
+        type,
+      );
+    }
+    return el.isContentEditable === true;
+  }
+}

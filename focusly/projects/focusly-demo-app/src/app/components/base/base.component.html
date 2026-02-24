@@ -15,12 +15,11 @@
       />
     </header>
 
-    <table class="data-grid" 
+    <table
+      class="data-grid"
       [focuslyGroupHost]="1"
-      focuslyShortcut
-      [focuslyKey]="'enter'"
-      [focuslyShortcutScope]="'group'"
-      (focuslyAction)="onEnterKey()"
+      focuslyShortcutHost
+      [focuslyShortcuts]="focuslyShortcuts"
     >
       <thead>
         <tr>
@@ -62,7 +61,7 @@
 
             <td class="cell-center">
               <input
-                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-2'"
+                [attr.data-test-id]="'grid-cell-1-' + row.rowIndex + '-2'"
                 focusly
                 class="cell-checkbox"
                 type="checkbox"
@@ -74,7 +73,7 @@
 
             <td>
               <input
-                [attr.data-test-id]="'grid-cell-' + row.rowIndex + '-3'"
+                [attr.data-test-id]="'grid-cell-1-' + row.rowIndex + '-3'"
                 focusly
                 class="cell-input wide"
                 type="text"
@@ -108,12 +107,12 @@
       />
     </header>
 
-    <table class="data-grid" 
+    <table
+      class="data-grid"
       [focuslyGroupHost]="2"
-      focuslyShortcut
-      [focuslyKey]="'enter'"
-      [focuslyShortcutScope]="'group'"
-      (focuslyAction)="onEnterKey2()">
+      focuslyShortcutHost
+      [focuslyShortcuts]="focuslyShortcuts2"
+    >
       <thead>
         <tr>
           <th>Field</th>
@@ -148,7 +147,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr focuslyShortcutHost>
           <td class="cell-label">Email</td>
           <td>
             <input

@@ -5,10 +5,20 @@ import { TestKeyMap } from './keymaps';
 export const TOOLKITS = ['Vanilla', 'NG-Zorro', 'Material'] as const;
 export type ToolkitType = (typeof TOOLKITS)[number];
 
+type CellLocation = {
+  group: number;
+  row: number;
+  col: number;
+};
+
+function toTestId(cell: CellLocation) {
+  return `grid-cell-${cell.group}-${cell.row}-${cell.col}`;
+}
+
 export async function testCellFocusChange(
   page: Page,
-  from: { row: number; col: number },
-  to: { row: number; col: number },
+  from: CellLocation,
+  to: CellLocation,
   keyChords: FocuslyKeyChord | undefined,
 ) {
   const chords = toChordArray(keyChords);
@@ -16,15 +26,12 @@ export async function testCellFocusChange(
   for (const chord of chords.length ? chords : ['']) {
     await setCellFocus(page, from);
     if (chord) await page.keyboard.press(toKeyPressString(chord));
-    await expectCellToContainActiveElement(page, to.row, to.col);
+    await expectCellToContainActiveElement(page, to);
   }
 }
 
-export async function setCellFocus(
-  page: Page,
-  from: { row: number; col: number },
-): Promise<Locator> {
-  const cell = page.getByTestId(`grid-cell-${from.row}-${from.col}`);
+export async function setCellFocus(page: Page, from: CellLocation): Promise<Locator> {
+  const cell = page.getByTestId(toTestId(from));
   await cell.waitFor();
 
   // Special case for UI element (e.g nz-input-number)
@@ -55,8 +62,8 @@ export async function updateFocuslyKeymap(page: Page, keymap: TestKeyMap) {
   }, keymap);
 }
 
-export async function expectCellToContainActiveElement(page: Page, row: number, col: number) {
-  const expectedId = `grid-cell-${row}-${col}`;
+export async function expectCellToContainActiveElement(page: Page, cellLocation: CellLocation) {
+  const expectedId = toTestId(cellLocation);
 
   await expect
     .poll(

@@ -1,46 +1,14 @@
-.instructions {
-  background: #f9fafb;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 1.5rem 2rem;
-  max-width: 700px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+.panel-grid-50 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+  justify-items: center;
+  margin-block: 2rem;
 
-.instructions h2 {
-  color: #1a237e;
-  font-size: 1.3rem;
-  margin-bottom: 0.75rem;
-}
-
-.instructions p {
-  color: #333;
-  line-height: 1.5;
-  margin-bottom: 0.75rem;
-}
-
-.instructions ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 0 1rem 0;
-}
-
-.instructions li {
-  background: #ffffff;
-  border: 1px solid #e3e3e3;
-  border-radius: 6px;
-  padding: 0.6rem 0.9rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.instructions strong {
-  color: #1976d2;
-}
-
-.instructions .note {
-  font-size: 0.95rem;
-  color: #555;
-  font-style: italic;
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .info-icon {
@@ -81,6 +49,7 @@
   cursor: pointer;
   padding: 2px 6px;
   border-radius: 8px;
+  font-size: x-large;
 }
 
 .toolkit-title {
@@ -88,12 +57,14 @@
   color: #1a237e;
   font-size: 1rem;
   margin-bottom: 0.75rem;
+  padding-right: 10px;
 }
 
 .toolkit-options {
   display: inline-flex;
   gap: 10px;
   flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .toolkit-radio {

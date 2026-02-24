@@ -8,15 +8,9 @@ import {
   output,
   signal,
 } from '@angular/core';
-import {
-  FOCUSLY_SERVICE_API,
-} from '@zaybu/focusly';
+import { FOCUSLY_SERVICE_API } from '@zaybu/focusly';
 
-import {
-  KeyPressAction,
-  FocuslyKeyMap,
-  FocuslyKeyChord
-} from '@zaybu/focusly';
+import { KeyPressAction, FocuslyKeyMap, FocuslyKeyChord } from '@zaybu/focusly';
 
 type ModifierOption = 'none' | 'ctrl' | 'alt' | 'shift';
 interface ModifierOptionItem {
@@ -131,6 +125,14 @@ export class FocuslyConfigComponent {
   onModifierChange(action: KeyPressAction, slotIndex: 0 | 1, modifierRaw: string): void {
     const modifier = (modifierRaw as ModifierOption) ?? 'none';
     const currentKey = this.getKeyForAction(action, slotIndex);
+
+    // If no key selected yet, keep the modifier locally (as "ctrl+") and don't emit/update service.
+    if (!currentKey) {
+      const local = modifier === 'none' ? '' : `${modifier}+`;
+      this.setChordLocalOnly(action, slotIndex, local);
+      return;
+    }
+
     const chord = this.composeChord(modifier, currentKey);
     this.setChord(action, slotIndex, chord);
   }
@@ -160,6 +162,17 @@ export class FocuslyConfigComponent {
     this.pushActionUpdate(action);
   }
 
+  private setChordLocalOnly(action: KeyPressAction, slotIndex: 0 | 1, rawValue: string): void {
+    const value = rawValue.trim();
+
+    this._keyMapValue.update((m) => {
+      const existing = m[action] ?? ['', ''];
+      const next: ChordSlots = [...existing] as ChordSlots;
+      next[slotIndex] = value;
+      return { ...m, [action]: next };
+    });
+  }
+
   private pushActionUpdate(action: KeyPressAction): void {
     const [c1, c2] = this.getSlots(action);
 
@@ -186,7 +199,7 @@ export class FocuslyConfigComponent {
 
   private composeChord(modifier: ModifierOption, key: string): string {
     const trimmedKey = (key ?? '').trim().toLowerCase();
-    if (!trimmedKey) return ''; // “Select key…” => no chord
+    if (!trimmedKey) return '';
     if (modifier === 'none') return trimmedKey;
     return `${modifier}+${trimmedKey}`;
   }
