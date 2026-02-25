@@ -26,10 +26,18 @@
     "pack:config": "cd ./dist/focusly-config && npm pack",
     "pack:nz": "cd ./dist/focusly-nz && npm pack",
     "pack:material": "cd ./dist/focusly-material && npm pack",
+    
     "publish": "cd ./dist/focusly && npm publish",
     "publish:config": "cd ./dist/focusly-config && npm publish --access public",
     "publish:nz": "cd ./dist/focusly-nz && npm publish --access public",
     "publish:material": "cd ./dist/focusly-material && npm publish --access public",
+
+    "publish:beta": "cd ./dist/focusly && npm publish --tag beta",
+    "publish:config:beta": "cd ./dist/focusly-config && npm publish --tag beta --access public",
+    "publish:nz:beta": "cd ./dist/focusly-nz && npm publish --tag beta --access public",
+    "publish:material:beta": "cd ./dist/focusly-material && npm publish --tag beta --access public",
+
+    "publish:all:beta": "npm run publish:beta && npm run publish:config:beta && npm run publish:nz:beta && npm run publish:material:beta",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,md,json}\"",
     "changeset:changeset": "changeset",
     "changeset:version-packages": "changeset version",

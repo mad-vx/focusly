@@ -1,12 +1,12 @@
 import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
-import { FocuslyTargetDirective } from './focusly-target.directive';
 import { FocuslyCellItem } from '../models/focus-item.model';
+import { FocuslyFocusDirective } from './focusly-focus.directive';
 
 @Directive({
   selector: '[focusly]',
   standalone: true,
 })
-export class FocuslyDirective extends FocuslyTargetDirective implements OnInit, OnDestroy {
+export class FocuslyDirective extends FocuslyFocusDirective implements OnInit, OnDestroy {
   @Input({ required: true }) set focuslyColumn(column: number) {
     this._focuslyColumn = column;
     this.syncRegistration();

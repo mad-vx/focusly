@@ -13,26 +13,26 @@ export default function GettingStartedPage() {
         <h2>1. Register a Focus Target</h2>
 
         <p>
-          Add the <code>focusly-target</code> directive to any focusable element.
-          Each target must have a stable <code>focuslyElementId</code> (used for programmatic focus).
+          Add the <code>focusly-focus</code> directive to any focusable element.
+          Each target must have a <code>focuslyElementId</code> for programmatic focus.
         </p>
 
         <CodeBlock language="html">{`
 <div [focuslyGroupHost]="1">
   <input
-    focusly-target
+    focusly-focus
     [focuslyElementId]="'firstName'"
     placeholder="First name"
   />
 
   <input
-    focusly-target
+    focusly-focus
     [focuslyElementId]="'lastName'"
     placeholder="Last name"
   />
 
   <button
-    focusly-target
+    focusly-focus
     [focuslyElementId]="'saveBtn'"
   >
     Save
@@ -81,10 +81,12 @@ export class DemoComponent {
 
         <p>
           Use the <code>focusly</code> directive when you want keyboard navigation. It extends{' '}
-          <code>focusly-target</code> and adds <code>focuslyRow</code> + <code>focuslyColumn</code>
+          <code>focusly-focus</code> and adds <code>focuslyRow</code> + <code>focuslyColumn</code>
           so Focusly can move around your layout with defined keys.
         </p>
-
+        <p>
+            Optionally use <code>focuslyElementId</code> for programmatic focus.
+        </p>
         <CodeBlock language="html">{`
 <select
   focusly
@@ -166,7 +168,7 @@ export class DemoComponent {
 
         <CodeBlock language="html">{`
 <input
-  focusly-target
+  focusly-focus
   [focuslyGroup]="1"
   [focuslyElementId]="'searchBox'"
 />

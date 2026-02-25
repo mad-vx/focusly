@@ -15,10 +15,10 @@ import { FocuslyItem, FocuslyTargetItem, FocusRequest } from '../models/focus-it
 import { FocuslyGroupHostDirective } from './focusly-group-host.directive';
 
 @Directive({
-  selector: '[focusly-target]',
+  selector: '[focusly-focus]',
   standalone: true,
 })
-export class FocuslyTargetDirective implements OnInit, OnDestroy {
+export class FocuslyFocusDirective implements OnInit, OnDestroy {
   protected readonly groupHost = inject(FocuslyGroupHostDirective, { optional: true });
 
   @Input({ required: false }) set focuslyGroup(group: number) {
