@@ -14,6 +14,8 @@ export default function GettingStartedPage() {
 
         <p>
           Add the <code>focusly-focus</code> directive to any focusable element.
+        </p>
+        <p>
           Each target must have a <code>focuslyElementId</code> for programmatic focus.
         </p>
 
