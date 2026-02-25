@@ -1,5 +1,13 @@
 # @zaybu/focusly-material
 
+## 2.0.1
+
+### Patch Changes
+
+- Renamed focusly-target directive to focusly-focus
+- Updated dependencies
+  - @zaybu/focusly@2.0.1
+
 ## 2.0.0
 
 ### Major Changes
