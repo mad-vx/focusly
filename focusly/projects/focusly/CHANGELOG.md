@@ -1,5 +1,11 @@
 # @zaybu/focusly
 
+## 2.0.1
+
+### Patch Changes
+
+- Renamed focusly-target directive to focusly-focus
+
 ## 2.0.0
 
 ### Major Changes
